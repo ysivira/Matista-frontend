@@ -1,38 +1,27 @@
 # MATISTA Frontend
 
-Aplicacion web base de MATISTA construida con React, Vite y JavaScript ES
-Modules.
+Aplicación web de MATISTA construida con React, Vite y JavaScript ES Modules.
 
 ## Estado actual
 
-Implementado:
+SPEC-02, etapa D.2 implementada:
 
-- Bootstrap de Vite mediante `index.html` y `src/main.jsx`.
-- Montaje de React en modo estricto.
-- Pantalla inicial contenida en `src/App.jsx`.
-- Estilos globales y de la pantalla inicial.
-- Configuracion base de Vite y ESLint.
-- Assets publicos y assets importados por React.
+- Router modular con rutas públicas y guards por sesión, estado y rol.
+- Cliente HTTP basado en `fetch` y configurado con `credentials: 'include'`.
+- Capa API para los doce endpoints del contrato AUTH vigente.
+- Sesión centralizada en memoria y restaurada mediante `GET /api/auth/me`.
+- Tokens globales de Amethyst Prism y recursos oficiales locales.
+- Placeholders mínimos para validar rutas sin anticipar pantallas funcionales.
+- Pruebas aisladas con Vitest, React Testing Library y jsdom.
 
-Reservado, pero no implementado:
-
-- Composicion de aplicacion en `src/app`.
-- Features `auth`, `admin` y `asesor`.
-- UI, layouts y utilidades compartidas.
-- Pruebas automatizadas.
-
-Los directorios reservados contienen unicamente archivos `.gitkeep`. No existen
-todavia `router.jsx`, `providers.jsx`, paginas, componentes de negocio, hooks,
-clientes API ni rutas funcionales. La pantalla actual sigue siendo el bootstrap
-visual inicial de Vite y no representa una interfaz funcional de MATISTA.
+No se implementaron todavía los formularios ni las pantallas finales de login,
+registro, verificación o recuperación. Tampoco existen interfaces funcionales de
+ADMIN o ASESOR.
 
 ## Requisitos
 
-- Node.js 24 o una version compatible posterior para las versiones actuales de
-  Vite y ESLint.
+- Node.js 24 o una versión compatible posterior.
 - npm y las dependencias declaradas en `package.json`.
-
-El proyecto no declara actualmente una version de Node mediante `engines`.
 
 ## Comandos
 
@@ -48,64 +37,91 @@ Iniciar el servidor de desarrollo:
 npm run dev
 ```
 
-Generar el build de produccion en `dist`:
-
-```bash
-npm run build
-```
-
-Ejecutar ESLint:
+Ejecutar verificaciones:
 
 ```bash
 npm run lint
+npm run test
+npm run build
 ```
 
-Previsualizar un build existente:
+Ejecutar las pruebas en modo observación:
 
 ```bash
-npm run preview
+npm run test:watch
 ```
-
-No existe todavia un script ni un runner de pruebas.
 
 ## Variables de entorno
 
-El frontend no consume variables de entorno en su estado actual. Por ese motivo
-no existe `.env.example` y no se ha definido una URL base de API ficticia.
+Copiar la configuración pública documentada en `.env.example` al entorno local
+correspondiente. Vite incorpora las variables `VITE_*` al navegador, por lo que
+nunca deben contener contraseñas, tokens ni secretos.
 
-## Arquitectura
+```text
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+Si `VITE_API_BASE_URL` no está definida, el cliente utiliza el mismo origen del
+frontend. La URL no debe terminar en `/`; el cliente también normaliza esa barra
+si estuviera presente.
+
+## Arquitectura D.2
 
 ```text
 src/
-|-- app/                         # Reservado
-|-- features/                    # Reservado
-|   |-- auth/
-|   |   |-- pages/
-|   |   |-- components/
-|   |   |-- hooks/
-|   |   `-- api/
-|   |-- admin/
-|   |   |-- pages/
-|   |   |-- components/
-|   |   |-- hooks/
-|   |   `-- api/
-|   `-- asesor/
-|       |-- pages/
-|       |-- components/
-|       |-- hooks/
-|       `-- api/
-|-- shared/                      # Reservado
-|   |-- ui/
-|   |-- layouts/
-|   `-- lib/
-|-- assets/                      # Implementado
-|-- App.css                      # Implementado
-|-- App.jsx                      # Implementado
-|-- index.css                    # Implementado
-`-- main.jsx                     # Implementado
-tests/                           # Reservado
+|-- app/
+|   |-- AppProviders.jsx
+|   |-- PlaceholderPages.jsx
+|   `-- router.jsx
+|-- assets/brand/
+|   |-- logo.png
+|   `-- logo1.png
+|-- features/auth/
+|   |-- api/authApi.js
+|   |-- components/ProtectedRoute.jsx
+|   |-- context/
+|   |   |-- SessionContext.js
+|   |   `-- SessionProvider.jsx
+|   |-- hooks/useSession.js
+|   `-- auth.constants.js
+|-- shared/
+|   |-- lib/httpClient.js
+|   `-- ui/
+|       |-- BrandLogo.jsx
+|       `-- LoadingState.jsx
+|-- App.css
+|-- App.jsx
+|-- index.css
+`-- main.jsx
+tests/
+|-- authApi.test.js
+|-- httpClient.test.js
+|-- router.test.jsx
+|-- session.test.jsx
+`-- setup.js
 ```
 
-Las reglas comerciales deben permanecer en el dominio backend. El frontend
-presentara datos y validaciones de experiencia de usuario sin duplicar el motor
-de calculo autoritativo.
+## Seguridad de sesión
+
+- El navegador administra la cookie HttpOnly `matista_session`.
+- El frontend no intenta leer la cookie.
+- No se almacena ninguna credencial o token en `localStorage` o `sessionStorage`.
+- No existe refresh token ni renovación automática.
+- Los guards mejoran la navegación, pero el backend conserva la autorización
+  efectiva en cada solicitud protegida.
+- Una cuenta pendiente no se representa como sesión autenticada.
+
+## Identidad visual
+
+Los tokens globales siguen Amethyst Prism y utilizan `#1B1D2B` como fondo común.
+`logo.png` se reserva para fondos oscuros y `logo1.png` para fondos claros. Los
+archivos se mantienen sin alterar y no dependen de URLs externas.
+
+La tipografía definitiva sigue pendiente para una etapa visual posterior. D.2
+utiliza una pila local del sistema para evitar dependencias CDN.
+
+## Integración pendiente
+
+Las pruebas actuales utilizan dobles y no acreditan integración real con el
+backend, MySQL, SMTP, CORS de despliegue ni cookies bajo HTTPS. Esas verificaciones
+corresponden al bloque de validación autorizado posteriormente.
