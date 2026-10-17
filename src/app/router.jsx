@@ -1,26 +1,47 @@
-import { createBrowserRouter, createMemoryRouter } from 'react-router-dom'
+import { createBrowserRouter, createMemoryRouter, Navigate } from 'react-router-dom'
 import { AUTH_ROLES } from '../features/auth/auth.constants.js'
 import { ProtectedRoute } from '../features/auth/components/ProtectedRoute.jsx'
 import {
-  InfrastructurePage,
   RoleLandingPage,
   RoutePlaceholder,
 } from './PlaceholderPages.jsx'
+import { LoginPage } from '../features/auth/pages/LoginPage.jsx'
+import { RegisterPage } from '../features/auth/pages/RegisterPage.jsx'
+import { VerifyEmailPage } from '../features/auth/pages/VerifyEmailPage.jsx'
+import { ResendVerificationPage } from '../features/auth/pages/ResendVerificationPage.jsx'
+import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.jsx'
+import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
 
 const routes = [
   {
+    // Punto de entrada: la unidad de decisión es /login, donde LoginPage ya resuelve
+    // carga (checking), error técnico con reintento y el destino por rol si hay sesión.
     path: '/',
-    element: <InfrastructurePage />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: '/login',
-    element: (
-      <RoutePlaceholder
-        eyebrow="Ruta pública"
-        title="Acceso AUTH pendiente de D.3"
-        description="Esta ruta provisional no solicita ni procesa credenciales."
-      />
-    ),
+    element: <LoginPage />,
+  },
+  {
+    path: '/register',
+    element: <RegisterPage />,
+  },
+  {
+    path: '/confirm-email',
+    element: <VerifyEmailPage />,
+  },
+  {
+    path: '/resend-verification',
+    element: <ResendVerificationPage />,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage />,
   },
   {
     path: '/account-unavailable',
