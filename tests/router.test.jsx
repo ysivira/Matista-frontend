@@ -78,7 +78,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Destino ADMIN')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ADMIN')).toBeTruthy()
   })
 
   it('redirige la raíz al destino del asesor con ese rol', async () => {
@@ -88,7 +88,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Destino ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
   })
 
   it('redirige una ruta privada a la pantalla de login cuando no hay sesión', async () => {
@@ -104,7 +104,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Destino ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
   })
 
   it('impide presentar una ruta incompatible con el rol', async () => {
@@ -156,6 +156,7 @@ describe('router y guards', () => {
       { entry: '/forgot-password', heading: 'Recuperar Contraseña' },
       { entry: '/reset-password#token=abc', heading: 'Restablecer Contraseña' },
       { entry: '/confirm-email#token=abc', heading: 'Confirmación de correo' },
+      { entry: '/confirm-email-change#token=abc', heading: 'Confirmación de cambio de correo' },
     ]
 
     for (const expectation of publicExpectations) {

@@ -2,15 +2,16 @@ import { createBrowserRouter, createMemoryRouter, Navigate } from 'react-router-
 import { AUTH_ROLES } from '../features/auth/auth.constants.js'
 import { ProtectedRoute } from '../features/auth/components/ProtectedRoute.jsx'
 import {
-  RoleLandingPage,
   RoutePlaceholder,
 } from './PlaceholderPages.jsx'
 import { LoginPage } from '../features/auth/pages/LoginPage.jsx'
 import { RegisterPage } from '../features/auth/pages/RegisterPage.jsx'
 import { VerifyEmailPage } from '../features/auth/pages/VerifyEmailPage.jsx'
+import { ConfirmEmailChangePage } from '../features/auth/pages/ConfirmEmailChangePage.jsx'
 import { ResendVerificationPage } from '../features/auth/pages/ResendVerificationPage.jsx'
 import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.jsx'
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
+import { TemporaryAccountPage } from '../features/auth/pages/TemporaryAccountPage.jsx'
 
 const routes = [
   {
@@ -30,6 +31,10 @@ const routes = [
   {
     path: '/confirm-email',
     element: <VerifyEmailPage />,
+  },
+  {
+    path: '/confirm-email-change',
+    element: <ConfirmEmailChangePage />,
   },
   {
     path: '/resend-verification',
@@ -66,13 +71,13 @@ const routes = [
   {
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ADMIN]} />,
     children: [
-      { path: '/admin', element: <RoleLandingPage role={AUTH_ROLES.ADMIN} /> },
+      { path: '/admin', element: <TemporaryAccountPage /> },
     ],
   },
   {
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR]} />,
     children: [
-      { path: '/asesor', element: <RoleLandingPage role={AUTH_ROLES.ASESOR} /> },
+      { path: '/asesor', element: <TemporaryAccountPage /> },
     ],
   },
   {

@@ -68,6 +68,22 @@ describe('ResendVerificationPage', () => {
 
     expect(await screen.findByText('Sin conexión con la API')).toBeTruthy()
   })
+
+  it('presenta un aviso amable cuando el reenvío alcanza el límite de solicitudes', async () => {
+    // El contrato confirma RATE_LIMIT_EXCEEDED/429 sin duración ni Retry-After: solo mensaje público.
+    authApi.resendVerification.mockRejectedValue(new ApiError({
+      status: 429,
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Demasiadas solicitudes. Intente más tarde.',
+    }))
+    renderPage(<ResendVerificationPage />)
+
+    fireEvent.change(screen.getByLabelText(/Email/), { target: { value: 'asesor@example.test' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Reenviar correo de confirmación' }))
+
+    expect(await screen.findByText('Demasiados intentos')).toBeTruthy()
+    expect(screen.getByText('Demasiadas solicitudes. Intente más tarde.')).toBeTruthy()
+  })
 })
 
 describe('ForgotPasswordPage', () => {
@@ -110,5 +126,19 @@ describe('ForgotPasswordPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Enviar enlace' }))
 
     expect(await screen.findByText('El reenvío está temporalmente limitado para este correo.')).toBeTruthy()
+  })
+
+  it('presenta un aviso amable cuando la recuperación alcanza el límite de solicitudes', async () => {
+    authApi.forgotPassword.mockRejectedValue(new ApiError({
+      status: 429,
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Demasiadas solicitudes. Intente más tarde.',
+    }))
+    renderPage(<ForgotPasswordPage />)
+
+    fireEvent.change(screen.getByLabelText(/Email/), { target: { value: 'asesor@example.test' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Enviar enlace' }))
+
+    expect(await screen.findByText('Demasiados intentos')).toBeTruthy()
   })
 })

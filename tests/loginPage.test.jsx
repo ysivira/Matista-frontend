@@ -4,7 +4,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { ApiError } from '../src/shared/lib/httpClient.js'
 import { LoginPage } from '../src/features/auth/pages/LoginPage.jsx'
 import { SessionProvider } from '../src/features/auth/context/SessionProvider.jsx'
-import { RoleLandingPage, RoutePlaceholder } from '../src/app/PlaceholderPages.jsx'
+import { RoutePlaceholder } from '../src/app/PlaceholderPages.jsx'
+import { TemporaryAccountPage } from '../src/features/auth/pages/TemporaryAccountPage.jsx'
 import { ProtectedRoute } from '../src/features/auth/components/ProtectedRoute.jsx'
 
 /**
@@ -37,8 +38,8 @@ function renderLoginPage(authClient, initialEntries = ['/login']) {
       <SessionProvider authClient={authClient}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/asesor" element={<RoleLandingPage role="ASESOR" />} />
-          <Route path="/admin" element={<RoleLandingPage role="ADMIN" />} />
+          <Route path="/asesor" element={<TemporaryAccountPage />} />
+          <Route path="/admin" element={<TemporaryAccountPage />} />
         </Routes>
       </SessionProvider>
     </MemoryRouter>,
@@ -99,7 +100,7 @@ describe('LoginPage', () => {
       resolveLogin({ user: { rol: 'ASESOR', estado: 'ACTIVO', email: 'asesor@example.test' } })
     })
 
-    expect(await screen.findByText('Destino ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
     expect(authClient.login).toHaveBeenCalledTimes(1)
   })
 
@@ -155,6 +156,25 @@ describe('LoginPage', () => {
     expect(authClient.login).toHaveBeenCalledTimes(1)
   })
 
+  it('avisa con tono accesible cuando el login alcanza el límite de solicitudes', async () => {
+    // El contrato confirma RATE_LIMIT_EXCEEDED/429 para login (5 por 15 minutos) sin Retry-After.
+    const authClient = createAuthClient({
+      login: vi.fn().mockRejectedValue(new ApiError({
+        status: 429,
+        code: 'RATE_LIMIT_EXCEEDED',
+        message: 'Demasiadas solicitudes. Intente más tarde.',
+      })),
+    })
+    renderLoginPage(authClient)
+
+    await screen.findByText('Iniciar Sesión')
+    fillAndSubmit()
+
+    expect(await screen.findByText('Demasiados intentos')).toBeTruthy()
+    expect(screen.getByText('Demasiadas solicitudes. Intente más tarde.')).toBeTruthy()
+    expect(screen.getByText('Iniciar Sesión')).toBeTruthy()
+  })
+
   it('notifica una cuenta no habilitada por el backend', async () => {
     const authClient = createAuthClient({
       login: vi.fn().mockRejectedValue(new ApiError({
@@ -182,7 +202,7 @@ describe('LoginPage', () => {
     await screen.findByText('Iniciar Sesión')
     fillAndSubmit()
 
-    expect(await screen.findByText('Destino ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
   })
 
   it('prioriza la ruta privada que originó la redirección', async () => {
@@ -198,9 +218,9 @@ describe('LoginPage', () => {
             <Route path="/login" element={<LoginPage />} />
             {/* Origen real de D.2: el guard anónimo redirige a /login conservando /asesor en el estado. */}
             <Route path="/asesor" element={<ProtectedRoute allowedRoles={['ASESOR']} />}>
-              <Route path="" element={<RoleLandingPage role="ASESOR" />} />
+              <Route path="" element={<TemporaryAccountPage />} />
             </Route>
-            <Route path="/admin" element={<RoleLandingPage role="ADMIN" />} />
+            <Route path="/admin" element={<TemporaryAccountPage />} />
             <Route
               path="/access-denied"
               element={(
@@ -219,7 +239,7 @@ describe('LoginPage', () => {
     await screen.findByText('Iniciar Sesión')
     fillAndSubmit()
 
-    // Si el login respetara solo el destino por rol del ADMIN (/admin), veríamos "Destino ADMIN";
+    // Si el login respetara solo el destino por rol del ADMIN (/admin), veríamos "Cuenta ADMIN";
     // el resultado esperado prueba que `from` (=/asesor) fue respetado y el guard real rechazó al ADMIN.
     expect(await screen.findByText('Acceso no autorizado')).toBeTruthy()
   })
@@ -232,7 +252,7 @@ describe('LoginPage', () => {
     })
     renderLoginPage(authClient)
 
-    expect(await screen.findByText('Destino ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
     expect(authClient.login).not.toHaveBeenCalled()
   })
 })

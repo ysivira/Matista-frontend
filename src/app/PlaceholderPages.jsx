@@ -46,19 +46,3 @@ export function InfrastructurePage() {
     </main>
   )
 }
-
-/**
- * Representa el destino transitorio por rol sin implementar módulos ADMIN o ASESOR.
- * @param {object} props Propiedades del destino.
- * @param {'ADMIN'|'ASESOR'} props.role Rol autorizado por el guard padre.
- * @returns {import('react').ReactElement} Destino privado provisional.
- */
-export function RoleLandingPage({ role }) {
-  return (
-    <RoutePlaceholder
-      eyebrow="Ruta protegida"
-      title={`Destino ${role}`}
-      description="El módulo privado se implementará en su etapa correspondiente."
-    />
-  )
-}
