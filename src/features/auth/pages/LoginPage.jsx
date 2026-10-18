@@ -6,7 +6,7 @@ import { AuthAlert } from '../components/AuthAlert.jsx'
 import { PasswordField, TextField } from '../components/AuthFields.jsx'
 import { useSession } from '../hooks/useSession.js'
 import { SESSION_STATUS } from '../context/SessionContext.js'
-import { destinationPathForRole } from '../auth.constants.js'
+import { destinationPathForRole, isRolePrivatePath } from '../auth.constants.js'
 import { loginNoticeFor } from '../auth.messages.js'
 import { INVALID_EMAIL_MESSAGE, REQUIRED_FIELD_MESSAGE, isValidEmail } from '../auth.validation.js'
 
@@ -25,9 +25,13 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false)
 
   // Única fuente de redirección tras iniciar sesión: la re-renderización por la sesión resuelta
-  // respeta el `from` del guard de D.2 y evita una segunda navegación con destino por rol.
+  // respeta el `from` del guard de D.2 solo si pertenece a las rutas privadas registradas del
+  // rol recién autenticado. Un path heredado de la sesión anterior con otro rol, una ruta
+  // pública, externa o no reconocida se descarta a favor del destino por rol del backend; en
+  // cualquier caso el guard ProtectedRoute sigue siendo el árbitro final de la autorización.
   if (status === SESSION_STATUS.AUTHENTICATED) {
-    const fromState = typeof location.state?.from === 'string' && location.state.from ? location.state.from : null
+    const fromPath = typeof location.state?.from === 'string' ? location.state.from : null
+    const fromState = fromPath && isRolePrivatePath(fromPath, user?.rol) ? fromPath : null
     return <Navigate to={fromState ?? destinationPathForRole(user?.rol)} replace />
   }
 

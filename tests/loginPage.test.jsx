@@ -205,22 +205,26 @@ describe('LoginPage', () => {
     expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
   })
 
-  it('prioriza la ruta privada que originó la redirección', async () => {
-    const authClient = createAuthClient({
-      login: vi.fn().mockResolvedValue({
-        user: { rol: 'ADMIN', estado: 'ACTIVO', email: 'admin@example.test' },
-      }),
-    })
+  /**
+   * Renderiza el login con las rutas protegidas reales (guard por rol) y la entrada
+   * inicial de historial indicada, para probar transiciones de sesión entre roles.
+   * @param {object} authClient Doble del API AUTH.
+   * @param {string|object} initialEntry Entrada inicial: path o parcial con state.
+   * @returns {void}
+   */
+  function renderLoginWithGuards(authClient, initialEntry = '/login') {
     render(
-      <MemoryRouter initialEntries={['/asesor']}>
+      <MemoryRouter initialEntries={[initialEntry]}>
         <SessionProvider authClient={authClient}>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            {/* Origen real de D.2: el guard anónimo redirige a /login conservando /asesor en el estado. */}
+            {/* Guard real: el anónimo expulsa a /login conservando el path en el estado. */}
             <Route path="/asesor" element={<ProtectedRoute allowedRoles={['ASESOR']} />}>
               <Route path="" element={<TemporaryAccountPage />} />
             </Route>
-            <Route path="/admin" element={<TemporaryAccountPage />} />
+            <Route path="/admin" element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+              <Route path="" element={<TemporaryAccountPage />} />
+            </Route>
             <Route
               path="/access-denied"
               element={(
@@ -235,13 +239,94 @@ describe('LoginPage', () => {
         </SessionProvider>
       </MemoryRouter>,
     )
+  }
+
+  it('lleva al ADMIN a su destino pese a un retorno incompatible de la sesión anterior', async () => {
+    const authClient = createAuthClient({
+      login: vi.fn().mockResolvedValue({
+        user: { rol: 'ADMIN', estado: 'ACTIVO', email: 'admin@example.test' },
+      }),
+    })
+    // Flujo ASESOR → logout en /asesor → login ADMIN: el guard anónimo redirige a /login
+    // con `from=/asesor`; el nuevo login debe descartarlo e ir al destino del rol /admin.
+    renderLoginWithGuards(authClient, '/asesor')
 
     await screen.findByText('Iniciar Sesión')
     fillAndSubmit()
 
-    // Si el login respetara solo el destino por rol del ADMIN (/admin), veríamos "Cuenta ADMIN";
-    // el resultado esperado prueba que `from` (=/asesor) fue respetado y el guard real rechazó al ADMIN.
+    expect(await screen.findByText('Cuenta ADMIN')).toBeTruthy()
+  })
+
+  it('lleva al ASESOR a su destino pese a un retorno incompatible de la sesión anterior', async () => {
+    const authClient = createAuthClient({
+      login: vi.fn().mockResolvedValue({
+        user: { rol: 'ASESOR', estado: 'ACTIVO', email: 'asesor@example.test' },
+      }),
+    })
+    renderLoginWithGuards(authClient, '/admin')
+
+    await screen.findByText('Iniciar Sesión')
+    fillAndSubmit()
+
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
+  })
+
+  it('conserva el retorno legítimo del propio rol', async () => {
+    const authClient = createAuthClient({
+      login: vi.fn().mockResolvedValue({
+        user: { rol: 'ASESOR', estado: 'ACTIVO', email: 'asesor@example.test' },
+      }),
+    })
+    renderLoginWithGuards(authClient, '/asesor')
+
+    await screen.findByText('Iniciar Sesión')
+    fillAndSubmit()
+
+    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
+  })
+
+  it('conserva el retorno legítimo del rol ADMIN', async () => {
+    const authClient = createAuthClient({
+      login: vi.fn().mockResolvedValue({
+        user: { rol: 'ADMIN', estado: 'ACTIVO', email: 'admin@example.test' },
+      }),
+    })
+    renderLoginWithGuards(authClient, '/admin')
+
+    await screen.findByText('Iniciar Sesión')
+    fillAndSubmit()
+
+    expect(await screen.findByText('Cuenta ADMIN')).toBeTruthy()
+  })
+
+  it('descarta el retorno externo, público o no reconocido del estado de navegación', async () => {
+    const authClient = createAuthClient({
+      login: vi.fn().mockResolvedValue({
+        user: { rol: 'ADMIN', estado: 'ACTIVO', email: 'admin@example.test' },
+      }),
+    })
+    // `from` manipulable del historial: URL externa y path parecido no autorizado.
+    renderLoginWithGuards(authClient, {
+      pathname: '/login',
+      state: { from: 'https://externo.test/admin-otra' },
+    })
+
+    await screen.findByText('Iniciar Sesión')
+    fillAndSubmit()
+
+    expect(await screen.findByText('Cuenta ADMIN')).toBeTruthy()
+  })
+
+  it('mantiene el acceso directo negado a la ruta privada de otro rol', async () => {
+    const authClient = createAuthClient({
+      getMe: vi.fn().mockResolvedValue({
+        user: { rol: 'ADMIN', estado: 'ACTIVO', email: 'admin@example.test' },
+      }),
+    })
+    renderLoginWithGuards(authClient, '/asesor')
+
     expect(await screen.findByText('Acceso no autorizado')).toBeTruthy()
+    expect(authClient.login).not.toHaveBeenCalled()
   })
 
   it('redirige al destino del rol cuando la sesión ya está activa', async () => {

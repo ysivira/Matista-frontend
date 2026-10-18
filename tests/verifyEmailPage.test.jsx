@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -99,5 +100,62 @@ describe('VerifyEmailPage', () => {
 
     await screen.findByText('Correo electrónico confirmado')
     expect(screen.getByRole('link', { name: 'Iniciar sesión' }).getAttribute('href')).toBe('/login')
+  })
+
+  it('despacha exactamente una solicitud efectiva durante el ciclo de efectos de StrictMode', async () => {
+    authApi.verifyEmail.mockResolvedValue({ code: 'EMAIL_VERIFIED' })
+    render(
+      <StrictMode>
+        <MemoryRouter initialEntries={['/confirm-email#token=abc']}>
+          <VerifyEmailPage />
+        </MemoryRouter>
+      </StrictMode>,
+    )
+
+    // El setup repetido del StrictMode no re-despacha: la petición duplicada nunca
+    // sale del navegador; la única respuesta vigente gana la vista con éxito (200)
+    // y no con la repetición estable ALREADY_VERIFIED que recibiría un segundo envío.
+    expect(await screen.findByText('Correo electrónico confirmado')).toBeTruthy()
+    expect(screen.getByText(/pendiente de activación/)).toBeTruthy()
+    expect(authApi.verifyEmail).toHaveBeenCalledTimes(1)
+    expect(authApi.verifyEmail).toHaveBeenCalledWith('abc')
+  })
+
+  it('no aplica la respuesta de una verificación cuyo componente ya se desmontó', async () => {
+    let resolver
+    authApi.verifyEmail.mockImplementationOnce(
+      () => new Promise((resolve) => { resolver = resolve }),
+    )
+    const { unmount } = renderVerify()
+    unmount()
+
+    await act(async () => {
+      resolver({ code: 'EMAIL_VERIFIED' })
+      await Promise.resolve()
+    })
+
+    expect(authApi.verifyEmail).toHaveBeenCalledTimes(1)
+  })
+
+  it('conserva el reintento legítimo tras un fallo técnico, incluso bajo StrictMode', async () => {
+    authApi.verifyEmail
+      .mockRejectedValueOnce(new NetworkError(new Error('fetch failed')))
+      .mockResolvedValueOnce({ code: 'EMAIL_VERIFIED' })
+    render(
+      <StrictMode>
+        <MemoryRouter initialEntries={['/confirm-email#token=abc']}>
+          <VerifyEmailPage />
+        </MemoryRouter>
+      </StrictMode>,
+    )
+
+    // El fallo técnico habilita Reintentar; el nuevo intento sí debe despacharse,
+    // aunque el guard anti-duplicado ya haya registrado el intento 0 del StrictMode.
+    const retryButton = await screen.findByRole('button', { name: 'Reintentar' })
+    await act(async () => {
+      fireEvent.click(retryButton)
+    })
+    expect(await screen.findByText('Correo electrónico confirmado')).toBeTruthy()
+    expect(authApi.verifyEmail).toHaveBeenCalledTimes(2)
   })
 })

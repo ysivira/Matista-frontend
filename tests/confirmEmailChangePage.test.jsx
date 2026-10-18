@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -129,5 +130,69 @@ describe('ConfirmEmailChangePage', () => {
 
     await screen.findByText('Correo electrónico actualizado')
     expect(screen.getByRole('link', { name: 'Iniciar sesión' }).getAttribute('href')).toBe('/login')
+  })
+
+  it('despacha exactamente una solicitud efectiva durante el ciclo de efectos de StrictMode', async () => {
+    authApi.confirmEmailChange.mockResolvedValue({
+      code: 'EMAIL_CHANGED',
+      oldEmail: 'asesor@example.test',
+      newEmail: 'asesor.nuevo@example.test',
+    })
+    render(
+      <StrictMode>
+        <MemoryRouter initialEntries={['/confirm-email-change#token=abc']}>
+          <SessionProvider authClient={createAnonAuthClient()}>
+            <ConfirmEmailChangePage />
+          </SessionProvider>
+        </MemoryRouter>
+      </StrictMode>,
+    )
+
+    // El setup repetido del StrictMode no re-despacha: la petición duplicada
+    // nunca sale del navegador y la única respuesta vigente (200) gana la vista.
+    expect(await screen.findByText('Correo electrónico actualizado')).toBeTruthy()
+    expect(screen.getByText(/asesor.nuevo@example.test/)).toBeTruthy()
+    expect(authApi.confirmEmailChange).toHaveBeenCalledTimes(1)
+    expect(authApi.confirmEmailChange).toHaveBeenCalledWith('abc')
+  })
+
+  it('no aplica la respuesta de una confirmación cuyo componente ya se desmontó', async () => {
+    let resolver
+    authApi.confirmEmailChange.mockImplementationOnce(
+      () => new Promise((resolve) => { resolver = resolve }),
+    )
+    const { unmount } = renderConfirmChange()
+    unmount()
+
+    await act(async () => {
+      resolver({ code: 'EMAIL_CHANGED', newEmail: 'tardio@example.test' })
+      await Promise.resolve()
+    })
+
+    expect(authApi.confirmEmailChange).toHaveBeenCalledTimes(1)
+  })
+
+  it('conserva el reintento legítimo tras un fallo técnico, incluso bajo StrictMode', async () => {
+    authApi.confirmEmailChange
+      .mockRejectedValueOnce(new NetworkError(new Error('fetch failed')))
+      .mockResolvedValueOnce({ code: 'EMAIL_CHANGED', newEmail: 'asesor.nuevo@example.test' })
+    render(
+      <StrictMode>
+        <MemoryRouter initialEntries={['/confirm-email-change#token=abc']}>
+          <SessionProvider authClient={createAnonAuthClient()}>
+            <ConfirmEmailChangePage />
+          </SessionProvider>
+        </MemoryRouter>
+      </StrictMode>,
+    )
+
+    // El fallo técnico habilita Reintentar; el nuevo intento sí debe despacharse,
+    // aunque el guard anti-duplicado ya haya registrado el intento 0 del StrictMode.
+    const retryButton = await screen.findByRole('button', { name: 'Reintentar' })
+    await act(async () => {
+      fireEvent.click(retryButton)
+    })
+    expect(await screen.findByText('Correo electrónico actualizado')).toBeTruthy()
+    expect(authApi.confirmEmailChange).toHaveBeenCalledTimes(2)
   })
 })

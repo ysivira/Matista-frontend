@@ -17,6 +17,8 @@ const VIEW_STATUS = {
 /**
  * Confirma el correo inicial con el token del enlace. El token se extrae una única vez,
  * se elimina del historial visible de inmediato y permanece solo en memoria durante la operación.
+ * En desarrollo StrictMode re-invoca el efecto de montaje: la verificación se despacha
+ * exactamente una vez por intento, sin duplicados que consuman el token en el servidor.
  * @returns {import('react').ReactElement} Pantalla pública de confirmación de correo.
  */
 export function VerifyEmailPage() {
@@ -29,6 +31,17 @@ export function VerifyEmailPage() {
   const [outcome, setOutcome] = useState(null)
   const [failure, setFailure] = useState(null)
   const [attempt, setAttempt] = useState(0)
+  // Control de unicidad del envío: React StrictMode ejecuta setup→cleanup→setup en el
+  // primer montaje conservando los refs del componente. dispatchedAttemptRef recuerda
+  // el intento ya despachado dentro de esta vida del componente, de modo que el segundo
+  // setup de la simulación se salta el envío; la petición duplicada nunca sale del
+  // navegador, evitando consumir indebidamente el token de un solo uso en el servidor.
+  const dispatchedAttemptRef = useRef(null)
+  // Vigencia real del montaje para aplicar respuestas. mountedRef es reactivado en cada
+  // setup del efecto: el cleanup intermedio de StrictMode lo apaga, pero el setup
+  // inmediato siguiente (sin re-enviar) lo enciende otra vez; solo un desmontaje real
+  // lo deja en false, cerrando la aplicación de respuestas tardías u obsoletas.
+  const mountedRef = useRef(false)
 
   useEffect(() => {
     if (hashClearedRef.current) return
@@ -41,21 +54,31 @@ export function VerifyEmailPage() {
 
   useEffect(() => {
     if (!token) return
-    let active = true
-    authApi.verifyEmail(token)
-      .then((response) => {
-        if (!active) return
-        // El backend admite correo recién verificado o ya confirmado; ambos despejan el flujo.
-        setOutcome(response?.code === 'EMAIL_ALREADY_VERIFIED' ? 'ALREADY_VERIFIED' : 'VERIFIED')
-        setStatus(VIEW_STATUS.SUCCESS)
-      })
-      .catch((caught) => {
-        if (!active) return
-        setFailure(caught)
-        setStatus(VIEW_STATUS.ERROR)
-      })
+    // Solo el primer setup de cada intento despacha: si el efecto ya envió la única
+    // petición efectiva para este intento, el setup repetido se limita a re-marcar
+    // el montaje vigente (comportamiento del ciclo setup→cleanup→setup de StrictMode).
+    if (dispatchedAttemptRef.current !== attempt) {
+      dispatchedAttemptRef.current = attempt
+      const attemptBound = attempt
+      // La respuesta se evalúa por vigencia de montaje e intento, no por la marca del
+      // closure que no distingue el cleanup simulado de StrictMode de un desmontaje real.
+      authApi.verifyEmail(token)
+        .then((response) => {
+          if (!mountedRef.current || dispatchedAttemptRef.current !== attemptBound) return
+          // El backend admite correo recién verificado o ya confirmado; ambos despejan el flujo.
+          setOutcome(response?.code === 'EMAIL_ALREADY_VERIFIED' ? 'ALREADY_VERIFIED' : 'VERIFIED')
+          setStatus(VIEW_STATUS.SUCCESS)
+        })
+        .catch((caught) => {
+          if (!mountedRef.current || dispatchedAttemptRef.current !== attemptBound) return
+          setFailure(caught)
+          setStatus(VIEW_STATUS.ERROR)
+        })
+    }
+    mountedRef.current = true
+    // El desmontaje real apaga la vigencia: las respuestas posteriores se ignoran sin tocar el estado.
     return () => {
-      active = false
+      mountedRef.current = false
     }
   }, [token, attempt])
 
