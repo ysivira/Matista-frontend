@@ -146,9 +146,10 @@ export function MiPerfilPage() {
     <AdminLayout section="Mi perfil">
       <div className="admin-profile">
         <h1 className="admin-title">Mi perfil</h1>
-        <p className="admin-profile__lead">Se ven tus datos reales; la autorización y el estado los decide el servidor.</p>
+        <p className="admin-directory__lead">Se ven tus datos reales; la autorización y el estado los decide el servidor.</p>
 
-        <dl className="admin-modal__facts admin-profile__identity">
+
+        <dl className="admin-facts admin-profile__identity">
           <div><dt>Nombre</dt><dd>{nombreCompleto}</dd></div>
           <div><dt>Correo</dt><dd>{user?.email ?? '—'}</dd></div>
           <div><dt>Legajo</dt><dd>{user?.legajo ?? '—'}</dd></div>
