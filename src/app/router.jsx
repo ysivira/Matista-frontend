@@ -11,7 +11,10 @@ import { ConfirmEmailChangePage } from '../features/auth/pages/ConfirmEmailChang
 import { ResendVerificationPage } from '../features/auth/pages/ResendVerificationPage.jsx'
 import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.jsx'
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
-import { TemporaryAccountPage } from '../features/auth/pages/TemporaryAccountPage.jsx'
+import { AdminLayout } from '../features/admin/components/AdminLayout.jsx'
+import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
+import { AsesorModuloPage } from '../features/admin/pages/AsesorModuloPage.jsx'
+import { MiPerfilPage } from '../features/perfil/pages/MiPerfilPage.jsx'
 
 const routes = [
   {
@@ -69,15 +72,30 @@ const routes = [
     ),
   },
   {
+    // Directorio ADMIN: carga el shell compartido y la pantalla SL-1 aprobada.
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ADMIN]} />,
     children: [
-      { path: '/admin', element: <TemporaryAccountPage /> },
+      {
+        path: '/admin',
+        element: <AdminLayout section="Directorio de empleados" />,
+        children: [
+          { index: true, element: <EmployeesPage /> },
+        ],
+      },
     ],
   },
   {
-    element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR]} />,
+    // Módulo ASESOR: deja visible el destino; las pantallas llegan en SL-2.
+    element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR, AUTH_ROLES.ADMIN]} />,
     children: [
-      { path: '/asesor', element: <TemporaryAccountPage /> },
+      { path: '/asesor', element: <AsesorModuloPage /> },
+    ],
+  },
+  {
+    // Perfil propio compartido por ambos roles con la misma sesión AUTH.
+    element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ADMIN, AUTH_ROLES.ASESOR]} />,
+    children: [
+      { path: '/perfil', element: <MiPerfilPage /> },
     ],
   },
   {

@@ -78,7 +78,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Cuenta ADMIN')).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Directorio de empleados' })).toBeTruthy()
   })
 
   it('redirige la raíz al destino del asesor con ese rol', async () => {
@@ -88,7 +88,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cotizaciones del asesor')).toBeTruthy()
   })
 
   it('redirige una ruta privada a la pantalla de login cuando no hay sesión', async () => {
@@ -104,7 +104,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Cuenta ASESOR')).toBeTruthy()
+    expect(await screen.findByText('Cotizaciones del asesor')).toBeTruthy()
   })
 
   it('impide presentar una ruta incompatible con el rol', async () => {
