@@ -13,7 +13,6 @@ import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.js
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
 import { AdminLayout } from '../features/admin/components/AdminLayout.jsx'
 import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
-import { AsesorModuloPage } from '../features/admin/pages/AsesorModuloPage.jsx'
 import { MiPerfilPage } from '../features/perfil/pages/MiPerfilPage.jsx'
 
 const routes = [
@@ -85,10 +84,12 @@ const routes = [
     ],
   },
   {
-    // Módulo ASESOR: deja visible el destino; las pantallas llegan en SL-2.
+    // La ruta inicial del rol ASESOR sigue registrada por la arquitectura AUTH;
+    // sin módulo propio aprobado resuelve hacia el perfil compartido de SL-1.
+    // Ninguna pantalla provisional de ASESOR queda expuesta antes de SL-2.
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR, AUTH_ROLES.ADMIN]} />,
     children: [
-      { path: '/asesor', element: <AsesorModuloPage /> },
+      { path: '/asesor', element: <Navigate to="/perfil" replace /> },
     ],
   },
   {

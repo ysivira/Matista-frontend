@@ -51,10 +51,6 @@ export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
             <span aria-hidden="true">▣</span>
             Directorio de empleados
           </NavLink>
-          <NavLink to="/asesor" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <span aria-hidden="true">◫</span>
-            Cotizaciones
-          </NavLink>
           <NavLink to="/perfil" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
             <span aria-hidden="true">◍</span>
             Mi perfil

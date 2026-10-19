@@ -88,7 +88,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Cotizaciones del asesor')).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Mi perfil' })).toBeTruthy()
   })
 
   it('redirige una ruta privada a la pantalla de login cuando no hay sesión', async () => {
@@ -104,7 +104,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByText('Cotizaciones del asesor')).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Mi perfil' })).toBeTruthy()
   })
 
   it('impide presentar una ruta incompatible con el rol', async () => {
