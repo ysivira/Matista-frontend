@@ -5,8 +5,12 @@ import { ApiError } from '../../../shared/lib/httpClient.js'
 import { technicalNoticeFor } from '../../auth/auth.messages.js'
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx'
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
-import { AdminAvatar, inicialesDe } from '../components/AdminAvatar.jsx'
+import { AdminAvatar } from '../components/AdminAvatar.jsx'
+import { inicialesDe } from '../components/iniciales.js'
 import { AdminModal, IconoAdvertencia, IconoCheck, IconoLupa } from '../components/AdminModal.jsx'
+import { ChipEstado } from '../components/ChipEstado.jsx'
+import { EmployeeCard, MenuRolEmpleados } from '../components/EmployeeCard.jsx'
+import { useVistaTarjetas } from '../hooks/useVistaTarjetas.js'
 
 const ESTADOS_FILTRO = ['todos', 'PENDIENTE', 'ACTIVO', 'INACTIVO', 'BAJA']
 const ROLES_FILTRO = ['todos', 'ADMIN', 'ASESOR']
@@ -52,20 +56,6 @@ function avisoPara(error, fallback = 'No se pudo completar la operación. Intent
     return { tone: 'error', title: 'El directorio rechazó la operación', message: error.message }
   }
   return technicalNoticeFor(error, fallback)
-}
-
-/** Deriva la clase de píldora de estado para chips y modales según negocio. */
-function claseEstado(estado) {
-  return `admin-chip--estado-${String(estado || '').toLowerCase()}`
-}
-
-/**
- * Píldora de estado del diseño Stitch con su punto de color asociado.
- * @param {{estado: string}} props Estado del DTO público.
- * @returns {import('react').ReactElement} Chip accesible del estado.
- */
-function ChipEstado({ estado }) {
-  return <span className={`admin-chip ${claseEstado(estado)}`}>{estado}</span>
 }
 
 /**
@@ -184,6 +174,7 @@ function ModalExito({ empleado, estadoFinal, mensaje, onCerrar }) {
  */
 export function EmployeesPage() {
   const { user } = useSession()
+  const vistaTarjetas = useVistaTarjetas()
   const [empleados, setEmpleados] = useState([])
   const [cargando, setCargando] = useState(true)
   const [aviso, setAviso] = useState(null)
@@ -192,6 +183,7 @@ export function EmployeesPage() {
   const [accionPendiente, setAccionPendiente] = useState(null) // { accion, empleado }
   const [submitting, setSubmitting] = useState(false)
   const [actualizado, setActualizado] = useState(null) // { empleado, estadoFinal, mensaje }
+  const [menuRol, setMenuRol] = useState(null) // Legajo con el menú de rol abierto
 
   /**
    * Recarga el listado con los filtros actuales; fallo técnico con aviso reintentable.
@@ -211,10 +203,22 @@ export function EmployeesPage() {
   }
 
   useEffect(() => {
-    void cargar()
+    // cargar() se difiere un microtask: sus setState iniciales quedan asíncronos
+    // respecto del efecto (react-hooks/set-state-in-effect) tras la consulta al backend.
+    queueMicrotask(cargar)
     // La carga inicial y los cambios de filtros disparan la única fuente de verdad: el backend.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filtros.estado, filtros.rol])
+
+  useEffect(() => {
+    // El menú contextual de rol se cierra con cualquier interacción fuera de él.
+    if (!menuRol) return undefined
+    function cerrarMenu(evento) {
+      if (!evento.target.closest?.('.admin-menu__wrap')) setMenuRol(null)
+    }
+    document.addEventListener('mousedown', cerrarMenu)
+    return () => document.removeEventListener('mousedown', cerrarMenu)
+  }, [menuRol])
 
   /**
    * Abre el modal de confirmación para la acción elegida sobre el empleado.
@@ -332,7 +336,6 @@ export function EmployeesPage() {
               onKeyDown={(event) => { if (event.key === 'Enter') void cargar() }}
             />
           </label>
-          <span className="admin-search__hint" aria-hidden="true">⌘K</span>
           <button className="admin-button admin-button--subtle" type="button" onClick={() => void cargar()}>
             Buscar
           </button>
@@ -359,6 +362,33 @@ export function EmployeesPage() {
 
       {cargando ? (
         <LoadingState message="Cargando el directorio..." />
+      ) : vistaTarjetas ? (
+        <section className="admin-card admin-directory-cards" aria-label="Tarjetas del directorio">
+          {empleados.length === 0 ? (
+            <p className="admin-directory-card__empty">No hay empleados con esos filtros.</p>
+          ) : (
+            <div className="admin-directory-cards__grid">
+              {empleados.map((empleado) => (
+                <EmployeeCard
+                  key={empleado.legajo}
+                  empleado={empleado}
+                  nombreMostrado={nombreCompleto(empleado)}
+                  acciones={accionesDe(empleado).map(({ accion, label }) => ({ accion, label, icono: ICONOS_ACCION[accion] }))}
+                  accionRol={accionRolDe(empleado)}
+                  menuAbierto={menuRol === empleado.legajo}
+                  onMenuRol={() => setMenuRol(menuRol === empleado.legajo ? null : empleado.legajo)}
+                  onPedirAccion={pedirConfirmacion}
+                  onElegirRol={(accion, elegido) => { setMenuRol(null); pedirConfirmacion(accion, elegido) }}
+                  onVerDetalle={() => { void adminApi.getEmployee(empleado.legajo).then((r) => setDetalle(r.empleado)).catch(() => {}) }}
+                />
+              ))}
+            </div>
+          )}
+          <div className="admin-card__footer">
+            <span>Página única del directorio</span>
+            <span>Mostrando {empleados.length} de {empleados.length} empleados</span>
+          </div>
+        </section>
       ) : (
         <div className="admin-card admin-table-wrap">
           <table className="admin-table">
@@ -411,15 +441,14 @@ export function EmployeesPage() {
                           </svg>
                         </button>
                       ))}
-                      {accionRolDe(empleado) ? (
-                        <button
-                          className="admin-button admin-button--subtle"
-                          type="button"
-                          onClick={() => pedirConfirmacion(accionRolDe(empleado).accion, empleado)}
-                        >
-                          {accionRolDe(empleado).label}
-                        </button>
-                      ) : null}
+                      <MenuRolEmpleados
+                        empleado={empleado}
+                        nombreMostrado={nombreCompleto(empleado)}
+                        accionRol={accionRolDe(empleado)}
+                        abierto={menuRol === empleado.legajo}
+                        onToggle={() => setMenuRol(menuRol === empleado.legajo ? null : empleado.legajo)}
+                        onElegir={(accion, elegido) => { setMenuRol(null); pedirConfirmacion(accion, elegido) }}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -434,7 +463,7 @@ export function EmployeesPage() {
       )}
 
       <p className="admin-directory__hint">
-        La propia cuenta no se administra desde el directorio: operá el cambio desde «Mi perfil».
+        La propia cuenta no se administra desde el directorio: operá los cambios desde la tarjeta de usuario al pie de la barra lateral.
       </p>
 
       {detalle && !accionPendiente ? (

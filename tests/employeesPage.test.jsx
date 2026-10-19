@@ -94,7 +94,7 @@ describe('directorio de empleados (SL-1)', () => {
     expect(await screen.findByText('0000000001')).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Desactivar' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'Cambiar a ASESOR' })).toBeNull()
-    expect(await screen.findByText(/operá el cambio desde «Mi perfil»/)).toBeTruthy()
+    expect(await screen.findByText(/tarjeta de usuario al pie de la barra lateral/)).toBeTruthy()
   })
 
   it('activa una cuenta PENDIENTE con el modal y recarga el directorio', async () => {
@@ -108,6 +108,21 @@ describe('directorio de empleados (SL-1)', () => {
     fireEvent.click(within(dialogo).getByRole('button', { name: /Confirmar activar/ }))
 
     await waitFor(() => expect(adminApi.changeEstado).toHaveBeenCalledWith('0000000099', 'ACTIVO'))
+    expect(await screen.findByText('Estado actualizado')).toBeTruthy()
+  })
+
+
+  it('promueve a ADMIN desde el menú contextual compacto', async () => {
+    adminApi.listEmployees.mockResolvedValue({ empleados: [empleado()] })
+    adminApi.changeRol.mockResolvedValue({ empleado: { ...empleado(), rol: 'ADMIN' } })
+    renderDirectory()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Más acciones de Nueva Cuenta' }))
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Promover a ADMIN' }))
+    const dialogo = await screen.findByRole('dialog', { name: 'Confirmar promover a ADMIN' })
+    fireEvent.click(within(dialogo).getByRole('button', { name: /Confirmar promover a ADMIN/ }))
+
+    await waitFor(() => expect(adminApi.changeRol).toHaveBeenCalledWith('0000000099', 'ADMIN'))
     expect(await screen.findByText('Estado actualizado')).toBeTruthy()
   })
 
