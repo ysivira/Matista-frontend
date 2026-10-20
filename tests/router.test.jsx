@@ -78,7 +78,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByRole('heading', { name: 'Directorio de empleados' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Gestión de empleados' })).toBeTruthy()
   })
 
   it('redirige la raíz al destino del asesor con ese rol', async () => {

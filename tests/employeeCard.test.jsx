@@ -86,7 +86,7 @@ describe('directorio de empleados en tarjetas (SPEC-03 responsive)', () => {
     expect(screen.getByText('Carla Sánchez')).toBeTruthy()
     expect(screen.getByLabelText('Rol')).toBeTruthy()
     expect(screen.queryByRole('table')).toBeNull()
-    expect(screen.getByText('Mostrando 2 de 2 empleados')).toBeTruthy()
+    expect(screen.getByText('Mostrando 1–2 de 2 empleados')).toBeTruthy()
   })
 
   it('aplica los filtros sobre la consulta compartida que alimenta las tarjetas', async () => {

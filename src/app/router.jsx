@@ -76,7 +76,7 @@ const routes = [
     children: [
       {
         path: '/admin',
-        element: <AdminLayout section="Directorio de empleados" />,
+        element: <AdminLayout section="Gestión de empleados" />,
         children: [
           { index: true, element: <EmployeesPage /> },
         ],

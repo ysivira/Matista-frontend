@@ -20,7 +20,8 @@ export function MiPerfilPage() {
   return (
     <AdminLayout section="Mi perfil">
       <div className="admin-profile">
-        <h1 className="admin-title">Mi perfil</h1>
+        {/* El título vive solo en el encabezado superior del shell (h1); la
+            vista mantiene su descripción breve sin repetir «Mi perfil». */}
         <p className="admin-directory__lead">Se ven tus datos reales; la autorización y el estado los decide el servidor.</p>
 
         <dl className="admin-facts admin-profile__identity">

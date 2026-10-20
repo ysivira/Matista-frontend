@@ -23,7 +23,7 @@ function renderShell(session = seededSession()) {
   return render(
     <SessionContext.Provider value={session}>
       <MemoryRouter initialEntries={['/admin']}>
-        <AdminLayout section="Directorio de empleados">
+        <AdminLayout section="Gestión de empleados">
           <p>Contenido de prueba</p>
         </AdminLayout>
       </MemoryRouter>

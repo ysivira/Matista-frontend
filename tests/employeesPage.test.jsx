@@ -143,3 +143,124 @@ describe('directorio de empleados (SL-1)', () => {
     await screen.findByText('No se puede desactivar al último ADMIN activo.')
   })
 })
+
+describe('regresión: transición de filtros sin parpadeo', () => {
+  it('no remonta la pantalla completa al recargar desde un filtro que no devolvió filas', async () => {
+    // Consulta inicial vacía: reproduce la combinación previa sin resultados
+    // (por ejemplo BAJA) que provocaba el parpadeo intermitente.
+    adminApi.listEmployees.mockResolvedValueOnce({ empleados: [] })
+    renderDirectory()
+    expect(await screen.findByText('No hay empleados con esos filtros.')).toBeTruthy()
+
+    // El cambio a ACTIVO queda pendiente: el listado se mantiene montado,
+    // sin pantalla completa y sin indicador de recarga intercalado.
+    let resolverActivo
+    adminApi.listEmployees.mockImplementationOnce(
+      () => new Promise((resolve) => { resolverActivo = resolve }),
+    )
+    fireEvent.change(screen.getByLabelText('Estado'), { target: { value: 'ACTIVO' } })
+    await waitFor(() => expect(resolverActivo).toBeTruthy())
+    await waitFor(() => expect(screen.queryByText('Cargando el directorio...')).toBeNull())
+    expect(screen.queryByText('No hay empleados con esos filtros.')).toBeTruthy()
+
+    resolverActivo({ empleados: [empleado()] })
+    expect(await screen.findAllByText('Nueva Cuenta')).toBeTruthy()
+    expect(screen.queryByText('Cargando el directorio...')).toBeNull()
+  })
+
+  it('descarta la respuesta obsoleta de cambios consecutivos y muestra solo el filtro vigente', async () => {
+    adminApi.listEmployees.mockResolvedValueOnce({ empleados: [empleado()] }) // Carga inicial con datos
+    let resolverActivo
+    let resolverInactivo
+    adminApi.listEmployees
+      // ACTIVO se consulta primero pero su respuesta tarda más que la de INACTIVO
+      .mockImplementationOnce(() => new Promise((resolve) => { resolverActivo = resolve }))
+      .mockImplementationOnce(() => new Promise((resolve) => { resolverInactivo = resolve }))
+    renderDirectory()
+    expect(await screen.findAllByText('Nueva Cuenta')).toBeTruthy()
+
+    // Dos cambios consecutivos: ACTIVO queda obsoleto respecto de INACTIVO.
+    fireEvent.change(screen.getByLabelText('Estado'), { target: { value: 'ACTIVO' } })
+    await waitFor(() => expect(resolverActivo).toBeTruthy())
+    fireEvent.change(screen.getByLabelText('Estado'), { target: { value: 'INACTIVO' } })
+    await waitFor(() => expect(resolverInactivo).toBeTruthy())
+
+    // La respuesta tardía de ACTIVO llega con el filtro vigente en INACTIVO.
+    resolverActivo({ empleados: [empleado({ legajo: '0000000011', nombre: 'Resuelta', estado: 'ACTIVO' })] })
+    resolverInactivo({ empleados: [empleado({ legajo: '0000000022', nombre: 'Actual', estado: 'INACTIVO' })] })
+
+    expect(await screen.findAllByText(/^Actual/)).toBeTruthy()
+    expect(screen.queryByText(/Resuelta/)).toBeNull() // La respuesta obsoleta no se aplica
+    expect(screen.queryByText('Cargando el directorio...')).toBeNull()
+    expect(adminApi.listEmployees).toHaveBeenCalledTimes(3)
+  })
+})
+
+describe('regresión: paginación compartida del directorio', () => {
+  /** Lista sintética de empleados paginable con nombres únicos. */
+  function listaEmpleados(cantidad) {
+    return Array.from({ length: cantidad }, (_, i) => empleado({
+      legajo: `0000081${String(i).padStart(2, '0')}`,
+      nombre: `Empleado${i}`,
+    }))
+  }
+
+  /** Filas de datos visibles, excluyendo el encabezado de la tabla. */
+  function filasVisibles() {
+    return screen.getByRole('table').querySelectorAll('tbody tr')
+  }
+
+  it('pagina el listado con el mismo estado en la navegación entre páginas', async () => {
+    adminApi.listEmployees.mockResolvedValue({ empleados: listaEmpleados(12) })
+    renderDirectory()
+    expect(await screen.findAllByText(/^Empleado\d/)).toHaveLength(10)
+    expect(screen.getByText('Mostrando 1–10 de 12 empleados')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Página anterior' }).disabled).toBe(true)
+    expect(screen.getByRole('button', { name: 'Página siguiente' }).disabled).toBe(false)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Página siguiente' }))
+    expect(screen.getAllByText(/^Empleado\d/)).toHaveLength(2)
+    expect(screen.getByText('Mostrando 11–12 de 12 empleados')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Página siguiente' }).disabled).toBe(true)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Página anterior' }))
+    expect(await screen.findAllByText(/^Empleado\d/)).toHaveLength(10)
+    expect(screen.getByText('Mostrando 1–10 de 12 empleados')).toBeTruthy()
+  })
+
+  it('cambia las filas por página reutilizando la misma fuente de paginación', async () => {
+    adminApi.listEmployees.mockResolvedValue({ empleados: listaEmpleados(12) })
+    renderDirectory()
+    expect(await screen.findAllByText(/^Empleado\d/)).toHaveLength(10)
+
+    fireEvent.change(screen.getByLabelText('Seleccionar filas por página'), { target: { value: '25' } })
+    expect(filasVisibles()).toHaveLength(12)
+    expect(screen.getByText('Mostrando 1–12 de 12 empleados')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Página anterior' }).disabled).toBe(true)
+    expect(screen.getByRole('button', { name: 'Página siguiente' }).disabled).toBe(true)
+  })
+
+  it('reinicia a la primera página al aplicar una nueva consulta y admite cero resultados', async () => {
+    adminApi.listEmployees.mockResolvedValueOnce({ empleados: listaEmpleados(12) })
+    adminApi.listEmployees.mockResolvedValueOnce({ empleados: [empleado({ nombre: 'UnicoA' }), empleado({ legajo: '0000000098', nombre: 'UnicoB' })] })
+    renderDirectory()
+    expect(await screen.findAllByText(/^Empleado\d/)).toHaveLength(10)
+
+    // Navegar a la segunda página y luego aplicar el filtro de rol: la nueva
+    // consulta debe volver a la primera página con el resultado vigente.
+    fireEvent.click(screen.getByRole('button', { name: 'Página siguiente' }))
+    expect(filasVisibles()).toHaveLength(2)
+    fireEvent.change(screen.getByLabelText('Rol'), { target: { value: 'ADMIN' } })
+    expect(await screen.findAllByText(/^Unico/)).toHaveLength(2)
+    expect(screen.getByText('Mostrando 1–2 de 2 empleados')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Página siguiente' }).disabled).toBe(true)
+
+    // Búsqueda sin resultados: contador en cero y navegación deshabilitada.
+    adminApi.listEmployees.mockResolvedValueOnce({ empleados: [] })
+    fireEvent.change(screen.getByLabelText('Estado'), { target: { value: 'BAJA' } })
+    await screen.findByText('No hay empleados con esos filtros.')
+    expect(screen.getByText('Mostrando 0 de 0 empleados')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Página anterior' }).disabled).toBe(true)
+    expect(screen.getByRole('button', { name: 'Página siguiente' }).disabled).toBe(true)
+  })
+})

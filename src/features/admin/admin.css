@@ -98,12 +98,16 @@
 .admin-nav__link {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.55rem 0.75rem;
+  /* Tipografía y espaciados afinados para que «Gestión de empleados» quepa
+     en una sola línea con el ancho habitual de la barra (232 px): no cambia
+     el ancho del sidebar, el icono ni los estados activo/hover. */
+  gap: 0.4rem;
+  padding: 0.55rem 0.55rem;
   border-radius: 0.7rem;
   color: #c9c6da;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 500;
+  white-space: nowrap;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease;
 }
@@ -123,8 +127,12 @@
 
 .admin-nav__link--active:hover { background: linear-gradient(135deg, #5b2cbf, #7c4ce0); }
 
+/* La tarjeta «Mi perfil» queda anclada al pie de la barra lateral: el flex
+   de la columna la separa de la navegación con un margen automático, de
+   modo que su ubicación es estable aunque el contenido del lienzo no ocupe
+   toda la pantalla o crezca, porque la altura del directorio es constante. */
 .admin-sidebar__footer {
-  margin-top: 1rem;
+  margin-top: auto;
 }
 
 .admin-user {
@@ -161,6 +169,23 @@
 }
 
 .admin-avatar--small { width: 1.85rem; height: 1.85rem; font-size: 0.68rem; }
+
+/* En la tabla del directorio el avatar es aún más compacto para mantener
+   la fila baja (27 px); los modales que reutilizan .admin-avatar--small
+   no cambian. */
+.admin-table .admin-avatar--small {
+  width: 1.7rem;
+  height: 1.7rem;
+  font-size: 0.66rem;
+}
+
+/* Etiquetas de rol y estado a 12 px dentro de la tabla, con padding menor
+   para acompañar la densidad de las filas; las tarjetas móviles conservan
+   su tamaño propio fuera de este alcance. */
+.admin-table .admin-chip {
+  font-size: 0.75rem;
+  padding: 0.18rem 0.6rem;
+}
 
 .admin-user__name {
   display: block;
@@ -199,12 +224,6 @@
   font-size: 1rem;
   font-weight: 700;
   color: #f4f2fb;
-}
-
-.admin-topbar__meta {
-  margin: 0;
-  font-size: 0.75rem;
-  color: var(--admin-soft);
 }
 
 .admin-content {
@@ -345,6 +364,15 @@
   color: #f8f7fd;
 }
 
+/* Descripción breve y discreta del directorio: el título vive solo en el
+   encabezado superior del shell («Gestión de empleados»), así que aquí no
+   hay segundo h1; solo una línea de apoyo con espacio vertical reducido. */
+.admin-directory__descripcion {
+  margin: 0 0 0.9rem;
+  font-size: 0.82rem;
+  color: #b9b6cc;
+}
+
 .admin-directory__lead {
   margin: 0 0 1.4rem;
 }
@@ -399,25 +427,31 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
+  /* Distribución fija: la proporción del colgroup gobierna las columnas y el
+     contenido no las ensancha, evitando saltos horizontales entre consultas. */
+  table-layout: fixed;
 }
 
 .admin-table th {
-  padding: 0.7rem 1.1rem;
+  padding: 0.5rem 0.9rem;
   background: var(--admin-surface-muted);
   border-bottom: 1px solid var(--admin-border);
   text-align: left;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: #4b5060;
 }
 
+/* Filas compactas y uniformes del directorio: tipografía de 13–14 px con
+   padding vertical de ~6 px, de modo que cada fila mide 38–42 px y una
+   página de diez registros es cómoda y separada sin estilizar datos. */
 .admin-table td {
-  padding: 0.62rem 1.1rem;
+  padding: 0.375rem 0.9rem;
   border-bottom: 1px solid #f0eef7;
   text-align: left;
-  font-size: 0.92rem;
+  font-size: 0.8125rem;
 }
 
 .admin-table tbody tr:last-child td { border-bottom: none; }
@@ -431,25 +465,32 @@
 .admin-table__name {
   display: block;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--admin-text);
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  font-size: 0.98rem;
+  font-size: 0.875rem;
 }
 
 .admin-table__legajo {
   font-family: 'Inter', monospace;
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   color: var(--admin-primary-deep);
 }
 
 .admin-table__email {
   font-family: 'Inter', monospace;
-  font-size: 0.82rem;
+  font-size: 0.8125rem;
   color: #6b7280;
+}
+
+/* Con el layout fijo el texto no puede ensanchar su columna: se envuelve
+   dentro de la celda para preservar la anchura acordada del colgroup. */
+.admin-table__email,
+.admin-table__name {
+  overflow-wrap: anywhere;
 }
 
 .admin-table__empty {
@@ -958,12 +999,12 @@
   }
 }
 
-/* De 1024 a 1279 px la tabla todavía cabe completa; se reduce el espaciado
-   lateral de celdas para mantener todas las columnas visibles sin corte. */
+/* De 1024 a 1279 px la tabla todavía cabe completa; se afina el espaciado
+   lateral de celdas para mantener todas las columnas fijas sin corte. */
 @media (min-width: 1024px) and (max-width: 1279px) {
   .admin-table th,
   .admin-table td {
-    padding-inline: 0.3rem;
+    padding-inline: 0.55rem;
   }
 }
 
@@ -1009,8 +1050,131 @@
 /* La tarjeta de usuario es un botón interactivo del foot de la barra lateral */
 .admin-profile__section h2 { font-size: 0.95rem; }
 
-/* La tabla desborda con scroll horizontal en anchos reducidos */
-.admin-card.admin-table-wrap { overflow-x: auto; overflow-y: hidden; }
+/* Pie de paginación anclado al borde inferior interno del panel blanco de
+   escritorio: el contenedor reparte su altura en columna y el pie queda
+   pegado al fondo, de modo que el espacio libre entre la última fila y el
+   pie conserve la posición del pie con 10, 3, 1 o 0 resultados. El hueco
+   libre queda entre la última fila y el pie, nunca debajo. Durante las
+   recargas el flex sigue activo: la clase de actualización no altera aquí
+   la distribución interna. */
+.admin-card.admin-table-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-card.admin-table-wrap .admin-card__footer {
+  margin-top: auto;
+}
+
+/* Altura exterior constante en escritorio independientemente del selector
+   de filas por página: el panel reserva siempre el espacio de una página
+   completa de 10 filas compactas (2.45rem por fila + encabezados + pie).
+   Nunca crece con 25 o 50 registros, por lo que la barra lateral y su
+   tarjeta «Mi perfil» mantienen su ubicación; la variación de contenido se
+   resuelve con el scroll interno del área desplazable, no del documento. */
+@media (min-width: 1024px) {
+  .admin-card.admin-table-wrap {
+    height: calc(10 * 2.45rem + 5.3rem);
+  }
+}
+
+/* Área desplazable de registros: el scroll vertical pertenece únicamente a
+   las filas dentro de su propio contenedor (limitado por el flex del panel);
+   los encabezados y el pie permanecen fijos y nunca aparecen scrolls
+   horizontales porque el colgroup fijo ya condiciona todas las columnas. */
+.admin-table__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Encabezados visibles durante el desplazamiento interno de filas: sticky
+   sobre la misma tabla para preservar la alineación exacta entre los th y
+   las celdas con el colgroup fijo; sin tablas de encabezado separadas. */
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  /* Con border-collapse el borde inferior puede pintarlo la tabla y no
+     acompañar al encabezado pegado: la sombra interior lo mantiene visible
+     durante el desplazamiento sin duplicar ningún borde. */
+  box-shadow: inset 0 -1px 0 var(--admin-border);
+}
+
+/* Recarga en vivo del directorio: mientras llega el listado del nuevo filtro,
+   la tabla o las tarjetas permanecen montadas al 100 % de opacidad. La única
+   señal de actualización es un marcador fino sobre el borde superior del
+   bloque, absolutamente posicionado para no desplazar ni causar saltos;
+   la interacción queda bloqueada durante la consulta. */
+.admin-card.admin-directory--actualizando {
+  position: relative;
+  pointer-events: none;
+}
+
+.admin-card.admin-directory--actualizando::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--admin-primary-deep), transparent);
+  animation: admin-actualizando 1s ease-in-out infinite;
+}
+
+/* Pulso del marcador de recarga: solo varía la opacidad de la barra; ningún
+   movimiento horizontal ni vertical que altere la composición del directorio. */
+@keyframes admin-actualizando {
+  from { opacity: 0.25; }
+  to { opacity: 0.9; }
+}
+
+/* El bloque de resultados reserva altura constante según las filas por
+   página vigentes (--filas-pagina la inyecta la página en .admin-table-wrap):
+   el pie de paginación queda a la misma posición vertical al alternar entre
+   filtros como ACTIVO, BAJA o todos, aunque la consulta devuelva menos filas
+   (sin empleados ficticios). Con la opción de 10 archivos el panel no llega
+   al borde inferior del viewport; con 25 o 50 el documento permite el scroll
+   natural si el área reservada supera la pantalla. Nunca hay scroll interno:
+   la tabla fluye completa. En móvil las tarjetas siguen siendo adaptables,
+   sin reservar el espacio de diez tarjetas. */
+/* Pie de paginación anclado al borde inferior interno del panel blanco de
+   escritorio: el contenedor reparte su altura en columna y el pie queda
+   pegado al fondo, de modo que el espacio libre entre la última fila y el
+   pie conserve la posición del pie con 10, 3, 1 o 0 resultados. El hueco
+   libre queda entre la última fila y el pie, nunca debajo. */
+
+/* Pie de paginación compartido (diseño Stitch): selector discreto de filas
+   por página y navegación anterior/siguiente compacta y deshabilitada en
+   los extremos. */
+.admin-footer-filas {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: #4b5060;
+}
+
+.admin-footer-filas select {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.55rem;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font: 500 0.8rem 'Inter', sans-serif;
+}
+
+.admin-footer__paginas {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.admin-icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: none;
+}
 
 /* En pantallas angostas los modales compartidos ajustan su espaciado: los
    botones se apilan en vertical y el correo dentro de la tarjeta de empleado

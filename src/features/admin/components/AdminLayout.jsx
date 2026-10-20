@@ -77,10 +77,7 @@ export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
 
       <div className="admin-canvas">
         <header className="admin-topbar">
-          <div>
-            <p className="admin-topbar__section">{section}</p>
-            <p className="admin-topbar__meta">Sesión verificada por el servidor en cada acceso</p>
-          </div>
+          <h1 className="admin-topbar__section">{section}</h1>
           <button className="admin-logout" type="button" onClick={() => void handleLogout()}>
             Cerrar sesión
           </button>
