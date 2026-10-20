@@ -128,9 +128,10 @@
 .admin-nav__link--active:hover { background: linear-gradient(135deg, #5b2cbf, #7c4ce0); }
 
 /* La tarjeta «Mi perfil» queda anclada al pie de la barra lateral: el flex
-   de la columna la separa de la navegación con un margen automático, de
-   modo que su ubicación es estable aunque el contenido del lienzo no ocupe
-   toda la pantalla o crezca, porque la altura del directorio es constante. */
+   de la columna la separa de la navegación con un margen automático. Con el
+   shell bloqueado al viewport (ver «Zona principal»), la columna lateral
+   tiene altura fija en escritorio, de modo que la tarjeta conserva su
+   posición aunque la navegación crezca o el lienzo se desplace internamente. */
 .admin-sidebar__footer {
   margin-top: auto;
 }
@@ -202,8 +203,58 @@
 }
 
 /* ---------------- Zona principal ---------------- */
+
+/* Justificación del bloqueo al viewport (corrección SL-2E): antes el shell
+   crecía con el contenido (min-height en shell y sidebar) y el acordeón de
+   planes desplazaba el documento entero (topbar y «Cerrar sesión» fuera de
+   vista) y estiraba la columna lateral desplazando la tarjeta «Mi perfil».
+   La solución es el patrón estándar de aplicaciones administrativas: un
+   único contenedor de desplazamiento vertical (el lienzo central) con la
+   barra lateral y la barra superior fijas por composición de la cuadrícula,
+   sin posiciones fijas ni copiar jerarquías nuevas. */
+@media (min-width: 901px) {
+  .admin-shell {
+    height: 100vh;
+    /* Navegadores con barras dinámicas (móviles de escritorio táctil) usan 100dvh
+       y dejan 100vh como respaldo: la progresión evita alturas elásticas erróneas. */
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .admin-sidebar {
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Si la barra no alcanza (ventanas bajas), solo la navegación se desplaza:
+     la marca y la tarjeta «Mi perfil» permanecen en su sitio sin scrolls extra. */
+  .admin-nav {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .admin-canvas {
+    min-height: 0;
+    height: 100%;
+  }
+
+  /* Único desplazamiento vertical del escritorio: el contenido crece aquí y
+     el documento nunca se mueve; las pantallas existentes no cambian su
+     composición interna (el directorio sigue con su panel de altura fija). */
+  .admin-content {
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
 .admin-canvas {
   display: grid;
+  /* Columna del lienzo con minmax(0, 1fr): en una pista implícita solo con
+     anchor autos, el contenido irrestricto (tabla sin max-width) redefine el
+     max-content y desborda el lienzo en pantallas anchas; el minmax(0, 1fr)
+     fija la columna al ancho disponible y deja el ajuste interno al contenido. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   min-width: 0;
 }
@@ -226,10 +277,16 @@
   color: #f4f2fb;
 }
 
+/* El lienzo central fluye con el ancho disponible de la cuadrícula (sin tope
+   arbitrario): antes, un max-width fijo dejaba una franja estrecha de
+   contenido con vacío excesivo a la derecha en pantallas anchas. Sin
+   `width: 100%`: el estiramiento del ítem ya llena la pista y, con el
+   box-sizing por defecto, el porcentaje se suma al padding y desborda el
+   lienzo (51,2 px verificados en navegador). La pista `minmax(0, 1fr)` del
+   `.admin-canvas` mantiene la columna en el ancho disponible. */
 .admin-content {
   min-width: 0;
   padding: 1.35rem 1.6rem 2rem;
-  max-width: 1180px;
 }
 
 /* ---------------- Botones ---------------- */
@@ -1197,4 +1254,246 @@
     display: flex;
     justify-content: center;
   }
+}
+
+/* SL-2: pantallas de consulta Planes y Gestión de Precios (extensión del
+   lenguaje SL-1; solo estilos nuevos, sin modificar reglas vigentes). */
+.admin-tabs {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.admin-tab {
+  border: 1px solid var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-muted);
+  border-radius: 999px;
+  padding: 0.5rem 1.05rem;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-tab:hover { border-color: var(--admin-primary); color: var(--admin-primary-deep); }
+
+.admin-tab--activa {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #ffffff;
+}
+
+.admin-tab--activa:hover { color: #ffffff; }
+
+.admin-version-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.85rem 1.1rem 0;
+  color: var(--admin-muted);
+  font-size: 0.85rem;
+}
+
+.admin-table__texto { color: var(--admin-muted); font-size: 0.9rem; }
+
+.admin-table__precio { text-align: right; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 720px) {
+  .admin-version-meta { padding: 0.65rem 0.85rem 0; }
+}
+
+/* SL-2E: catalogo de planes compacto y desplegable; importes ARS ya alineados
+   con .admin-table__precio. Unica columna tambien en escritorio: los textos de
+   cobertura son extensos y crecen en vertical sin scroll horizontal. */
+.admin-plan-lista {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.admin-plan-card { padding: 0; overflow-wrap: anywhere; }
+
+.admin-plan-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+}
+
+.admin-plan-card__nombre {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.admin-plan-card__acciones { display: flex; gap: 0.5rem; }
+
+.admin-plan-card__body {
+  border-top: 1px solid var(--admin-border);
+  padding: 1rem 1.1rem 1.25rem;
+}
+
+/* Espaciado interno sin display propio en el panel: si el componente declara
+   display, esa regla de autor anula la del agente de usuario y el atributo
+   [hidden] deja de ocultar (causa del defecto SL-2E confirmado en navegador). */
+.admin-plan-card__body > * + * { margin-top: 0.75rem; }
+
+/* Guardia explícita: el panel contraído queda oculto incluso si una regla
+   agregada después volviera a declarar display para el panel. */
+.admin-plan-card__body[hidden] { display: none; }
+
+.admin-plan-card__subtitulo {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+/* El texto se renderiza fiel: los saltos de linea del origen conservan la
+   estructura de coberturas y no se interpreta el separador `|` inconsistente. */
+.admin-plan-card__texto {
+  margin: 0;
+  white-space: pre-line;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--admin-text);
+}
+
+/* Tabla semántica de coberturas: encabezados jerarquizados, separación
+   sutil por fila y columnas alineadas. El contenido proviene de la fuente
+   sin reinterpretaciones: `NO` y abreviaturas se conservan literales y los
+   registros ambiguos se muestran completos en una fila extendida. */
+.admin-plan-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.88rem;
+}
+
+/* Proporciones estables de columna con layout fijo: la prestación gana el
+   mayor ancho y las prestaciones extensas ocupan varias líneas sin
+   deformar la tabla; a su vez los anchos en porcentaje acompañan el zoom
+   del navegador sin cortes ni anchos fijos de píxeles. */
+.admin-plan-tabla col:nth-child(1) { width: 46%; }
+.admin-plan-tabla col:nth-child(2) { width: 27%; }
+.admin-plan-tabla col:nth-child(3) { width: 27%; }
+
+/* Rótulo solo accesible: la tabla ya tiene encabezados visibles. */
+.admin-plan-tabla__captura {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.admin-plan-tabla thead th {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  background: var(--admin-surface-tint);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-plan-tabla tbody td {
+  padding: 0.45rem 0.6rem;
+  line-height: 1.5;
+  color: var(--admin-text);
+  vertical-align: top;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-plan-tabla tbody tr:last-child td { border-bottom: none; }
+
+/* Fila extendida del registro ambiguo: el texto íntegro ocupa las tres
+   columnas y la etiqueta discreta lo distingue sin alterarlo. */
+.admin-plan-tabla__fila-completa td { background: var(--admin-surface-tint); }
+
+.admin-plan-tabla__etiqueta {
+  display: inline-block;
+  margin-right: 0.45rem;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+  background: var(--admin-surface);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  vertical-align: middle;
+}
+
+/* El glosario de referencias se separa visualmente del cuerpo de
+   condiciones: es una porción estructural fiable (prefijo `Referencias:`
+   verificado en los cuatro planes), no una interpretación de contenido. */
+.admin-plan-card__glosario {
+  border-left: 3px solid var(--admin-primary);
+  padding: 0.1rem 0 0.1rem 0.8rem;
+}
+
+.admin-plan-card__texto--glosario { font-size: 0.82rem; color: var(--admin-soft); }
+
+.admin-plan-card__empty { margin: 0; padding: 1.1rem; color: var(--admin-muted); }
+
+@media (max-width: 720px) {
+  .admin-plan-card__header { padding: 0.85rem 0.9rem; }
+  .admin-plan-card__body { padding: 0.85rem 0.9rem 1.1rem; }
+
+  /* La tabla se vuelve fichas apiladas con etiquetas visibles de cada campo:
+     sin desplazamiento horizontal de la página ni contenido cortado. */
+  .admin-plan-tabla thead { display: none; }
+
+  .admin-plan-tabla,
+  .admin-plan-tabla tbody,
+  .admin-plan-tabla tr,
+  .admin-plan-tabla td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-plan-tabla tr {
+    margin-bottom: 0.55rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--admin-border);
+    border-radius: 0.55rem;
+    background: var(--admin-surface);
+  }
+
+  .admin-plan-tabla tbody td {
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.15rem 0;
+    border-bottom: none;
+  }
+
+  .admin-plan-tabla tbody td::before {
+    content: attr(data-label);
+    flex: 0 0 7.5rem;
+    padding-top: 0.1rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--admin-muted);
+  }
+
+  /* La fila extendida del «Detalle original» no repite etiquetas de campo:
+     conserva su propia indicación y el texto completo debajo. */
+  .admin-plan-tabla tr.admin-plan-tabla__fila-completa td::before { content: none; }
 }

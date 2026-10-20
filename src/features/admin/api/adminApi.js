@@ -3,9 +3,10 @@ import { httpClient } from '../../../shared/lib/httpClient.js'
 const ADMIN_BASE_PATH = '/api/admin'
 
 /**
- * Compone las operaciones del directorio ADMIN sobre un cliente HTTP inyectable.
+ * Compone las operaciones del módulo ADMIN (directorio SL-1 y catálogo de
+ * planes/tarifario SL-2) sobre un cliente HTTP inyectable.
  * @param {{request: Function}} client Cliente HTTP compartido con cookie de sesión.
- * @returns {object} Operaciones aprobadas en el plan SPEC-03 (SL-1).
+ * @returns {object} Operaciones aprobadas en el plan SPEC-03.
  */
 export function createAdminApi(client) {
   /**
@@ -43,7 +44,26 @@ export function createAdminApi(client) {
     })
   }
 
-  return { listEmployees, getEmployee, changeEstado, changeRol }
+  /**
+   * Lista el catálogo de planes activos (RF-D06).
+   * @returns {Promise<{planes: object[]}>} Planes con datos públicos sin precios.
+   */
+  function listarPlanes() {
+    return client.request(`${ADMIN_BASE_PATH}/planes`)
+  }
+
+  /**
+   * Consulta la matriz de tarifas vigente de un plan por modalidad (RF-D07).
+   * @param {number|string} planId Identificador del plan del catálogo.
+   * @param {string} tipoIngreso Modalidad exacta: "Obligatorio" o "Voluntario".
+   * @returns {Promise<object>} Plan, modalidad, versión vigente y tarifas en orden comercial.
+   */
+  function consultarTarifario(planId, tipoIngreso) {
+    const modalidad = encodeURIComponent(tipoIngreso)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/planes/${planId}/${modalidad}`)
+  }
+
+  return { listEmployees, getEmployee, changeEstado, changeRol, listarPlanes, consultarTarifario }
 }
 
 export const adminApi = createAdminApi(httpClient)

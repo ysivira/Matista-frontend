@@ -21,6 +21,18 @@ vi.mock('../src/features/auth/api/authApi.js', () => ({
   },
 }))
 
+/** Consultas SL-2 simuladas para renderizar el shell sin red en las pruebas de guard. */
+vi.mock('../src/features/admin/api/adminApi.js', () => ({
+  adminApi: {
+    listEmployees: vi.fn().mockResolvedValue({ empleados: [] }),
+    getEmployee: vi.fn(),
+    changeEstado: vi.fn(),
+    changeRol: vi.fn(),
+    listarPlanes: vi.fn().mockResolvedValue({ planes: [] }),
+    consultarTarifario: vi.fn().mockResolvedValue({ tarifas: [] }),
+  },
+}))
+
 /**
  * Renderiza una ruta con un estado de sesión explícito para probar guards sin red.
  * @param {string} path Ruta inicial.
@@ -147,6 +159,32 @@ describe('router y guards', () => {
 
     expect(await screen.findByText('No se pudo verificar la sesión')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Reintentar' })).toBeTruthy()
+  })
+
+  it('reserva las pantallas SL-2 al rol ADMIN y comparte el shell', async () => {
+    const adminSession = {
+      status: 'authenticated',
+      user: { rol: 'ADMIN', estado: 'ACTIVO', nombre: 'Admin' },
+      error: null,
+    }
+
+    renderRoute('/admin/planes', adminSession)
+    expect(await screen.findByRole('heading', { name: 'Planes' })).toBeTruthy()
+    cleanup()
+
+    renderRoute('/admin/tarifario', adminSession)
+    expect(await screen.findByRole('heading', { name: 'Gestión de Precios' })).toBeTruthy()
+    cleanup()
+  })
+
+  it('impide que un ASESOR presente una ruta SL-2', async () => {
+    renderRoute('/admin/planes', {
+      status: 'authenticated',
+      user: { rol: 'ASESOR', estado: 'ACTIVO' },
+      error: null,
+    })
+
+    expect(await screen.findByText('Acceso no autorizado')).toBeTruthy()
   })
 
   it('expone las pantallas públicas de autenticación de D.3', async () => {

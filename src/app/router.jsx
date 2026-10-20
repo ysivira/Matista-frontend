@@ -13,6 +13,8 @@ import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.js
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
 import { AdminLayout } from '../features/admin/components/AdminLayout.jsx'
 import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
+import { PlanesPage } from '../features/admin/pages/PlanesPage.jsx'
+import { TarifarioPage } from '../features/admin/pages/TarifarioPage.jsx'
 import { MiPerfilPage } from '../features/perfil/pages/MiPerfilPage.jsx'
 
 const routes = [
@@ -71,7 +73,8 @@ const routes = [
     ),
   },
   {
-    // Directorio ADMIN: carga el shell compartido y la pantalla SL-1 aprobada.
+    // Módulo ADMIN: shell compartido con el directorio SL-1 y las pantallas
+    // de consulta SL-2; el guard del bloque exige rol ADMIN para todas.
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ADMIN]} />,
     children: [
       {
@@ -79,6 +82,8 @@ const routes = [
         element: <AdminLayout section="Gestión de empleados" />,
         children: [
           { index: true, element: <EmployeesPage /> },
+          { path: 'planes', element: <PlanesPage /> },
+          { path: 'tarifario', element: <TarifarioPage /> },
         ],
       },
     ],

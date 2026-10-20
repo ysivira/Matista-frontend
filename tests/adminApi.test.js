@@ -50,6 +50,27 @@ describe('adminApi (SL-1)', () => {
   })
 })
 
+describe('adminApi consulta SL-2', () => {
+  it('lista planes con la ruta canónica sin cuerpo extra', async () => {
+    const client = capturador({ planes: [] })
+    const api = createAdminApi(client)
+
+    await api.listarPlanes()
+    expect(client.llamadas[0]).toEqual({ ruta: '/api/admin/planes', opciones: {} })
+  })
+
+  it('consulta el tarifario con planId y modalidad exacta en el segmento URL', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.consultarTarifario(2, 'Voluntario')
+    expect(client.llamadas[0]).toEqual({ ruta: '/api/admin/tarifario/planes/2/Voluntario', opciones: {} })
+
+    await api.consultarTarifario('4', 'Obligatorio')
+    expect(client.llamadas[1].ruta).toBe('/api/admin/tarifario/planes/4/Obligatorio')
+  })
+})
+
 /** Sección mínima para la vista de perfil: se reutiliza authApi simulado. */
 vi.mock('../src/features/auth/api/authApi.js', () => ({
   authApi: { changePassword: vi.fn(), changeEmail: vi.fn() },
