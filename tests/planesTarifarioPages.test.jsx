@@ -49,9 +49,15 @@ function planSecundario() {
   return plan({ id: 3, nombre: 'PLAN OTRO', detalles: 'Detalles del otro', condiciones_generales: 'Condiciones del otro' })
 }
 
-/** Devuelve la tarjeta `article` del plan cuyo nombre se indique. */
+/**
+ * Devuelve la tarjeta `article` del plan cuyo nombre se indique. El nombre
+ * también aparece en la ficha técnica del plan, así que se elige el nodo que
+ * pertenece a la tarjeta y no a la ficha.
+ */
 function tarjetaDe(nombre) {
-  return within(screen.getByText(nombre).closest('article'))
+  const nodo = screen.getAllByText(nombre).find((elemento) => elemento.closest('article'))
+  expect(nodo).toBeTruthy()
+  return within(nodo.closest('article'))
 }
 
 /** Matriz vigente sintética con dos tarifas en cualquier orden de llegada. */
@@ -82,8 +88,8 @@ describe('PlanesPage (SL-2E, catálogo desplegable)', () => {
     adminApi.listarPlanes.mockResolvedValue({ planes: [plan(), planSecundario()] })
     renderPantalla(<PlanesPage />, '/admin/planes')
 
-    expect(await screen.findByText('PLAN EJEMPLO')).toBeTruthy()
-    expect(screen.getByText('PLAN OTRO')).toBeTruthy()
+    expect(await screen.findAllByText('PLAN EJEMPLO')).toBeTruthy()
+    expect(screen.getAllByText('PLAN OTRO').length).toBeGreaterThan(0)
     // Contraídos: los paneles de ambas tarjetas quedan ocultos.
     expect(document.getElementById('plan-2-detalles').hasAttribute('hidden')).toBe(true)
     expect(document.getElementById('plan-3-detalles').hasAttribute('hidden')).toBe(true)
@@ -96,7 +102,7 @@ describe('PlanesPage (SL-2E, catálogo desplegable)', () => {
     adminApi.listarPlanes.mockResolvedValue({ planes: [plan(), planSecundario()] })
     renderPantalla(<PlanesPage />, '/admin/planes')
 
-    expect(await screen.findByText('PLAN EJEMPLO')).toBeTruthy()
+    expect(await screen.findAllByText('PLAN EJEMPLO')).toBeTruthy()
     expect(document.getElementById('plan-2-detalles').hasAttribute('hidden')).toBe(true)
 
     fireEvent.click(tarjetaDe('PLAN EJEMPLO').getByRole('button', { name: 'Ver detalles' }))
@@ -114,7 +120,7 @@ describe('PlanesPage (SL-2E, catálogo desplegable)', () => {
     adminApi.listarPlanes.mockResolvedValue({ planes: [plan(), planSecundario()] })
     renderPantalla(<PlanesPage />, '/admin/planes')
 
-    expect(await screen.findByText('PLAN EJEMPLO')).toBeTruthy()
+    expect(await screen.findAllByText('PLAN EJEMPLO')).toBeTruthy()
     fireEvent.click(tarjetaDe('PLAN EJEMPLO').getByRole('button', { name: 'Ver detalles' }))
     expect(await screen.findByText('Detalle público')).toBeTruthy()
     expect(document.getElementById('plan-2-detalles').hasAttribute('hidden')).toBe(false)
@@ -160,7 +166,7 @@ describe('PlanesPage (SL-2E, catálogo desplegable)', () => {
 
     fireEvent.click(await screen.findByRole('button', { name: 'Ver tarifas' }))
     // La navegación resuelve la pantalla de Gestión de Precios del shell.
-    await screen.findByText('Versión 27 · CARGA_INICIAL')
+    await screen.findByText(/Tarifas vigentes/)
     expect(adminApi.consultarTarifario).toHaveBeenCalledWith('2', 'Obligatorio')
   })
 })
@@ -171,7 +177,7 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     adminApi.consultarTarifario.mockResolvedValue(matriz())
     renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2&modalidad=Obligatorio')
 
-    await screen.findByText('Versión 27 · CARGA_INICIAL')
+    await screen.findByText(/Tarifas vigentes/)
     expect(adminApi.consultarTarifario).toHaveBeenCalledWith('2', 'Obligatorio')
   })
 
@@ -180,7 +186,7 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     adminApi.consultarTarifario.mockResolvedValue(matriz())
     renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
 
-    await screen.findByText('Versión 27 · CARGA_INICIAL')
+    await screen.findByText(/Tarifas vigentes/)
     expect(adminApi.consultarTarifario).toHaveBeenCalledWith('2', 'Obligatorio')
   })
 
@@ -189,8 +195,8 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     adminApi.consultarTarifario.mockResolvedValue(matriz())
     renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
 
-    await screen.findByText('Versión 27 · CARGA_INICIAL')
-    fireEvent.click(screen.getByRole('button', { name: 'Voluntario' }))
+    await screen.findByText(/Tarifas vigentes/)
+    fireEvent.change(screen.getByLabelText('Modalidad Tarifaria'), { target: { value: 'Voluntario' } })
     await waitFor(() => expect(adminApi.consultarTarifario).toHaveBeenCalledWith('2', 'Voluntario'))
   })
 
@@ -199,8 +205,8 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     adminApi.consultarTarifario.mockResolvedValue(matriz())
     renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2&modalidad=Voluntario')
 
-    await screen.findByText('Versión 27 · CARGA_INICIAL')
-    fireEvent.change(screen.getByLabelText('Plan'), { target: { value: '3' } })
+    await screen.findByText(/Tarifas vigentes/)
+    fireEvent.change(screen.getByLabelText('Seleccionar Plan de Salud'), { target: { value: '3' } })
     await waitFor(() => expect(adminApi.consultarTarifario).toHaveBeenCalledWith('3', 'Voluntario'))
   })
 
@@ -214,7 +220,8 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     const claves = (await cuerpo.findAllByRole('row')).map((fila) => fila.textContent)
     // El importe se formatea visualmente; la cadena original permanece intácta en la API.
     await screen.findByText('$ 50,25')
-    expect(await cuerpo.findByText('HIJO 0-1')).toBeTruthy()
+    // El segmento aparece con su rango etario y con la clave de la tarifa.
+    expect((await cuerpo.findAllByText(/HIJO 0-1/)).length).toBeGreaterThan(0)
     expect(claves[0]).toContain('HIJO 0-1')
     expect(claves[1]).toContain('0-25')
     expect(typeof adminApi.consultarTarifario.mock.calls[0][0]).toBe('string')
@@ -256,6 +263,13 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
 })
 
 describe('presentación de coberturas y glosario (SL-2E, tabla conservadora)', () => {
+  /** Devuelve la tabla de coberturas de la ficha técnica en la página. */
+  function tablaFicha() {
+    const tabla = document.querySelector('.admin-plan-tabla')
+    expect(tabla).toBeTruthy()
+    return tabla
+  }
+
   /** Plan con la forma real de la fuente: dos registros de tres campos y uno ambiguo. */
   function planConFuenteReal() {
     return plan({
@@ -269,7 +283,7 @@ describe('presentación de coberturas y glosario (SL-2E, tabla conservadora)', (
     renderPantalla(<PlanesPage />, '/admin/planes')
 
     fireEvent.click(await screen.findByRole('button', { name: 'Ver detalles' }))
-    const tabla = tarjetaDe('PLAN EJEMPLO').getByRole('table')
+    const tabla = tablaFicha()
     const encabezados = within(tabla).getAllByRole('columnheader').map((th) => th.textContent)
     expect(encabezados).toEqual(['Prestación', 'Cobertura', 'Observaciones'])
     // Tres columnas declaradas para las proporciones de colgroup en admin.css.
@@ -287,7 +301,7 @@ describe('presentación de coberturas y glosario (SL-2E, tabla conservadora)', (
     renderPantalla(<PlanesPage />, '/admin/planes')
 
     fireEvent.click(await screen.findByRole('button', { name: 'Ver detalles' }))
-    const tabla = tarjetaDe('PLAN EJEMPLO').getByRole('table')
+    const tabla = tablaFicha()
     const extendida = document.querySelector('.admin-plan-tabla__fila-completa td')
     expect(extendida).toBeTruthy()
     expect(extendida.getAttribute('colspan')).toBe('3')
@@ -418,6 +432,146 @@ describe('candado de layout del shell ADMIN (SL-2E, corrección de desplazamient
   })
 })
 
+describe('estructura aprobada de la lista de precios (Stitch Consultar Listas de Precios)', () => {
+  it('presenta el panel de filtros con plan, modalidad, búsqueda y limpieza', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2&modalidad=Obligatorio')
+
+    await screen.findByText(/Tarifas vigentes/)
+    expect(screen.getByLabelText('Seleccionar Plan de Salud')).toBeTruthy()
+    expect(screen.getByLabelText('Modalidad Tarifaria')).toBeTruthy()
+    expect(screen.getByLabelText('Filtrar Segmento o Edad')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Limpiar filtros' })).toBeTruthy()
+  })
+
+  it('muestra las dos columnas aprobadas del tarifario', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
+
+    const tabla = await screen.findByRole('table')
+    const encabezados = within(tabla).getAllByRole('columnheader').map((th) => th.textContent)
+    expect(encabezados).toEqual(['Rango etario / Segmento tarifario', 'Precio vigente'])
+  })
+
+  it('indica las tarifas vigentes con la versión y su fecha real de activación', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
+
+    const indicador = await screen.findByText(/Tarifas vigentes/)
+    expect(indicador.textContent).toContain('Versión 27')
+    // La fecha proviene de la respuesta real del backend, con formato local.
+    expect(indicador.textContent).toContain('2026')
+    // Pie informativo con los datos disponibles de la versión vigente.
+    const pie = document.querySelector('.admin-tarifario__pie')
+    expect(pie.textContent).toContain('Identificador de versión: 27')
+    expect(pie.textContent).toContain('CARGA_INICIAL')
+  })
+
+  it('muestra la denominación visible de la modalidad sin alterar el valor interno', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2&modalidad=Obligatorio')
+
+    await screen.findByText(/Tarifas vigentes/)
+    const selector = screen.getByLabelText('Modalidad Tarifaria')
+    // El valor que viaja a la API sigue siendo el interno del contrato.
+    expect(selector.value).toBe('Obligatorio')
+    expect(within(selector).getByRole('option', { name: 'Obligatorio/Monotributo' })).toBeTruthy()
+    expect(within(selector).getByRole('option', { name: 'Voluntario' })).toBeTruthy()
+  })
+
+  it('filtra los segmentos por el texto buscado sin volver a consultar', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
+
+    await screen.findByText(/Tarifas vigentes/)
+    const llamadasIniciales = adminApi.consultarTarifario.mock.calls.length
+
+    fireEvent.change(screen.getByLabelText('Filtrar Segmento o Edad'), { target: { value: 'hijo' } })
+
+    const filas = within(screen.getByRole('table')).getAllByRole('row')
+    // Solo queda la fila del segmento encontrado: la otra desaparece.
+    expect(filas).toHaveLength(2)
+    expect(filas[1].textContent).toContain('HIJO 0-1')
+    // El filtro opera sobre los datos ya cargados: no hay consultas nuevas.
+    expect(adminApi.consultarTarifario.mock.calls).toHaveLength(llamadasIniciales)
+    // El contador de segmentos refleja la selección visible.
+    expect(document.querySelector('.admin-tarifario__conteo-valor').textContent).toBe('1')
+  })
+
+  it('informa cuando ningún segmento coincide con la búsqueda', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2')
+
+    await screen.findByText(/Tarifas vigentes/)
+    fireEvent.change(screen.getByLabelText('Filtrar Segmento o Edad'), { target: { value: 'inexistente' } })
+
+    expect(await screen.findByText('Sin segmentos que coincidan con la búsqueda.')).toBeTruthy()
+  })
+
+  it('limpia los filtros y vuelve a la modalidad obligatoria y al primer plan', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan(), plan({ id: 3, nombre: 'PLAN TRES' })] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=3&modalidad=Voluntario')
+
+    await screen.findByText(/Tarifas vigentes/)
+    fireEvent.change(screen.getByLabelText('Filtrar Segmento o Edad'), { target: { value: 'hijo' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Limpiar filtros' }))
+
+    await waitFor(() => expect(adminApi.consultarTarifario).toHaveBeenCalledWith('2', 'Obligatorio'))
+    expect(screen.getByLabelText('Filtrar Segmento o Edad').value).toBe('')
+    expect(screen.getByLabelText('Modalidad Tarifaria').value).toBe('Obligatorio')
+  })
+})
+
+describe('componentes compartidos diseño ASESOR (encabezado, gema y matriz)', () => {
+  it('el catálogo presenta encabezado contextual y gema por tarjeta de plan', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan({ nombre: 'ESMERALDA' })] })
+    renderPantalla(<PlanesPage />, '/admin/planes')
+
+    expect(await screen.findByText('Módulo ADMIN · Catálogo oficial')).toBeTruthy()
+    expect(screen.getByText('Catálogo de planes')).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Catálogo de planes' })).toBeTruthy()
+    // La gema conoce la paleta aprobada: ESMERALDA resuelve a su tinte verde.
+    expect(document.querySelector('.admin-plan-card__gema .ui-gema--esmeralda svg')).toBeTruthy()
+  })
+
+  it('los planes fuera de la paleta caen a la gema neutra sin romper la tarjeta', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<PlanesPage />, '/admin/planes')
+
+    expect(await screen.findAllByText('PLAN EJEMPLO')).toBeTruthy()
+    expect(document.querySelector('.admin-plan-card__gema .ui-gema--neutra svg')).toBeTruthy()
+  })
+
+  it('la ficha técnica muestra gema, epígrafe y píldora de cobertura', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan({ nombre: 'RUBÍ', detalles: 'Consultas| SC|NO' })] })
+    renderPantalla(<PlanesPage />, '/admin/planes')
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Ver detalles' }))
+    // La ficha muestra únicamente el nombre del plan, como en el diseño aprobado.
+    await screen.findAllByText('RUBÍ')
+    expect(document.querySelector('.admin-plan-card__encabezado').textContent).toBe('RUBÍ')
+    expect(document.querySelector('.admin-plan-card__body .ui-gema--rubi svg')).toBeTruthy()
+    // La cobertura usa la píldora violeta tenue aprobada en el catálogo ASESOR.
+    expect(document.querySelector('.admin-plan-tabla__cobertura')).toBeTruthy()
+    // El punto de color del plan acompaña la prestación.
+    expect(document.querySelector('.admin-plan-tabla__bullet')).toBeTruthy()
+  })
+
+  it('la matriz vigente presenta encabezado contextual, titular del plan y píldora de modalidad', async () => {
+    adminApi.listarPlanes.mockResolvedValue({ planes: [plan()] })
+    renderPantalla(<TarifarioPage />, '/admin/tarifario?planId=2&modalidad=Obligatorio')
+
+    expect(await screen.findByText('Módulo ADMIN · Tarifario comercial')).toBeTruthy()
+    expect(screen.getByText('Listas de precios vigentes')).toBeTruthy()
+    await screen.findByText(/Tarifas vigentes/)
+    // Titular del plan y píldora de modalidad según el diseño de listas de precios.
+    expect(document.querySelector('.admin-tarifario__plan').textContent).toBe('PLAN EJEMPLO')
+    expect(document.querySelector('.admin-tarifario__modalidad').textContent).toBe('Obligatorio/Monotributo')
+    // El punto violeta marca cada segmento en la tabla de precios.
+    expect(document.querySelector('.admin-tarifario__punto')).toBeTruthy()
+  })
+})
+
 describe('visibilidad real del panel desplegable (SL-2E, caída CSS del atributo hidden)', () => {
   /**
    * Inyecta en el héroe de la prueba las dos reglas en competencia de
@@ -471,7 +625,7 @@ describe('visibilidad real del panel desplegable (SL-2E, caída CSS del atributo
     renderPantalla(<PlanesPage />, '/admin/planes')
 
     // Inicialmente todos contraídos: display none efectivo, no solo atributo.
-    expect(await screen.findByText('PLAN EJEMPLO')).toBeTruthy()
+    expect(await screen.findAllByText('PLAN EJEMPLO')).toBeTruthy()
     expect(getComputedStyle(panelDe(2)).display).toBe('none')
     expect(getComputedStyle(panelDe(3)).display).toBe('none')
 

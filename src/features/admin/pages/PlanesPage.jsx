@@ -4,6 +4,9 @@ import { adminApi } from '../api/adminApi.js'
 import { avisoAdminPara } from '../components/avisoAdmin.js'
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx'
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
+import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.jsx'
+import { GemaPlan } from '../../../shared/ui/GemaPlan.jsx'
+import { colorDePlan } from '../../../shared/ui/gemasPlan.js'
 
 /**
  * Separa el detalle de un plan en su lista de líneas (una por prestación según
@@ -124,7 +127,11 @@ export function PlanesPage() {
 
   return (
     <div className="admin-directory">
-      <p className="admin-directory__descripcion">Consultá los planes activos publicados en el tarifario.</p>
+      <EncabezadoContextual
+        etiqueta="Módulo ADMIN · Catálogo oficial"
+        titulo="Catálogo de planes"
+        descripcion="Consultá los planes activos publicados en el tarifario."
+      />
 
       {aviso ? (
         <AuthAlert tone={aviso.tone} title={aviso.title}>{aviso.message}</AuthAlert>
@@ -137,36 +144,60 @@ export function PlanesPage() {
           <p className="admin-plan-card__empty">No hay planes activos.</p>
         </div>
       ) : (
-        <div className="admin-plan-lista">
-          {planes.map((plan) => {
-            // Solo el plan seleccionado queda expandido; el resto se contrae.
-            const abierto = planAbierto === plan.id
-            return (
-              <article key={plan.id} className={`admin-card admin-plan-card${abierto ? ' admin-plan-card--abierto' : ''}`}>
-                <div className="admin-plan-card__header">
-                  <h2 className="admin-plan-card__nombre">{plan.nombre}</h2>
-                  <div className="admin-plan-card__acciones">
-                    <button
-                      type="button"
-                      className="admin-button admin-button--ghost"
-                      aria-expanded={abierto}
-                      aria-controls={`plan-${plan.id}-detalles`}
-                      onClick={() => alternarDetalles(plan.id)}
-                    >
-                      {abierto ? 'Ocultar detalles' : 'Ver detalles'}
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-button admin-button--subtle"
-                      onClick={() => abrirTarifario(plan.id, 'Obligatorio')}
-                    >
-                      Ver tarifas
-                    </button>
+        <>
+          {/* Rejilla de tarjetas compactas del catálogo aprobado: gema, nombre
+              y acciones de ADMIN por plan; el plan abierto recibe el anillo
+              violeta de selección. La ficha técnica vive inmediatamente
+              debajo, no dentro de la tarjeta, como el diseño aprobado. */}
+          <div className="admin-plan-lista">
+            {planes.map((plan) => {
+              const abierto = planAbierto === plan.id
+              return (
+                <article key={plan.id} className={`admin-card admin-plan-card${abierto ? ' admin-plan-card--abierto' : ''}`}>
+                  <div className="admin-plan-card__header">
+                    <span className="admin-plan-card__gema">
+                      <GemaPlan nombre={plan.nombre} />
+                    </span>
+                    <h2 className="admin-plan-card__nombre">{plan.nombre}</h2>
+                    <div className="admin-plan-card__acciones">
+                      <button
+                        type="button"
+                        className="admin-button admin-button--ghost"
+                        aria-expanded={abierto}
+                        aria-controls={`plan-${plan.id}-detalles`}
+                        onClick={() => alternarDetalles(plan.id)}
+                      >
+                        {abierto ? 'Ocultar detalles' : 'Ver detalles'}
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-button admin-button--subtle admin-button--wide"
+                        onClick={() => abrirTarifario(plan.id, 'Obligatorio')}
+                      >
+                        Ver tarifas
+                      </button>
+                    </div>
                   </div>
-                </div>
-                {/* hidden retira el contenido del árbol de accesibilidad y del
-                    teclado mientras está contraído, como pide el diseño accesible. */}
-                <div id={`plan-${plan.id}-detalles`} hidden={!abierto} className="admin-plan-card__body">
+                </article>
+              )
+            })}
+          </div>
+          {/* Fichas técnicas (una por plan, solo la elegida visible): los
+              paneles conservan el contrato accesible de tarjetas SL-2E con
+              `hidden` por plan y `aria-controls` en la tarjeta que los abre.
+              El grupo se separa de la rejilla con aire suficiente para leer
+              la ficha como bloque propio. */}
+          <div className="admin-plan-fichas">
+            {planes.map((plan) => {
+              const abierto = planAbierto === plan.id
+              return (
+                <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto} className="admin-card admin-plan-card__body">
+                  <div className="admin-plan-card__titular">
+                    <span className="admin-plan-card__gema">
+                      <GemaPlan nombre={plan.nombre} tamano="ficha" />
+                    </span>
+                    <h3 className="admin-plan-card__encabezado">{plan.nombre}</h3>
+                  </div>
                   <h3 className="admin-plan-card__subtitulo">Coberturas</h3>
                   {/* Tabla semántica de coberturas: los registros con tres campos
                       delimitados por `|` se separan en celdas; los registros
@@ -199,8 +230,16 @@ export function PlanesPage() {
                           {filas.map((fila, indice) => (
                             fila.celdas ? (
                               <tr key={indice}>
-                                <td data-label="Prestación">{fila.celdas[0]}</td>
-                                <td data-label="Cobertura">{fila.celdas[1]}</td>
+                                {/* Punto de color del plan junto a la prestación
+                                    y píldora de fondo violeta para la cobertura:
+                                    lenguaje visual del catálogo aprobado. */}
+                                <td data-label="Prestación">
+                                  <span className="admin-plan-tabla__bullet" style={{ background: colorDePlan(plan.nombre) }} aria-hidden="true" />
+                                  {fila.celdas[0]}
+                                </td>
+                                <td data-label="Cobertura">
+                                  <span className="admin-plan-tabla__cobertura">{fila.celdas[1]}</span>
+                                </td>
                                 <td data-label="Observaciones">{fila.celdas[2]}</td>
                               </tr>
                             ) : (
@@ -233,11 +272,11 @@ export function PlanesPage() {
                       </>
                     )
                   })()}
-                </div>
-              </article>
-            )
-          })}
-        </div>
+                </section>
+              )
+            })}
+          </div>
+        </>
       )}
 
       <p className="admin-directory__hint">

@@ -4,6 +4,7 @@ import { useSession } from '../../auth/hooks/useSession.js'
 import { SESSION_STATUS } from '../../auth/context/SessionContext.js'
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx'
 import { BrandLogo } from '../../../shared/ui/BrandLogo.jsx'
+import { EncabezadoSuperior } from '../../../shared/ui/EncabezadoSuperior.jsx'
 import { AdminAvatar } from './AdminAvatar.jsx'
 import { inicialesDe } from './iniciales.js'
 import { PerfilCuentaModal } from '../../perfil/components/PerfilCuentaModal.jsx'
@@ -112,12 +113,11 @@ export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
       </aside>
 
       <div className="admin-canvas">
-        <header className="admin-topbar">
-          <h1 className="admin-topbar__section">{seccionActiva}</h1>
-          <button className="admin-logout" type="button" onClick={() => void handleLogout()}>
-            Cerrar sesión
-          </button>
-        </header>
+        <EncabezadoSuperior
+          seccion={seccionActiva}
+          usuario={user}
+          onCerrarSesion={() => void handleLogout()}
+        />
         <main className="admin-content">
           {children ?? <Outlet />}
         </main>

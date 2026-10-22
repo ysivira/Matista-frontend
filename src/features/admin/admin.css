@@ -259,24 +259,6 @@
   min-width: 0;
 }
 
-.admin-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1.5rem;
-  background: rgba(13, 14, 26, 0.78);
-  border-bottom: 1px solid rgba(149, 142, 160, 0.12);
-}
-
-.admin-topbar__section {
-  margin: 0;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #f4f2fb;
-}
-
 /* El lienzo central fluye con el ancho disponible de la cuadrícula (sin tope
    arbitrario): antes, un max-width fijo dejaba una franja estrecha de
    contenido con vacío excesivo a la derecha en pantallas anchas. Sin
@@ -449,19 +431,6 @@
 }
 
 .admin-employee-card--center { justify-content: center; width: 100%; }
-
-.admin-logout {
-  padding: 0.55rem 1.05rem;
-  border: none;
-  border-radius: 0.85rem;
-  background: rgba(139, 92, 246, 0.16);
-  color: #efeafd;
-  font: 600 0.88rem 'Inter', sans-serif;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.admin-logout:hover { background: rgba(139, 92, 246, 0.3); }
 
 .admin-directory__toolbar {
   display: flex;
@@ -1546,86 +1515,309 @@
   }
 }
 
-/* SL-2: pantallas de consulta Planes y Gestión de Precios (extensión del
-   lenguaje SL-1; solo estilos nuevos, sin modificar reglas vigentes). */
-.admin-tabs {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-}
+/* Gestión de Precios con la estructura aprobada en Stitch «Asesor —
+   Consultar Listas de Precios»: panel de filtros sobre superficie clara,
+   tarjeta de resultados con plan, modalidad y cantidad de segmentos, tabla
+   de precios vigentes y pie informativo con los datos de la versión. */
 
-.admin-tab {
-  border: 1px solid var(--admin-border);
-  background: var(--admin-surface);
-  color: var(--admin-muted);
-  border-radius: 999px;
-  padding: 0.5rem 1.05rem;
-  font: inherit;
-  font-size: 0.86rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.admin-tab:hover { border-color: var(--admin-primary); color: var(--admin-primary-deep); }
-
-.admin-tab--activa {
-  background: var(--admin-primary);
-  border-color: var(--admin-primary);
-  color: #ffffff;
-}
-
-.admin-tab--activa:hover { color: #ffffff; }
-
-.admin-version-meta {
+/* Panel de filtros del diseño aprobado: una única fila horizontal en
+   escritorio con plan, modalidad, búsqueda y la acción de limpieza compacta
+   a la derecha; en pantallas pequeñas las columnas se reorganizan. */
+.admin-tarifario-filtros {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  padding: 0.85rem 1.1rem 0;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  border-radius: var(--admin-radius);
+  background: var(--admin-surface-tint);
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow);
+}
+
+.admin-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1 1 12rem;
+}
+
+/* Acción de limpieza: ancho del contenido y extremo derecho de la fila. */
+.admin-tarifario-filtros__limpiar {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.admin-campo__etiqueta {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--admin-muted);
-  font-size: 0.85rem;
+}
+
+.admin-campo select,
+.admin-campo input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.5rem;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font: 500 0.9rem 'Inter', sans-serif;
+}
+
+.admin-campo input::placeholder { color: var(--admin-soft); }
+
+.admin-campo select:focus-visible,
+.admin-campo input:focus-visible {
+  outline: 2px solid var(--admin-primary);
+  outline-offset: 2px;
+}
+
+/* Indicador de tarifas vigentes: emblema verde del diseño aprobado. */
+.admin-vigencia {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 0.78rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(6, 95, 70, 0.18);
+}
+
+.admin-vigencia svg { width: 1.05rem; height: 1.05rem; }
+
+.admin-tarifario { overflow: hidden; }
+
+.admin-tarifario__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 1rem 1.4rem;
+  background: var(--admin-surface);
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-tarifario__titular {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-tarifario__plan {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--admin-text);
+}
+
+.admin-tarifario__modalidad {
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-tarifario__conteo {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.admin-tarifario__conteo-etiqueta {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+}
+
+.admin-tarifario__conteo-valor {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--admin-primary-deep);
+}
+
+.admin-tarifario__scroll {
+  overflow-x: auto;
+  max-height: 32rem;
+  overflow-y: auto;
+}
+
+.admin-tarifario__tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-tarifario__tabla thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.75rem 1.4rem;
+  background: #ede7fc;
+  border-bottom: 1px solid var(--admin-border);
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5d607e;
+}
+
+.admin-tarifario__tabla tbody td {
+  padding: 0.7rem 1.4rem;
+  border-bottom: 1px solid #e5def7;
+  color: var(--admin-text);
+  font-size: 0.9rem;
+  vertical-align: top;
+}
+
+.admin-tarifario__tabla tbody tr:nth-child(even) td { background: #f9f7ff; }
+.admin-tarifario__tabla tbody tr:last-child td { border-bottom: none; }
+
+.admin-tarifario__segmento {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+/* Punto violeta de marca de segmento, como en el diseño aprobado. */
+.admin-tarifario__punto {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--admin-primary-deep);
+  flex-shrink: 0;
+}
+
+.admin-tarifario__detalle {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.76rem;
+  color: var(--admin-muted);
+}
+
+.admin-tarifario__precio {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: #101220;
+}
+
+.admin-tarifario__pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  padding: 0.75rem 1.4rem;
+  background: var(--admin-surface-tint);
+  border-top: 1px solid var(--admin-border);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
 }
 
 .admin-table__texto { color: var(--admin-muted); font-size: 0.9rem; }
 
 .admin-table__precio { text-align: right; font-variant-numeric: tabular-nums; }
 
-@media (max-width: 720px) {
-  .admin-version-meta { padding: 0.65rem 0.85rem 0; }
+@media (max-width: 900px) {
+  /* Pantallas estrechas: los filtros se apilan y la acción baja al final. */
+  .admin-tarifario-filtros { flex-direction: column; align-items: stretch; }
+  .admin-tarifario-filtros__limpiar { margin-left: 0; align-self: flex-start; }
 }
 
-/* SL-2E: catalogo de planes compacto y desplegable; importes ARS ya alineados
-   con .admin-table__precio. Unica columna tambien en escritorio: los textos de
-   cobertura son extensos y crecen en vertical sin scroll horizontal. */
+/* SM-2E/COMPARTIDOS: catálogo de planes bajo la presentación aprobada del
+   catálogo ASESOR: rejilla de tarjetas compactas con gema y selección de
+   anillo violeta, y ficha técnica en panel ancho debajo de la rejilla. Los
+   textos de cobertura se leen en la ficha, no dentro de la tarjeta, por lo
+   que la rejilla puede crecer a dos y cuatro columnas sin scroll. */
 .admin-plan-lista {
   display: grid;
-  gap: 0.9rem;
+  gap: 1rem;
 }
 
-.admin-plan-card { padding: 0; overflow-wrap: anywhere; }
+@media (min-width: 640px) {
+  .admin-plan-lista { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .admin-plan-lista { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Tarjeta compacta del catálogo: gema sobre el nombre y acciones apiladas al
+   pie, tasa hover de elevación leve y anillo violeta en la tarjeta abierta. */
+.admin-plan-card {
+  padding: 0;
+  overflow-wrap: anywhere;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-plan-card:hover { transform: translateY(-2px); }
+
+.admin-plan-card--abierto {
+  box-shadow: 0 0 0 2px var(--admin-primary), var(--admin-shadow);
+}
 
 .admin-plan-card__header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1rem;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.1rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 1rem 1.1rem 1.15rem;
 }
+
+.admin-plan-card__gema { display: inline-flex; }
 
 .admin-plan-card__nombre {
   margin: 0;
   font-size: 1.02rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--admin-text);
 }
 
-.admin-plan-card__acciones { display: flex; gap: 0.5rem; }
+/* Acciones del plan apiladas de ancho completo, como el botón único aprobado. */
+.admin-plan-card__acciones {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Separación vertical entre la rejilla de tarjetas y el bloque de fichas
+   técnicas: la ficha se lee como bloque propio, no como extensión de la
+   tarjeta seleccionada. */
+.admin-plan-fichas {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
 
 .admin-plan-card__body {
-  border-top: 1px solid var(--admin-border);
-  padding: 1rem 1.1rem 1.25rem;
+  padding: 1.25rem 1.4rem 1.4rem;
 }
 
 /* Espaciado interno sin display propio en el panel: si el componente declara
@@ -1636,6 +1828,22 @@
 /* Guardia explícita: el panel contraído queda oculto incluso si una regla
    agregada después volviera a declarar display para el panel. */
 .admin-plan-card__body[hidden] { display: none; }
+
+/* Titular de la ficha técnica aprobada: gema de tamaño mayor y epígrafe. */
+.admin-plan-card__titular {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.admin-plan-card__encabezado {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--admin-text);
+}
 
 .admin-plan-card__subtitulo {
   margin: 0;
@@ -1706,6 +1914,29 @@
   color: var(--admin-text);
   vertical-align: top;
   border-bottom: 1px solid var(--admin-border);
+}
+
+/* Punto de color del plan junto a la prestación: marca segmental aprobada
+   en el catálogo de ASESOR; el color lo aporta colorDePlan(). */
+.admin-plan-tabla__bullet {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  margin-right: 0.45rem;
+  vertical-align: 0.2em;
+}
+
+/* Píldora con fondo violeta tenue para el valor de cobertura, igual que el
+   chip de la columna Cobertura aprobado en el catálogo de ASESOR. */
+.admin-plan-tabla__cobertura {
+  display: inline-block;
+  padding: 0.06rem 0.5rem;
+  border-radius: 0.375rem;
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--admin-text);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .admin-plan-tabla tbody tr:last-child td { border-bottom: none; }

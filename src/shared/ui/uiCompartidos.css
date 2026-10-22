@@ -1,0 +1,193 @@
+/* Componentes compartidos ADMIN / ASESOR (paleta «Amethyst Prism Enterprise»
+   aprobada en Stitch). Valores tomados del catálogo ASESOR aprobado:
+   superficie de trabajo #F5F2FF, tbla #DCD6E9, violeta interactivo
+   #8B5CF6/#A78BFA, texto claro #202236 y secundario #5D607E. */
+
+/* Encabezado superior compartido (ADMIN y ASESOR): sección a la izquierda,
+   identidad de la sesión y salida a la derecha, sobre la banda oscura del
+   shell. Los datos de usuario nunca son fijos: llegan de la sesión. */
+.ui-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  background: rgba(13, 14, 26, 0.78);
+  border-bottom: 1px solid rgba(149, 142, 160, 0.12);
+}
+
+.ui-cabecera__seccion {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f4f2fb;
+}
+
+/* Isotipo de MATISTA del encabezado derecho: se apoya directamente sobre el
+   fondo oscuro de la banda, sin baldosa, marco ni sombra. */
+.ui-cabecera__marca {
+  display: inline-flex;
+  align-items: center;
+}
+
+.ui-cabecera__marca .brand-logo { width: 6.5rem; }
+
+.ui-cabecera__identidad {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-left: auto;
+}
+
+.ui-cabecera__datos {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.ui-cabecera__nombre {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f3f4f6;
+}
+
+.ui-cabecera__rol {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a78bfa;
+}
+
+/* Botón de salida con el icono del diseño aprobado: discreto en reposo y
+   resaltado al pasar el cursor. */
+.ui-cabecera__salir {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: #cbc3d7;
+  font: 500 0.78rem 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.ui-cabecera__salir:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
+
+.ui-cabecera__salir svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 720px) {
+  .ui-cabecera { padding: 0.75rem 1rem; }
+  .ui-cabecera__marca .brand-logo { width: 4.75rem; }
+  .ui-cabecera__salir span { display: none; }
+}
+
+/* Encabezado contextual: etiqueta con punto pulsante, título y descripción
+   sobre el lienzo oscuro del shell; las acciones quedan a la derecha. */
+.ui-encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.ui-encabezado__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.ui-encabezado__etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #a78bfa;
+}
+
+.ui-encabezado__punto {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: #a78bfa;
+  animation: ui-pulso 1.8s ease-in-out infinite;
+}
+
+@keyframes ui-pulso {
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-encabezado__punto { animation: none; }
+}
+
+.ui-encabezado__titulo {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+
+.ui-encabezado__descripcion {
+  margin: 0;
+  max-width: 42rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.ui-encabezado__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Gema del plan: superficie de color por plan con el ícono delineado. */
+.ui-gema {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+}
+
+.ui-gema svg { width: 1.5rem; height: 1.5rem; }
+
+.ui-gema--ficha {
+  width: 3rem;
+  height: 3rem;
+}
+
+.ui-gema--ficha svg { width: 1.75rem; height: 1.75rem; }
+
+.ui-gema--rubi { color: #dc2626; background: #fff1f2; }
+.ui-gema--esmeralda { color: #059669; background: #ecfdf5; }
+.ui-gema--zafiro { color: #2563eb; background: #eff6ff; }
+.ui-gema--diamante { color: #64748b; background: #f1f5f9; }
+
+/* Gema neutra: planes fuera de la paleta aprobada conservan el tono slate. */
+.ui-gema--neutra { color: #64748b; background: #f1f5f9; }
