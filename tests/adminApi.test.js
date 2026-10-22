@@ -75,3 +75,76 @@ describe('adminApi consulta SL-2', () => {
 vi.mock('../src/features/auth/api/authApi.js', () => ({
   authApi: { changePassword: vi.fn(), changeEmail: vi.fn() },
 }))
+
+describe('adminApi consultas SL-3', () => {
+  it('lista el historial y obtiene cabecera y snapshot por versión', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.listarVersiones()
+    expect(client.llamadas[0]).toEqual({ ruta: '/api/admin/tarifario/versiones', opciones: {} })
+
+    await api.obtenerVersion('7')
+    expect(client.llamadas[1]).toEqual({ ruta: '/api/admin/tarifario/versiones/7', opciones: {} })
+
+    await api.listarTarifasVersion('7')
+    expect(client.llamadas[2]).toEqual({ ruta: '/api/admin/tarifario/versiones/7/tarifas', opciones: {} })
+  })
+})
+
+describe('adminApi ciclo de edición SL-4/SL-5', () => {
+  it('crea borrador y activa versión con cuerpo vacío por el contrato JSON', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.crearBorradorTarifario()
+    expect(client.llamadas[0]).toEqual({
+      ruta: '/api/admin/tarifario/versiones',
+      opciones: { method: 'POST', body: {} },
+    })
+
+    await api.activarVersion('7')
+    expect(client.llamadas[1]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/activacion',
+      opciones: { method: 'POST', body: {} },
+    })
+  })
+
+  it('envía el DTO exacto del aumento masivo con modalidad opcional', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.aumentarVersion('7', { porcentaje: '5', revision: '0' })
+    expect(client.llamadas[0]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/aumentos',
+      opciones: { method: 'POST', body: { porcentaje: '5', revision: '0' } },
+    })
+
+    await api.aumentarVersion('7', { porcentaje: '5', tipoIngreso: 'Voluntario', revision: '1' })
+    expect(client.llamadas[1].opciones.body).toEqual({
+      porcentaje: '5', tipoIngreso: 'Voluntario', revision: '1',
+    })
+  })
+
+  it('edita precio individual con PATCH en el segmento de tarifa', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.editarPrecioTarifa('7', '201', { precio: '120.50', revision: '1' })
+    expect(client.llamadas[0]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/tarifas/201',
+      opciones: { method: 'PATCH', body: { precio: '120.50', revision: '1' } },
+    })
+  })
+
+  it('finaliza la edición con la revisión optimista del borrador', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.finalizarVersion('7', { revision: '2' })
+    expect(client.llamadas[0]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/finalizacion',
+      opciones: { method: 'POST', body: { revision: '2' } },
+    })
+  })
+})

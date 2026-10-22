@@ -30,6 +30,14 @@ vi.mock('../src/features/admin/api/adminApi.js', () => ({
     changeRol: vi.fn(),
     listarPlanes: vi.fn().mockResolvedValue({ planes: [] }),
     consultarTarifario: vi.fn().mockResolvedValue({ tarifas: [] }),
+    listarVersiones: vi.fn().mockResolvedValue({ versiones: [] }),
+    obtenerVersion: vi.fn(),
+    listarTarifasVersion: vi.fn().mockResolvedValue({ tarifas: [] }),
+    crearBorradorTarifario: vi.fn(),
+    aumentarVersion: vi.fn(),
+    editarPrecioTarifa: vi.fn(),
+    finalizarVersion: vi.fn(),
+    activarVersion: vi.fn(),
   },
 }))
 
@@ -174,6 +182,10 @@ describe('router y guards', () => {
 
     renderRoute('/admin/tarifario', adminSession)
     expect(await screen.findByRole('heading', { name: 'Gestión de Precios' })).toBeTruthy()
+    cleanup()
+
+    renderRoute('/admin/versiones', adminSession)
+    expect(await screen.findByRole('heading', { name: 'Historial de versiones' })).toBeTruthy()
     cleanup()
   })
 

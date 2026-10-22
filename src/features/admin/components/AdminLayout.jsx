@@ -17,12 +17,15 @@ const ICONO_DIRECTORIO = 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM1 18v-1a6 6 0 0 1 14
 const ICONO_PLANES = 'M6 3h12l4 6-10 12L2 9zM2 9h20M9 3l3 6 3-6M12 21L9 9M12 21l3-12'
 /** Ícono de la entrada "Gestión de Precios": tarjeta de cobros (trazo de Stitch). */
 const ICONO_PRECIOS = 'M2 6h20v12H2zM2 11h20M6 15h4'
+/** Ícono de la entrada "Versiones": línea de tiempo con nodos (trazo de Stitch). */
+const ICONO_VERSIONES = 'M3 5h18M3 12h12M3 19h6M18 16v5M15 18h6'
 
 /** Encabezado del topbar por ruta activa del módulo ADMIN (SL-2). */
 const SECCIONES_RUTA = Object.freeze({
   '/admin': 'Gestión de empleados',
   '/admin/planes': 'Planes',
   '/admin/tarifario': 'Gestión de Precios',
+  '/admin/versiones': 'Versiones del tarifario',
 })
 
 /**
@@ -88,6 +91,12 @@ export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
               <path d={ICONO_PRECIOS} />
             </svg>
             Gestión de Precios
+          </NavLink>
+          <NavLink to="/admin/versiones" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d={ICONO_VERSIONES} />
+            </svg>
+            Versiones
           </NavLink>
         </nav>
 

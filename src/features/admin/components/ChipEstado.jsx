@@ -1,12 +1,15 @@
+import { etiquetaEstado } from './etiquetasEstado.js'
+
 /**
  * Píldora de estado del diseño Stitch con su punto de color asociado.
- * Reutilizada por la tabla del directorio, las tarjetas móviles y los modales.
+ * Reutilizada por la tabla del directorio, las tarjetas móviles y los modales;
+ * los estados del ciclo del tarifario se muestran con etiqueta amigable.
  * @param {{estado: string}} props Estado del DTO público.
- * @returns {import('react').ReactElement} Chip accesible del estado.
+ * @returns {import('react').ReactElement} Chip accesible con etiqueta amigable.
  */
 export function ChipEstado({ estado }) {
   return (
-    <span className={`admin-chip ${claseEstado(estado)}`}>{estado}</span>
+    <span className={`admin-chip ${claseEstado(estado)}`}>{etiquetaEstado(estado)}</span>
   )
 }
 

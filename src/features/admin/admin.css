@@ -719,6 +719,296 @@
 
 .admin-chip--estado-baja { background: #e5e7eb; color: #4b5563; }
 
+/* Chips de estados del ciclo de vida de versiones del tarifario (SL-4/SL-5).
+   Nombres deliberadamente distintos de los del directorio de empleados. */
+.admin-chip--estado-preparacion { background: var(--admin-surface-muted); color: #6d28d9; }
+.admin-chip--estado-preparacion::before {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #8b5cf6;
+}
+
+.admin-chip--estado-lista_para_activar { background: #fef3c7; color: #92400e; }
+.admin-chip--estado-lista_para_activar::before {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #fbbf24;
+}
+
+.admin-chip--estado-activa { background: #def7ec; color: #03543f; }
+.admin-chip--estado-activa::before {
+  content: '';
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: #31c48d;
+}
+
+.admin-chip--estado-historica { background: #e5e7eb; color: #4b5563; }
+
+/* El estado interno CANCELADA (descarte de versiones no activadas) se
+   presenta como 'Descartada' con el tono de advertencia suave. */
+.admin-chip--estado-cancelada { background: rgba(179, 50, 60, 0.1); color: #b3323c; }
+
+/* Boton destructivo secundario del descarte: hereda la geometria de los
+   botones del modulo pero lleva el rojo de alerta, sin relleno fuerte. */
+.admin-button--peligro {
+  background: transparent;
+  color: #b3323c;
+  border: 1px solid rgba(179, 50, 60, 0.45);
+  box-shadow: none;
+}
+
+.admin-button--peligro:hover:not(:disabled) {
+  background: rgba(179, 50, 60, 0.07);
+}
+
+.admin-button--peligro:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* El campo del motivo vive dentro del bloque de confirmacion sin
+   estirarse mas alla del ancho necesario. */
+.admin-vers__campo-descarte {
+  min-width: 20rem;
+  max-width: 22rem;
+}
+
+/* Filtro de descartadas: píldora tenue que resalta solo cuando esta
+   activa, para no confundirse con las acciones del ciclo. */
+.admin-vers__filtro-activo {
+  border: 1px solid #7c4ce0;
+  color: #5b2cbf;
+}
+
+/* Cabecera del panel de versiones: título con acciones del ciclo a la derecha. */
+.admin-vers__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  padding: 0.75rem 1.1rem;
+}
+
+.admin-vers__titulo {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.admin-vers__acciones {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Alturas, bordes y radios unificados para toda accion del ciclo de
+   versiones; el texto de cada boton no se parte en varias lineas. */
+.admin-vers__acciones .admin-button,
+.admin-vers__formu .admin-button,
+.admin-vers__confirmar .admin-button,
+.admin-vers__confirmacion-aumento .admin-button {
+  white-space: nowrap;
+  min-height: 2.1rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 0.6rem;
+}
+
+/* Tabla de filas del detalle: celdas compactas con el encabezado
+   adherido (regla global de sticky thead) para listas largas. */
+.admin-vers-card--detalle .admin-table thead th {
+  padding: 0.45rem 0.9rem 0.4rem;
+}
+
+.admin-vers-card--detalle .admin-table td {
+  padding: 0.3rem 0.9rem;
+}
+
+/* Fila del historial elegida como panel abierto. */
+.admin-vers__fila-elegida { background: rgba(139, 92, 246, 0.06); }
+
+/* La version ACTIVA se reconoce de un vistazo aunque no sea la mas
+   reciente: tinte verde suave junto a la marca Vigente de su celda. */
+.admin-vers__fila-activa { background: rgba(49, 196, 141, 0.07); }
+
+.admin-vers__vigente {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #0e6a45;
+  background: rgba(49, 196, 141, 0.14);
+}
+
+/* Formulario incrustado del aumento masivo sobre el panel del borrador. */
+.admin-vers__formu {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0 1.1rem 0.9rem;
+}
+
+.admin-vers__formu .admin-field {
+  min-width: 11rem;
+}
+
+/* Los paneles de versiones cancelan la altura fija de 10 filas que usan los
+   directorios paginados: historial y detalle se dimensionan por contenido con
+   topes propios y quedan como tarjetas visualmente independientes. */
+.admin-card.admin-table-wrap.admin-vers-card {
+  height: auto;
+}
+
+/* El detalle se separa del historial que lo precede sin cambiar el flujo de
+   las tarjetas cuando ninguna versión está seleccionada. */
+.admin-vers-card--detalle {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Historial compacto: cinco versiones visibles con filas mas bajas; el
+   resto se resuelve con el scroll vertical interno del propio bloque de
+   filas (la altura de fila coincide con el calc de abajo). */
+.admin-vers-card--historial .admin-table thead th {
+  padding: 0.45rem 0.9rem 0.4rem;
+}
+
+.admin-vers-card--historial .admin-table td {
+  padding: 0.26rem 0.9rem;
+}
+
+.admin-vers-card--historial .admin-table__scroll {
+  max-height: calc(5 * 1.9rem + 0.9rem);
+}
+
+/* Boton de fila del historial: unico, compacto, alineado a la derecha y
+   sin quiebre de texto dentro del boton. */
+.admin-vers__ver-fila {
+  white-space: nowrap;
+  padding: 0.28rem 0.72rem;
+  border-radius: 0.6rem;
+  min-height: 1.8rem;
+  font-size: 0.78rem;
+}
+
+/* Tabla de tarifas del detalle: scroll interno moderado con encabezado
+   adherido (regla global de sticky thead) para listas largas de rangos;
+   la altura de fila compacta responde al calc de abajo. */
+.admin-vers-card--detalle .admin-table__scroll {
+  max-height: calc(6 * 1.9rem + 0.9rem);
+}
+
+/* Confirmación de dos clics del deshacer y del aumento masivo: mensaje
+   plano con las acciones alineadas bajo la cabecera del panel. */
+.admin-vers__confirmar,
+.admin-vers__confirmacion-aumento {
+  margin: 0 1.1rem 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.75rem;
+  background: var(--admin-surface-tint);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.admin-vers__confirmar p,
+.admin-vers__confirmacion-aumento > p {
+  margin: 0;
+  flex: 1 1 100%;
+  color: #4b5060;
+  font-size: 0.88rem;
+}
+
+/* Vista previa del aumento: la tabla de antes->nuevo no puede desplazar
+   al borrador completo; se resuelve con el mismo archivo de filas de 6
+   que la tabla del detalle. */
+.admin-vers__confirmacion-aumento .admin-vers__previa-scroll {
+  flex: 1 1 100%;
+  max-height: calc(6 * 1.9rem + 0.9rem);
+}
+
+/* Resumen de cambios: auditoría real del backend listada de la más
+   reciente a la más antigua, con scroll interno para eventos largos. */
+.admin-resumen {
+  border-top: 1px solid var(--admin-border);
+  margin-top: 0.75rem;
+  padding: 0.9rem 1.1rem 1rem;
+}
+
+.admin-resumen__titulo {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* La descripcion redundante fue retirada de la pantalla: el titulo y el
+   contenido del listado son la informacion de auditoria. */
+
+.admin-resumen__vacio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #4b5060;
+}
+
+.admin-resumen__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 11rem;
+  overflow-y: auto;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.admin-resumen__item {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.6rem;
+  background: var(--admin-surface-tint);
+}
+
+.admin-resumen__linea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-resumen__tipo {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #6d28d9;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.admin-resumen__texto {
+  font-size: 0.85rem;
+  color: #3c4049;
+}
+
+.admin-resumen__meta {
+  font-size: 0.75rem;
+  color: #a5a2ba;
+}
+
 .admin-card__footer {
   display: flex;
   justify-content: space-between;
