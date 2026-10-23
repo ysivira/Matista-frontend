@@ -16,6 +16,7 @@ import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
 import { PlanesPage } from '../features/admin/pages/PlanesPage.jsx'
 import { TarifarioPage } from '../features/admin/pages/TarifarioPage.jsx'
 import { VersionesPage } from '../features/admin/pages/VersionesPage.jsx'
+import { ConfiguracionComercialPage } from '../features/admin/pages/ConfiguracionComercialPage.jsx'
 import { MiPerfilPage } from '../features/perfil/pages/MiPerfilPage.jsx'
 
 const routes = [
@@ -86,6 +87,7 @@ const routes = [
           { path: 'planes', element: <PlanesPage /> },
           { path: 'tarifario', element: <TarifarioPage /> },
           { path: 'versiones', element: <VersionesPage /> },
+          { path: 'configuracion', element: <ConfiguracionComercialPage /> },
         ],
       },
     ],

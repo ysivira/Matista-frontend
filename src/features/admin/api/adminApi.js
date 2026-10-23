@@ -181,18 +181,82 @@ export function createAdminApi(client) {
     })
   }
 
-  /**
-   * Deshace el último cambio económico vigente de un borrador en PREPARACION
-   * (edición individual o aumento masivo completo), con revisión optimista.
-   * @param {number|string} versionId Versión en PREPARACION.
-   * @param {number|string} revision Revisión vigente del borrador.
-   */
-  function deshacerUltimoCambio(versionId, revision) {
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/deshacer`, {
-      method: 'POST',
-      body: { revision: String(revision) },
-    })
-  }
+/**
+ * Deshace el último cambio económico vigente de un borrador en PREPARACION
+ * (edición individual o aumento masivo completo), con revisión optimista.
+ * @param {number|string} versionId Versión en PREPARACION.
+ * @param {number|string} revision Revisión vigente del borrador.
+ */
+function deshacerUltimoCambio(versionId, revision) {
+  return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/deshacer`, {
+    method: 'POST',
+    body: { revision: String(revision) },
+  })
+}
+
+/**
+ * Obtiene la política comercial actualmente vigente.
+ * @returns {Promise<object>} Política comercial vigente.
+ */
+function obtenerPoliticaComercial() {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial`)
+}
+
+/**
+ * Actualiza la política comercial vigente o su programación pendiente.
+ * El cuerpo puede llevar `activacion` ({ modo, fecha }) y `revision` para
+ * editar una programación con concurrencia optimista.
+ * @param {number|string} politicaId ID de la política comercial.
+ * @param {object} datos Datos a actualizar.
+ * @returns {Promise<object>} Política comercial actualizada.
+ */
+function actualizarPoliticaComercial(politicaId, datos) {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`, {
+    method: 'PUT',
+    body: datos,
+  })
+}
+
+/** Recupera todas las versiones de política comercial con sus descuentos. */
+function listarHistorialPoliticaComercial() {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/historial`)
+}
+
+/** Recupera el snapshot completo de una versión de política comercial. */
+function obtenerDetallePoliticaComercial(politicaId) {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`)
+}
+
+/** Reactiva un snapshot histórico creando una nueva versión vigente. */
+function recuperarPoliticaComercial(politicaId) {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/recuperacion`, {
+    method: 'POST',
+    body: {},
+  })
+}
+
+/**
+ * Cancela la única programación pendiente sin tocar la vigente.
+ * @param {number|string} politicaId Programación pendiente.
+ * @param {{revision: number|string, motivo: string}} cuerpo Revisión optimista y motivo auditable.
+ * @returns {Promise<{version: object, evento: object}>} Versión cancelada y evento.
+ */
+function cancelarProgramacionPoliticaComercial(politicaId, cuerpo) {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/cancelacion`, {
+    method: 'POST',
+    body: cuerpo,
+  })
+}
+
+/**
+ * Lista la auditoría de ciclo de vida de una versión con nombre y legajo
+ * preservados por el backend (migración 023).
+ * @param {number|string} politicaId Versión consultada.
+ * @returns {Promise<object[]>} Eventos ordenados del más reciente al más antiguo.
+ */
+function obtenerEventosPoliticaComercial(politicaId) {
+  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/eventos`)
+}
 
   return {
     listEmployees,
@@ -214,6 +278,13 @@ export function createAdminApi(client) {
     descartarVersion,
     activarVersion,
     deshacerUltimoCambio,
+    obtenerPoliticaComercial,
+    actualizarPoliticaComercial,
+    listarHistorialPoliticaComercial,
+    obtenerDetallePoliticaComercial,
+    recuperarPoliticaComercial,
+    cancelarProgramacionPoliticaComercial,
+    obtenerEventosPoliticaComercial,
   }
 }
 

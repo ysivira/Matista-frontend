@@ -22,7 +22,7 @@ export function sesionCayoPara(error) {
 /** Códigos de negocio del contrato SL-2/SL-4/SL-5 que la interfaz puede explicar al ADMIN. */
 const CODIGOS_CONSULTA_ADMIN = Object.freeze([
   'ADMIN_VALIDACION', 'ADMIN_NO_ENCONTRADO', 'ADMIN_ESTADO',
-  'ADMIN_TRANSICION', 'ADMIN_CONCURRENCIA', 'ADMIN_ROUTE_NOT_FOUND',
+  'ADMIN_TRANSICION', 'ADMIN_CONCURRENCIA', 'ADMIN_INTEGRIDAD', 'ADMIN_ROUTE_NOT_FOUND',
   'SESSION_INVALID', 'ROLE_FORBIDDEN',
 ])
 
