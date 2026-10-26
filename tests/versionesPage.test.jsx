@@ -15,6 +15,7 @@ vi.mock('../src/features/admin/api/adminApi.js', () => ({
     crearBorradorTarifario: vi.fn(),
     recuperarVersionHistorica: vi.fn(),
     aumentarVersion: vi.fn(),
+    previsualizarAumentoVersion: vi.fn(),
     editarPrecioTarifa: vi.fn(),
     finalizarVersion: vi.fn(),
     activarVersion: vi.fn(),
@@ -174,6 +175,26 @@ beforeEach(() => {
   prepararEjecucion()
 })
 
+/**
+ * Prepara la previsualización del aumento tal como la entrega el backend:
+ * importes DECIMAL calculados por el servidor, filtrados por modalidad.
+ * @param {{porcentaje?: string, filas?: object[], rechazo?: unknown}} expectativas Filas previstas o error a rechazar.
+ */
+function mockearPrevisualizacion(expectativas = {}) {
+  if (expectativas.rechazo) {
+    adminApi.previsualizarAumentoVersion.mockRejectedValue(expectativas.rechazo)
+    return
+  }
+  const obligatoria = { id: '101', plan_id: '1', plan_nombre: 'RUBI', tipo_ingreso: 'Obligatorio', rango_clave: '0-25', rango_nota: null, precio_anterior: '100.00', precio_nuevo: '105.00', incremento: '5.00' }
+  const voluntaria = { id: '111', plan_id: '1', plan_nombre: 'RUBI', tipo_ingreso: 'Voluntario', rango_clave: '66+', rango_nota: null, precio_anterior: '80.25', precio_nuevo: '84.26', incremento: '4.01' }
+  adminApi.previsualizarAumentoVersion.mockImplementation(async (_versionId, { tipoIngreso }) => ({
+    version: { id: '7', estado: 'PREPARACION' },
+    porcentaje: expectativas.porcentaje ?? '5',
+    tipo_ingreso: tipoIngreso ?? null,
+    filas: expectativas.filas ?? (tipoIngreso === 'Voluntario' ? [voluntaria] : [obligatoria, voluntaria]),
+  }))
+}
+
 afterEach(() => {
   vi.clearAllMocks()
 })
@@ -248,17 +269,22 @@ describe('VersionesPage (SL-3 consultas)', () => {
 describe('VersionesPage (SL-4 ciclo de edición)', () => {
   it('abre el formulario de aumento masivo y envía el DTO con el campo obligatorio', async () => {
     adminApi.aumentarVersion.mockResolvedValue({ evento: { id: '12' }, filas: 2, revision: 2, porcentaje: '5' })
+    mockearPrevisualizacion()
     adminApi.listarVersiones.mockResolvedValue(historial())
     renderPantalla('?id=7')
 
     fireEvent.click(await screen.findByRole('button', { name: 'Aumento masivo' }))
     const porcentaje = screen.getByLabelText('Porcentaje')
     fireEvent.change(porcentaje, { target: { value: '5' } })
-    // Primer paso: la revision de la vista previa NO llama al backend.
+    // Primer paso: la revisión de la vista previa consulta el endpoint de
+    // solo lectura del backend (los importes ya no se calculan en React)
+    // sin llamar a la operación de aumento definitiva.
     fireEvent.submit(porcentaje.closest('form'))
+    await waitFor(() => expect(adminApi.previsualizarAumentoVersion).toHaveBeenCalledWith('7', { porcentaje: '5' }))
     expect(adminApi.aumentarVersion).not.toHaveBeenCalled()
-    expect(screen.getByText('$ 105,00')).toBeTruthy()
+    expect(await screen.findByText('$ 105,00')).toBeTruthy()
     expect(screen.getByText('$ 84,26')).toBeTruthy()
+    expect(screen.getByText('+$ 5,00')).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Confirmar aumento' }))
 
     await waitFor(() => expect(adminApi.aumentarVersion).toHaveBeenCalledWith('7', {
@@ -273,19 +299,69 @@ describe('VersionesPage (SL-4 ciclo de edición)', () => {
 
   it('expone la modalidad opcional del aumento masivo cuando se elige', async () => {
     adminApi.aumentarVersion.mockResolvedValue({ evento: { id: '12' }, filas: 1, revision: 2, porcentaje: '5' })
+    mockearPrevisualizacion()
     renderPantalla('?id=7')
 
     fireEvent.click(await screen.findByRole('button', { name: 'Aumento masivo' }))
     fireEvent.change(screen.getByLabelText('Porcentaje'), { target: { value: '5' } })
     fireEvent.change(screen.getByLabelText('Modalidad'), { target: { value: 'Voluntario' } })
     fireEvent.click(screen.getByRole('button', { name: 'Revisar aumento' }))
-    // La vista previa de una modalidad solo abarca las filas de esa modalidad.
-    expect(screen.getByText(/sobre 1 fila\(s\)/)).toBeTruthy()
+    // La vista previa de una modalidad solo abarca las filas de esa modalidad,
+    // según la respuesta del backend.
+    expect(await screen.findByText(/sobre 1 fila\(s\)/)).toBeTruthy()
     fireEvent.click(screen.getByRole('button', { name: 'Confirmar aumento' }))
 
     await waitFor(() => expect(adminApi.aumentarVersion).toHaveBeenCalledWith('7', {
       porcentaje: '5', tipoIngreso: 'Voluntario', revision: '1',
     }))
+  })
+
+  it('recalcula la previsualización en el backend cuando cambia el porcentaje en la confirmación', async () => {
+    mockearPrevisualizacion()
+    renderPantalla('?id=7')
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Aumento masivo' }))
+    fireEvent.change(screen.getByLabelText('Porcentaje'), { target: { value: '5' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Revisar aumento' }))
+    expect(await screen.findByText('$ 105,00')).toBeTruthy()
+    // Cambiar el porcentaje en el paso de confirmación dispara una nueva
+    // consulta: nunca se muestra una tabla que no corresponde al formulario.
+    fireEvent.change(screen.getByLabelText('Porcentaje'), { target: { value: '10' } })
+    await waitFor(() => expect(adminApi.previsualizarAumentoVersion).toHaveBeenLastCalledWith('7', { porcentaje: '10' }))
+    // La tabla vuelve a mostrarse con la respuesta de la nueva consulta.
+    expect(await screen.findByText('$ 105,00')).toBeTruthy()
+  })
+
+  it('muestra el error del backend y no aplica el aumento si la previsualización falla', async () => {
+    mockearPrevisualizacion({
+      rechazo: new ApiError({
+        status: 409,
+        code: 'ADMIN_ESTADO',
+        message: 'El porcentaje indicado no modifica ningun precio despues del redondeo monetario.',
+      }),
+    })
+    renderPantalla('?id=7')
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Aumento masivo' }))
+    fireEvent.change(screen.getByLabelText('Porcentaje'), { target: { value: '0.01' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Revisar aumento' }))
+    expect(await screen.findByText(/no modifica ningun precio/i)).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Confirmar aumento' }).disabled).toBe(true)
+    expect(adminApi.aumentarVersion).not.toHaveBeenCalled()
+  })
+
+  it('rechaza en el cliente un porcentaje con formato invalido sin consultar el backend', async () => {
+    renderPantalla('?id=7')
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Aumento masivo' }))
+    const porcentaje = screen.getByLabelText('Porcentaje')
+    // El input numérico rechaza texto no numérico: el estado queda vacío y
+    // el envío directo del formulario (sin validación del navegador) cae en
+    // el aviso local de porcentaje inválido sin consultar el backend.
+    fireEvent.change(porcentaje, { target: { value: 'abc' } })
+    fireEvent.submit(porcentaje.closest('form'))
+    expect(await screen.findByText('Revisá el porcentaje ingresado')).toBeTruthy()
+    expect(adminApi.previsualizarAumentoVersion).not.toHaveBeenCalled()
   })
 
   it('edita el precio de una fila y envia el PATCH con la revision visible', async () => {

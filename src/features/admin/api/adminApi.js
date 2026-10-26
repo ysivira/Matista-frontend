@@ -124,6 +124,20 @@ export function createAdminApi(client) {
   }
 
   /**
+   * Solicita al backend la previsualización del aumento masivo (solo lectura).
+   * Los importes los calcula el servidor con la misma función económica del
+   * aumento definitivo; React no implementa la regla de cálculo.
+   * @param {number|string} versionId Versión del borrador.
+   * @param {{porcentaje: string, tipoIngreso?: string}} parametros Porcentaje y modalidad opcional.
+   * @returns {Promise<{version: object, porcentaje: string, tipo_ingreso: string|null, filas: object[]}>} Importes por fila en DECIMAL.
+   */
+  function previsualizarAumentoVersion(versionId, { porcentaje, tipoIngreso }) {
+    const parameters = new URLSearchParams({ porcentaje })
+    if (tipoIngreso) parameters.set('tipoIngreso', tipoIngreso)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/aumentos/vista-previa?${parameters.toString()}`)
+  }
+
+  /**
    * Cambia el precio de una fila individual del borrador (SL-4, caso B).
    * @param {number|string} versionId Versión en PREPARACION.
    * @param {number|string} tarifaId Fila dentro del snapshot de la versión.
@@ -272,6 +286,7 @@ function obtenerEventosPoliticaComercial(politicaId) {
     crearBorradorTarifario,
     recuperarVersionHistorica,
     aumentarVersion,
+    previsualizarAumentoVersion,
     editarPrecioTarifa,
     finalizarVersion,
     reanudarVersion,

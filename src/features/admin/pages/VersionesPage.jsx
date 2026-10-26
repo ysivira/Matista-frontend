@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { adminApi } from '../api/adminApi.js'
 import { avisoAdminPara, sesionCayoPara } from '../components/avisoAdmin.js'
@@ -122,6 +122,8 @@ export function VersionesPage() {
   const [operando, setOperando] = useState(false) // escritura en curso: deshabilita botones
   const [aviso, setAviso] = useState(null)
   const [formAumento, setFormAumento] = useState(null) // { porcentaje, tipoIngreso, paso } abierto
+  const [previaAumento, setPreviaAumento] = useState(null) // { clave, filas } de la previsualización backend
+  const [previaEstado, setPreviaEstado] = useState('inactiva') // 'inactiva' | 'cargando' | 'lista' | 'error'
   const [edicion, setEdicion] = useState(null) // { tarifaId, precio } de la ÚNICA fila en edición
   const [deshacerArmado, setDeshacerArmado] = useState(false) // confirmación de dos clics del deshacer
   const [reanudarArmado, setReanudarArmado] = useState(false) // confirmación de dos clics de 'Volver a edición'
@@ -129,6 +131,7 @@ export function VersionesPage() {
   const [motivoDescarte, setMotivoDescarte] = useState('') // motivo de negocio exigido por el backend
   const [mostrarDescartadas, setMostrarDescartadas] = useState(false) // filtro del historial
   const consultaActualRef = useRef(0)
+  const previaConsultaRef = useRef(0) // guardia de respuestas viejas de la previsualización backend
   const { clearSession } = useSession()
 
   /**
@@ -165,6 +168,8 @@ export function VersionesPage() {
     setDetalle(null)
     setResumen(null)
     setFormAumento(null)
+    setPreviaAumento(null)
+    setPreviaEstado('inactiva')
     setEdicion(null)
     setDeshacerArmado(false)
     setReanudarArmado(false)
@@ -213,6 +218,50 @@ export function VersionesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idParam])
 
+  /** Consulta la previsualización al backend (única implementación económica). */
+  const consultarPreviaAumento = useCallback(async () => {
+    if (formAumento?.paso !== 'confirmacion' || !detalle) return
+    const consulta = previaConsultaRef.current + 1
+    previaConsultaRef.current = consulta
+    const porcentaje = formAumento.porcentaje
+    const tipoIngreso = formAumento.tipoIngreso
+    const clave = `${detalle.version.id}|${porcentaje}|${tipoIngreso}`
+    setPreviaAumento(null)
+    setPreviaEstado('cargando')
+    // La previsualización vive en el backend: los importes provienen de la
+    // misma función económica del aumento definitivo y React solo los
+    // muestra. El guardián previaConsultaRef descarta respuestas viejas
+    // cuando el usuario cambia rápido porcentaje o modalidad, de modo que
+    // nunca se muestre una tabla que no corresponde a los valores del
+    // formulario; ante un fallo se muestra el error del servidor sin
+    // calcular alternativas locales.
+    ;(async () => {
+      try {
+        const respuesta = await adminApi.previsualizarAumentoVersion(detalle.version.id, {
+          porcentaje,
+          ...(tipoIngreso ? { tipoIngreso } : {}),
+        })
+        if (consulta !== previaConsultaRef.current) return
+        setPreviaAumento({ clave, filas: respuesta.filas })
+        setPreviaEstado('lista')
+      } catch (error) {
+        if (consulta !== previaConsultaRef.current) return
+        if (manejarSesionVencida(error)) return
+        setPreviaEstado('error')
+        setAviso(avisoAdminPara(error, 'No se pudo calcular la previsualización del aumento. Intenta nuevamente.'))
+      }
+    })()
+  }, [formAumento, detalle])
+
+  // Se ejecuta en una microtask (como cargar()) para que los setState no
+  // ocurran sincronamente dentro del cuerpo del efecto.
+  // `manejarSesionVencida` solo usa setters y clearSession (estables), por lo
+  // que no genera cierre obsoleto; el guardia previaConsultaRef descarta
+  // respuestas tardías.
+  useEffect(() => {
+    queueMicrotask(() => { void consultarPreviaAumento() })
+  }, [consultarPreviaAumento])
+
   /**
    * Envuelve cada escritura del ciclo en un bloqueo de pantalla y recarga
    * del servidor. La pantalla nunca predice estados ni revisiones: tras el
@@ -259,55 +308,16 @@ export function VersionesPage() {
   }
 
   /**
-   * Calcula la vista previa del aumento masivo con la MISMA aritmética del
-   * backend: cada importe pasa a centavos; el incremento es el cociente
-   * exacto `(centavos * mantisa) / 10^(2+escala)` redondeado HALF-UP y el
-   * precio nuevo es `centavos + incremento`.
-   * @param {string} porcentajeTexto Porcentaje escrito en el formulario.
-   * @param {string} tipoIngreso Modalidad elegida ('' = ambas).
-   * @returns {{filas: object[], detalleModalidad: string}|null} Previa por fila o null si el porcentaje es inválido.
-   */
-  function calcularVistaPrevia(porcentajeTexto, tipoIngreso) {
-    const texto = String(porcentajeTexto).trim()
-    if (!/^\d+(\.\d{1,2})?$/.test(texto)) return null
-    const partes = texto.split('.')
-    const escala = partes[1]?.length ?? 0
-    const mantisa = Number(partes.join(''))
-    const filas = (detalle?.tarifas ?? [])
-      .filter((tarifa) => !tipoIngreso || tarifa.tipo_ingreso === tipoIngreso)
-      .map((tarifa) => {
-        const centavos = Math.round(Number(String(tarifa.precio)) * 100)
-        const numerador = centavos * mantisa
-        const denominador = 10 ** (2 + escala)
-        const resto = numerador % denominador
-        const cociente = (numerador - resto) / denominador
-        // HALF-UP exacto igual que dividirHalfUp del backend: el resto
-        // mitad o mayor redondea hacia arriba.
-        const incremento = 2 * resto >= denominador ? cociente + 1 : cociente
-        return {
-          ...tarifa,
-          incremento,
-          precioAntes: tarifa.precio,
-          precioNuevo: ((centavos + incremento) / 100).toFixed(2),
-        }
-      })
-    return {
-      filas,
-      detalleModalidad: tipoIngreso
-        ? tipoIngreso
-        : 'Obligatorio y Voluntario',
-    }
-  }
-
-  /**
-   * Avanza el formulario de aumento al paso de confirmación: recalcula la
-   * vista previa local y si el porcentaje no es válido muestra el aviso local.
+   * Valida el formato del porcentaje en el cliente (experiencia de usuario)
+   * y avanza al paso de confirmación. La previsualización de importes NO se
+   * calcula aquí: la obtiene el backend por API con la misma función
+   * económica del aumento definitivo (SPEC-ARCH-16).
    * @returns {void}
    */
   function irAConfirmacionAumento() {
     if (!detalle) return
-    const prevista = calcularVistaPrevia(formAumento.porcentaje, formAumento.tipoIngreso)
-    if (!prevista || prevista.filas.length === 0) {
+    const texto = String(formAumento.porcentaje).trim()
+    if (!/^\d+(\.\d{1,2})?$/.test(texto)) {
       setAviso({
         tone: 'error',
         title: 'Revisá el porcentaje ingresado',
@@ -316,7 +326,7 @@ export function VersionesPage() {
       return
     }
     setAviso(null)
-    setFormAumento({ ...formAumento, paso: 'confirmacion' })
+    setFormAumento({ ...formAumento, porcentaje: texto, paso: 'confirmacion' })
   }
 
   /**
@@ -598,10 +608,15 @@ export function VersionesPage() {
   // modificaciones economicas no disparan pedidos al backend.
   const hayReversibles = editable && hayCambiosReversibles(resumen?.eventos ?? [])
   const permiteCopiar = versionDelDetalle?.estado === 'ACTIVA' && !operando
-  // Previa del aumento: se recalcula por render, siempre a partir de los
-  // precios reales del snapshot del servidor y con la aritmética exacta.
-  const previaAumento = formAumento && detalle
-    ? calcularVistaPrevia(formAumento.porcentaje, formAumento.tipoIngreso)
+  // Previa del aumento: la calcula el backend al entrar al paso de
+  // confirmación (efecto de arriba). La clave garantiza que la tabla
+  // mostrada corresponda exactamente al porcentaje y modalidad actuales
+  // del formulario; mientras llega la respuesta no se muestran importes.
+  const clavePrevia = formAumento?.paso === 'confirmacion' && detalle
+    ? `${detalle.version.id}|${formAumento.porcentaje}|${formAumento.tipoIngreso}`
+    : null
+  const previaVisible = previaAumento && clavePrevia === previaAumento.clave
+    ? previaAumento
     : null
   const mapaNombresPlan = new Map(
     (detalle?.tarifas ?? []).map((tarifa) => [String(tarifa.plan_id), tarifa.plan_nombre]),
@@ -942,36 +957,46 @@ export function VersionesPage() {
                 <div className="admin-vers__confirmacion-aumento">
                   <p>
                     Revisá el aumento antes de aplicarlo: porcentaje {formAumento.porcentaje}%
-                    sobre {previaAumento?.filas.length ?? 0} fila(s) de modalidad
+                    sobre {previaVisible?.filas.length ?? 0} fila(s) de modalidad
                     {formAumento.tipoIngreso ? ` ${formAumento.tipoIngreso}` : ' Obligatorio y Voluntario'}.
                   </p>
-                  <div className="admin-table__scroll admin-vers__previa-scroll">
-                    <table className="admin-table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Plan</th>
-                          <th scope="col">Modalidad</th>
-                          <th scope="col">Rango</th>
-                          <th scope="col">Precio actual</th>
-                          <th scope="col">Precio nuevo</th>
-                          <th scope="col">Diferencia</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {previaAumento.filas.map((fila) => (
-                          <tr key={fila.id}>
-                            <td>{fila.plan_nombre}</td>
-                            <td className="admin-table__texto">{fila.tipo_ingreso}</td>
-                            <td>{fila.rango_clave}{fila.rango_nota ? ` ${fila.rango_nota}` : ''}</td>
-                            <td className="admin-table__precio">{formatearPrecioARS(fila.precioAntes)}</td>
-                            <td className="admin-table__precio">{formatearPrecioARS(fila.precioNuevo)}</td>
-                            <td className="admin-table__precio">+{formatearPrecioARS((fila.incremento / 100).toFixed(2))}</td>
+                  {previaEstado === 'cargando' || previaEstado === 'error' || !previaVisible ? (
+                    <p role={previaEstado === 'error' ? 'alert' : 'status'}>
+                      {previaEstado === 'cargando'
+                        ? 'Calculando la previsualización en el servidor...'
+                        : previaEstado === 'error'
+                          ? 'No hay previsualización disponible: revisá el aviso y reintenta.'
+                          : 'Previsualización no calculada todavía.'}
+                    </p>
+                  ) : (
+                    <div className="admin-table__scroll admin-vers__previa-scroll">
+                      <table className="admin-table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Plan</th>
+                            <th scope="col">Modalidad</th>
+                            <th scope="col">Rango</th>
+                            <th scope="col">Precio actual</th>
+                            <th scope="col">Precio nuevo</th>
+                            <th scope="col">Diferencia</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                  <button type="button" className="admin-button" disabled={operando} onClick={() => void confirmarAumento()}>
+                        </thead>
+                        <tbody>
+                          {previaVisible.filas.map((fila) => (
+                            <tr key={fila.id}>
+                              <td>{fila.plan_nombre}</td>
+                              <td className="admin-table__texto">{fila.tipo_ingreso}</td>
+                              <td>{fila.rango_clave}{fila.rango_nota ? ` ${fila.rango_nota}` : ''}</td>
+                              <td className="admin-table__precio">{formatearPrecioARS(fila.precio_anterior)}</td>
+                              <td className="admin-table__precio">{formatearPrecioARS(fila.precio_nuevo)}</td>
+                              <td className="admin-table__precio">+{formatearPrecioARS(fila.incremento)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                  <button type="button" className="admin-button" disabled={operando || !previaVisible} onClick={() => void confirmarAumento()}>
                     Confirmar aumento
                   </button>
                   <button type="button" className="admin-button admin-button--ghost" disabled={operando} onClick={() => setFormAumento(null)}>

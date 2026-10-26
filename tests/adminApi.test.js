@@ -126,6 +126,23 @@ describe('adminApi ciclo de edición SL-4/SL-5', () => {
     })
   })
 
+  it('solicita la previsualización del aumento como GET de solo lectura con query', async () => {
+    const client = capturador()
+    const api = createAdminApi(client)
+
+    await api.previsualizarAumentoVersion('7', { porcentaje: '5' })
+    await api.previsualizarAumentoVersion('7', { porcentaje: '7.77', tipoIngreso: 'Voluntario' })
+
+    expect(client.llamadas[0]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/aumentos/vista-previa?porcentaje=5',
+      opciones: {},
+    })
+    expect(client.llamadas[1]).toEqual({
+      ruta: '/api/admin/tarifario/versiones/7/aumentos/vista-previa?porcentaje=7.77&tipoIngreso=Voluntario',
+      opciones: {},
+    })
+  })
+
   it('edita precio individual con PATCH en el segmento de tarifa', async () => {
     const client = capturador()
     const api = createAdminApi(client)
