@@ -1,0 +1,10 @@
+.inicio-modulo { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; align-items:stretch; }
+.inicio-modulo__tarjeta { grid-column:span 2; display:flex; gap:20px; align-items:center; position:relative; min-height:150px; padding:28px; background:#fff; color:#202236; border:1px solid #dcd6e9; border-top:3px solid #ede9fe; border-radius:18px; box-shadow:0 8px 24px #14152212; text-decoration:none; transition:transform .18s,box-shadow .18s,border-color .18s; }
+.inicio-modulo__tarjeta:last-child:nth-child(odd) { grid-column:2/span 2; }
+.inicio-modulo__tarjeta:hover { transform:translateY(-3px); border-top-color:#8b5cf6; box-shadow:0 5px 24px #8b5cf64d; }
+.inicio-modulo__tarjeta:focus-visible { outline:3px solid #a78bfa; outline-offset:4px; }
+.inicio-modulo__icono { flex-shrink:0; display:grid; place-items:center; width:54px; height:54px; border-radius:16px; color:#7c3aed; background:linear-gradient(135deg,#f5f2ff,#ede9fe); border:1px solid #e7ddfa; }
+.inicio-modulo__tarjeta h3 { font-size:1.15rem; letter-spacing:-.02em; padding-right:18px; margin:0 0 8px; }
+.inicio-modulo__tarjeta p { font-size:.88rem; color:#69718a; margin:0; line-height:1.6; }
+.inicio-modulo__flecha { position:absolute; top:20px; right:20px; color:#a78bfa; font-size:20px; }
+@media (max-width:700px) { .inicio-modulo { grid-template-columns:minmax(0,1fr); } .inicio-modulo__tarjeta,.inicio-modulo__tarjeta:last-child:nth-child(odd) { grid-column:auto; padding:22px; gap:14px; } }

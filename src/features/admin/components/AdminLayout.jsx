@@ -5,6 +5,8 @@ import { SESSION_STATUS } from '../../auth/context/SessionContext.js'
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx'
 import { BrandLogo } from '../../../shared/ui/BrandLogo.jsx'
 import { EncabezadoSuperior } from '../../../shared/ui/EncabezadoSuperior.jsx'
+import { NAVEGACION_ADMIN, NAVEGACION_ASESOR } from '../../../shared/ui/navegacionModulos.js'
+import { IconoNavegacion } from '../../../shared/ui/IconoNavegacion.jsx'
 import { AdminAvatar } from './AdminAvatar.jsx'
 import { inicialesDe } from './iniciales.js'
 import { PerfilCuentaModal } from '../../perfil/components/PerfilCuentaModal.jsx'
@@ -12,44 +14,26 @@ import '../admin.css'
 // Los avisos y campos AUTH reutilizados por el módulo comparten la hoja AUTH.
 import '../../auth/components/auth.css'
 
-/** Ícono de la única entrada de navegación del módulo (trazo de Stitch). */
-const ICONO_DIRECTORIO = 'M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM1 18v-1a6 6 0 0 1 14 0v1M17 7a3 3 0 1 0-1-5.9M21 18v-1a6 6 0 0 0-3.5-5.4'
-/** Ícono de la entrada "Planes": diamante de catálogo (trazo de Stitch). */
-const ICONO_PLANES = 'M6 3h12l4 6-10 12L2 9zM2 9h20M9 3l3 6 3-6M12 21L9 9M12 21l3-12'
-/** Ícono de la entrada "Gestión de Precios": tarjeta de cobros (trazo de Stitch). */
-const ICONO_PRECIOS = 'M2 6h20v12H2zM2 11h20M6 15h4'
-/** Ícono de la entrada "Versiones": línea de tiempo con nodos (trazo de Stitch). */
-const ICONO_VERSIONES = 'M3 5h18M3 12h12M3 19h6M18 16v5M15 18h6'
-/** Ícono de la entrada "Configuración": engranaje/ajustes (trazo de Stitch). */
-const ICONO_CONFIGURACION = 'M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zM19.1 8.5a.9.9 0 1 1-1.2-1.3 30 30 0 0 0-4.7-2.3.9.9 0 0 1-.3-1.2 30 30 0 0 0 2.1-5.4.9.9 0 0 1-1.2-.4 30 30 0 0 0-5.4-2.2.9.9 0 1 1-.7-1.7 30 30 0 0 0-5.4 2.2.9.9 0 0 1-1.3.4 30 30 0 0 0-2.2 5.4.9.9 0 0 1-.3 1.2 30 30 0 0 0-4.6 2.2.9.9 0 1 1-1.3 1.2 30 30 0 0 0 2.2 5.4.9.9 0 0 1-.4 1.3 30 30 0 0 0 5.4 2.2.9.9 0 1 1 1.7.7 30 30 0 0 0 5.4-2.2.9.9 0 0 1 .4 1.2 30 30 0 0 0 4.6 2.3.9.9 0 1 1 1.3-1.3zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z'
-
-/** Encabezado del topbar por ruta activa del módulo ADMIN (SL-2). */
-const SECCIONES_RUTA = Object.freeze({
-  '/admin': 'Gestión de empleados',
-  '/admin/planes': 'Planes',
-  '/admin/tarifario': 'Gestión de Precios',
-  '/admin/versiones': 'Versiones del tarifario',
-  '/admin/configuracion': 'Configuración comercial',
-})
-
 /**
- * Estructura del módulo ADMIN bajo la identidad Amethyst Prism Enterprise:
+ * Estructura compartida ADMIN/ASESOR bajo la identidad Amethyst Prism Enterprise:
  * barra lateral oscura con el logo oficial y la tarjeta de cuenta operante,
  * topbar con Cerrar Sesión y lienzo oscuro con tarjetas claras. La tarjeta de
  * usuario abre el modal «Mi perfil» con las operaciones personales de AUTH.
  * Reutiliza la sesión AUTH vigente; no conserva ni administra credenciales
  * propias en el navegador.
  * @param {{children?: import('react').ReactNode, section?: string}} props Sección activa para el texto del encabezado.
- * @returns {import('react').ReactElement} Shell de navegación del módulo ADMIN.
+ * @returns {import('react').ReactElement} Shell único con navegación comercial o administrativa.
  */
 export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
   const { status, user, logout, clearSession } = useSession()
   const location = useLocation()
   const navigate = useNavigate()
   const [perfilAbierto, setPerfilAbierto] = useState(false)
+  const comercial = location.pathname.startsWith('/asesor')
 
   // El topbar refleja la pantalla activa; el prop conserva el default para usos aislados.
-  const seccionActiva = SECCIONES_RUTA[location.pathname] ?? section
+  const navegacion = comercial ? NAVEGACION_ASESOR : NAVEGACION_ADMIN
+  const seccionActiva = navegacion.find(item => item.ruta === location.pathname)?.titulo ?? (location.pathname.startsWith('/asesor/cotizaciones/') ? 'Historial' : section)
 
   if (status !== SESSION_STATUS.AUTHENTICATED || !user) {
     // El guard de rutas ya resolvió la sesión; solo se espera sin navegar.
@@ -72,42 +56,16 @@ export function AdminLayout({ children, section = 'Módulo ADMIN' }) {
 
   return (
     <div className="admin-shell">
-      <aside className="admin-sidebar" aria-label="Navegación del módulo ADMIN">
+      <aside className="admin-sidebar" aria-label={comercial ? 'Navegación del módulo ASESOR' : 'Navegación del módulo ADMIN'}>
         <div className="admin-brand">
           <BrandLogo surface="dark" compact />
         </div>
 
         <nav className="admin-nav">
-          <NavLink to="/admin" end className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={ICONO_DIRECTORIO} />
-            </svg>
-            Gestión de empleados
-          </NavLink>
-          <NavLink to="/admin/planes" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={ICONO_PLANES} />
-            </svg>
-            Planes
-          </NavLink>
-          <NavLink to="/admin/tarifario" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={ICONO_PRECIOS} />
-            </svg>
-            Gestión de Precios
-          </NavLink>
-          <NavLink to="/admin/versiones" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={ICONO_VERSIONES} />
-            </svg>
-            Versiones
-          </NavLink>
-          <NavLink to="/admin/configuracion" className={({ isActive }) => (isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link')}>
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d={ICONO_CONFIGURACION} />
-            </svg>
-            Configuración
-          </NavLink>
+          {navegacion.map(item => <NavLink key={item.ruta} to={item.ruta} end={item.ruta === '/admin' || item.ruta === '/asesor'}
+            className={({ isActive }) => isActive ? 'admin-nav__link admin-nav__link--active' : 'admin-nav__link'}>
+            <IconoNavegacion trazo={item.icono} /><span className="admin-nav__label">{item.titulo}</span>
+          </NavLink>)}
         </nav>
 
         <div className="admin-sidebar__footer">

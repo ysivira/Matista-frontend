@@ -1,3 +1,5 @@
+import { CAMPOS_POLITICA, formatearPorcentaje } from '../components/politicaPresentacion.js'
+import { DetallePolitica } from '../components/DetallePolitica.jsx'
 import { useEffect, useRef, useState } from 'react'
 import { adminApi } from '../api/adminApi.js'
 import { avisoAdminPara } from '../components/avisoAdmin.js'
@@ -8,24 +10,6 @@ import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.js
 // El aporte de monotributo es un importe versionado de cada snapshot (021);
 // TDC queda como descuento numérico: decidir aplicarlo es del Asesor, por lo
 // que desaparece el interruptor global "TDC habilitado" del administrador.
-const CAMPOS_POLITICA = Object.freeze([
-  { grupo: 'Aportes y topes', name: 'porcentaje_aporte_reconocido', label: 'Aporte obra social', tipo: 'number', step: '0.01', min: '0.01', max: '99.99', sufijo: '%' },
-  { grupo: 'Aportes y topes', name: 'tope_sueldo_bruto', label: 'Tope sueldo bruto', tipo: 'number', step: '0.01', min: '0.01', moneda: true },
-  { grupo: 'Aportes y topes', name: 'aporte_monotributo', label: 'Aporte monotributo', tipo: 'number', step: '0.01', min: '0.01', moneda: true },
-  { grupo: 'Descuentos y promociones', name: 'joven_porcentaje', label: 'Descuento joven', tipo: 'number', step: '0.01', min: '0', max: '100', sufijo: '%' },
-  { grupo: 'Descuentos y promociones', name: 'comercial_fijo_max_pct', label: 'Descuento fijo máx.', tipo: 'number', step: '0.01', min: '0.01', max: '100', sufijo: '%' },
-  { grupo: 'Descuentos y promociones', name: 'comercial_fijo_meses_max', label: 'Duración máx. fijo', tipo: 'number', min: '1', max: '12', sufijo: ' meses' },
-  { grupo: 'Descuentos y promociones', name: 'primer_tramo_50_meses_max', label: 'Primer tramo 50% máx.', tipo: 'number', min: '1', max: '12', sufijo: ' meses', help: 'Regla especial: cuando el primer tramo de una propuesta escalonada sea del 50%, debe durar exactamente 3 meses.' },
-  { grupo: 'Esquema escalonado', name: 'comercial_escalonado_max_pct', label: 'Desc. escalonado máx.', tipo: 'number', step: '0.01', min: '0.01', max: '100', sufijo: '%' },
-  { grupo: 'Esquema escalonado', name: 'comercial_escalonado_tramos_max', label: 'Tramos máx.', tipo: 'number', min: '1', max: '4' },
-  { grupo: 'Esquema escalonado', name: 'comercial_escalonado_total_meses_max', label: 'Total meses máx.', tipo: 'number', min: '1', max: '12', sufijo: ' meses' },
-  { grupo: 'TDC y afinidad', name: 'tdc_pct', label: 'Descuento TDC', tipo: 'number', step: '0.01', min: '0', max: '100', sufijo: '%' },
-  { grupo: 'TDC y afinidad', name: 'tope_comercial_tdc_pct', label: 'Tope comercial TDC', tipo: 'number', step: '0.01', min: '0.01', max: '100', sufijo: '%' },
-  { grupo: 'TDC y afinidad', name: 'afinidad_pct', label: 'Descuento afinidad', tipo: 'number', step: '0.01', min: '0', max: '100', sufijo: '%', opcional: true },
-])
-
-const GRUPOS = [...new Set(CAMPOS_POLITICA.map((campo) => campo.grupo))]
-
 const ETIQUETAS_POLITICA = Object.freeze({
   VIGENTE: 'Vigente',
   PROGRAMADA: 'Programada',
@@ -54,11 +38,6 @@ function presentarResponsable(version) {
   return `${version.actor_nombre ?? ''} ${version.actor_apellido ?? ''} (${legajo})`.trim()
 }
 
-/** Formatea un decimal como porcentaje con dos posiciones. */
-function formatearPorcentaje(valor) {
-  return `${Number(valor).toFixed(2)}%`
-}
-
 /** Convierte un instante del snapshot (ISO o MySQL UTC) a la vista local. */
 function presentarFecha(valor) {
   return valor ? new Date(valor).toLocaleString('es-AR') : '—'
@@ -72,22 +51,11 @@ function fechaALocal(valor) {
   return `${fecha.getFullYear()}-${pad(fecha.getMonth() + 1)}-${pad(fecha.getDate())}T${pad(fecha.getHours())}:${pad(fecha.getMinutes())}`
 }
 
-/** Presenta un valor de política con su unidad sin alterar el dato recibido. */
-function presentarValor(campo, politica) {
-  const valor = politica?.[campo.name]
-  if (valor === null || valor === undefined || valor === '') return '—'
-  if (campo.moneda) {
-    return `$ ${Number(valor).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-  }
-  if (campo.sufijo === '%') return formatearPorcentaje(valor)
-  return `${valor}${campo.sufijo ?? ''}`
-}
-
 /** Copia la versión objetivo al estado editable conservando nullables. */
 function crearFormulario(politica) {
   return Object.fromEntries(CAMPOS_POLITICA.map((campo) => [
     campo.name,
-    campo.name === 'afinidad_pct' ? (politica[campo.name] ?? '') : politica[campo.name],
+    campo.opcional ? (politica[campo.name] ?? '') : politica[campo.name],
   ]))
 }
 
@@ -132,40 +100,6 @@ function hayCambiosReales(objetivo, formulario, porcentajes, activacion) {
     !fechaEditada
     || new Date(objetivo.fecha_vigencia).getTime() !== new Date(fechaEditada).getTime())
   return cambioCampos || cambioCatalogo || cambioFecha || activacion.modo === 'INMEDIATA'
-}
-
-/** Renderiza los valores de una versión agrupados según la pantalla vigente. */
-function DetallePolitica({ politica, compacto = false }) {
-  return (
-    <div className={`admin-config__grupos${compacto ? ' admin-config__grupos--compactos' : ''}`}>
-      {GRUPOS.map((grupo) => (
-        <section key={grupo} className="admin-config__grupo">
-          <h3 className="admin-config__grupo-titulo">{grupo}</h3>
-          <div className="admin-config__grid">
-            {CAMPOS_POLITICA.filter((campo) => campo.grupo === grupo).map((campo) => (
-              <div key={campo.name} className="admin-config__campo">
-                <span className="admin-config__label">{campo.label}</span>
-                <span className="admin-config__valor">{presentarValor(campo, politica)}</span>
-                {campo.help ? <p className="admin-config__help">{campo.help}</p> : null}
-              </div>
-            ))}
-          </div>
-        </section>
-      ))}
-      <section className="admin-config__grupo">
-        <h3 className="admin-config__grupo-titulo">Descuentos comerciales autorizados</h3>
-        <div className="admin-config__chips" aria-label="Descuentos comerciales autorizados">
-          {(politica?.porcentajes_comerciales ?? []).length > 0
-            ? politica.porcentajes_comerciales.map((porcentaje) => (
-              <span key={String(porcentaje)} className="admin-config__chip">
-                {formatearPorcentaje(porcentaje)}
-              </span>
-            ))
-            : <span className="admin-config__vacio">No hay descuentos configurados.</span>}
-        </div>
-      </section>
-    </div>
-  )
 }
 
 /** Renderiza la auditoría de ciclo de vida con responsable y fecha. */
@@ -329,6 +263,8 @@ async function guardarPolitica() {
     const datos = {
       ...formulario,
       afinidad_pct: formulario.afinidad_pct === '' ? null : formulario.afinidad_pct,
+      aporte_adherente: formulario.aporte_adherente === '' ? null : formulario.aporte_adherente,
+      iva_voluntario_pct: formulario.iva_voluntario_pct === '' ? null : formulario.iva_voluntario_pct,
       porcentajes_comerciales: porcentajes,
       activacion: activacion.modo === 'INMEDIATA'
         ? { modo: 'INMEDIATA' }

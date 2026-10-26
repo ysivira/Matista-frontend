@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { RouterProvider } from 'react-router-dom'
 import { createMemoryAppRouter } from '../src/app/router.jsx'
@@ -63,6 +63,20 @@ const anonymousSession = {
 }
 
 describe('router y guards', () => {
+  it.each(['/asesor', '/asesor/nueva', '/asesor/cotizaciones', '/asesor/planes', '/asesor/precios', '/asesor/condiciones'])('ADMIN no accede a %s por URL', async path => {
+    renderRoute(path, { status: 'authenticated', user: { rol: 'ADMIN', estado: 'ACTIVO' }, error: null })
+    expect(await screen.findByText('Acceso no autorizado')).toBeTruthy()
+  })
+
+  it.each(['/admin', '/admin/empleados', '/admin/planes', '/admin/tarifario', '/admin/configuracion'])('ASESOR no accede a %s por URL', async path => {
+    renderRoute(path, { status: 'authenticated', user: { rol: 'ASESOR', estado: 'ACTIVO' }, error: null })
+    expect(await screen.findByText('Acceso no autorizado')).toBeTruthy()
+  })
+
+  it('no expone una pantalla independiente de clientes', async () => {
+    renderRoute('/asesor/clientes', { status: 'authenticated', user: { rol: 'ASESOR', estado: 'ACTIVO' }, error: null })
+    expect(await screen.findByText('Ruta no encontrada')).toBeTruthy()
+  })
   it('redirige la raíz a la pantalla de login sin sesión', async () => {
     renderRoute('/', anonymousSession)
 
@@ -98,7 +112,25 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByRole('heading', { name: 'Gestión de empleados' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Inicio', level: 2 })).toBeTruthy()
+  })
+
+  it('Inicio ADMIN ofrece cinco rutas funcionales y marca únicamente Inicio en el menú', async () => {
+    renderRoute('/admin', { status: 'authenticated', user: { rol: 'ADMIN', estado: 'ACTIVO' }, error: null })
+    await screen.findByRole('heading', { name: 'Inicio', level: 2 })
+    const tarjetas = within(screen.getByRole('main')).getAllByRole('link')
+    expect(tarjetas.map(t => t.getAttribute('href'))).toEqual(['/admin/empleados', '/admin/planes', '/admin/tarifario', '/admin/versiones', '/admin/configuracion'])
+    const menu = screen.getByRole('navigation')
+    expect(within(menu).getAllByRole('link')).toHaveLength(6)
+    expect(menu.querySelectorAll('svg')).toHaveLength(6)
+    expect(menu.querySelectorAll('[aria-current="page"]')).toHaveLength(1)
+    expect(menu.querySelector('[aria-current="page"]').textContent).toBe('Inicio')
+  })
+
+  it('conserva el directorio de empleados en su ruta funcional y el menú activo', async () => {
+    renderRoute('/admin/empleados', { status: 'authenticated', user: { rol: 'ADMIN', estado: 'ACTIVO' }, error: null })
+    await screen.findByRole('heading', { name: 'Gestión de empleados' })
+    expect(screen.getByRole('navigation').querySelector('[aria-current="page"]').getAttribute('href')).toBe('/admin/empleados')
   })
 
   it('redirige la raíz al destino del asesor con ese rol', async () => {
@@ -108,7 +140,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByRole('heading', { name: 'Mi perfil' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Inicio', level: 2 })).toBeTruthy()
   })
 
   it('redirige una ruta privada a la pantalla de login cuando no hay sesión', async () => {
@@ -124,7 +156,7 @@ describe('router y guards', () => {
       error: null,
     })
 
-    expect(await screen.findByRole('heading', { name: 'Mi perfil' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Inicio', level: 2 })).toBeTruthy()
   })
 
   it('impide presentar una ruta incompatible con el rol', async () => {
@@ -181,7 +213,7 @@ describe('router y guards', () => {
     cleanup()
 
     renderRoute('/admin/tarifario', adminSession)
-    expect(await screen.findByRole('heading', { name: 'Gestión de Precios' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { name: 'Gestión de precios' })).toBeTruthy()
     cleanup()
 
     renderRoute('/admin/versiones', adminSession)

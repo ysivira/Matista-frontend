@@ -113,6 +113,13 @@
 }
 
 .admin-nav__link svg { flex: 0 0 auto; }
+/* Las etiquetas largas ajustan su texto sin desplazar horizontalmente la barra lateral. */
+.admin-nav__label { min-width: 0; white-space: normal; line-height: 1.4; }
+
+/* SPEC-UI-06: solo este enlace comercial; no cambia el ancho ni la navegación del shell. */
+.admin-nav__link[href="/asesor/condiciones"] { gap:0.35rem; padding-inline:0.45rem; font-size:0.79rem; }
+.admin-nav__link[href="/asesor/condiciones"] .admin-nav__label { white-space:nowrap; }
+.admin-nav__link[href="/asesor/condiciones"] svg { width:18px; height:18px; }
 
 .admin-nav__link:hover {
   background: rgba(139, 92, 246, 0.14);

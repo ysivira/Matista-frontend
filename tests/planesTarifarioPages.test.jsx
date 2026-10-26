@@ -220,8 +220,12 @@ describe('TarifarioPage (SL-2, RF-D07)', () => {
     const claves = (await cuerpo.findAllByRole('row')).map((fila) => fila.textContent)
     // El importe se formatea visualmente; la cadena original permanece intácta en la API.
     await screen.findByText('$ 50,25')
-    // El segmento aparece con su rango etario y con la clave de la tarifa.
-    expect((await cuerpo.findAllByText(/HIJO 0-1/)).length).toBeGreaterThan(0)
+    // Cada segmento aparece una sola vez, sin la clave repetida ni la acción CSV.
+    expect(await cuerpo.findAllByText(/HIJO 0-1/)).toHaveLength(1)
+    expect(tabla.querySelector('.admin-tarifario__detalle')).toBeNull()
+    expect(screen.queryByRole('link', { name: 'Exportar CSV' })).toBeNull()
+    expect(screen.getByRole('link', { name: 'Imprimir' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Exportar PDF' })).toBeTruthy()
     expect(claves[0]).toContain('HIJO 0-1')
     expect(claves[1]).toContain('0-25')
     expect(typeof adminApi.consultarTarifario.mock.calls[0][0]).toBe('string')

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { adminApi } from '../api/adminApi.js'
 import { avisoAdminPara } from '../components/avisoAdmin.js'
@@ -7,6 +7,8 @@ import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
 import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.jsx'
 import { GemaPlan } from '../../../shared/ui/GemaPlan.jsx'
 import { colorDePlan } from '../../../shared/ui/gemasPlan.js'
+import { AccionesDocumento } from '../components/AccionesDocumento.jsx'
+import '../../../shared/ui/documentos.css'
 
 /**
  * Separa el detalle de un plan en su lista de líneas (una por prestación según
@@ -67,9 +69,10 @@ function descomponerCobertura(linea) {
  * expandido a la vez. El texto recibido se preserva íntegro sin extraer ni
  * reformular coberturas, porque el separador `|` de la fuente no es consistente
  * entre planes y cualquier recorte podría alterar el significado contractual.
+ * @param {object} props API de lectura y ruta base para compartir catálogo con ASESOR.
  * @returns {import('react').ReactElement} Catálogo desplegable de planes.
  */
-export function PlanesPage() {
+export function PlanesPage({ api = adminApi, basePath = '/admin' }) {
   const navigate = useNavigate()
   const [planes, setPlanes] = useState([])
   const [cargando, setCargando] = useState(true)
@@ -82,13 +85,13 @@ export function PlanesPage() {
    * por el contador vigente, igual que en el resto del módulo.
    * @returns {Promise<void>} Finaliza al aplicar el catálogo o el aviso.
    */
-  async function cargar() {
+  const cargar = useCallback(async function cargar() {
     const consulta = consultaActualRef.current + 1
     consultaActualRef.current = consulta
     setCargando(true)
     setAviso(null)
     try {
-      const respuesta = await adminApi.listarPlanes()
+      const respuesta = await api.listarPlanes()
       if (consulta !== consultaActualRef.current) return
       setPlanes(respuesta.planes ?? [])
     } catch (error) {
@@ -97,13 +100,13 @@ export function PlanesPage() {
     } finally {
       if (consulta === consultaActualRef.current) setCargando(false)
     }
-  }
+  }, [api])
 
   useEffect(() => {
     // cargar() se difiere un microtask: sus setState iniciales quedan
     // asíncronos respecto del efecto (react-hooks/set-state-in-effect).
     queueMicrotask(cargar)
-  }, [])
+  }, [cargar])
 
   /**
    * Conmuta el plan expandido: abrir uno contrae el anterior y abrir el
@@ -122,13 +125,13 @@ export function PlanesPage() {
    * @returns {void}
    */
   function abrirTarifario(planId, tipoIngreso) {
-    navigate(`/admin/tarifario?planId=${planId}&modalidad=${encodeURIComponent(tipoIngreso)}`)
+    navigate(`${basePath === '/admin' ? '/admin/tarifario' : '/asesor/precios'}?planId=${planId}&modalidad=${encodeURIComponent(tipoIngreso)}`)
   }
 
   return (
     <div className="admin-directory">
       <EncabezadoContextual
-        etiqueta="Módulo ADMIN · Catálogo oficial"
+        etiqueta={`${basePath === '/admin' ? 'Módulo ADMIN' : 'Módulo ASESOR'} · Catálogo oficial`}
         titulo="Catálogo de planes"
         descripcion="Consultá los planes activos publicados en el tarifario."
       />
@@ -191,13 +194,14 @@ export function PlanesPage() {
             {planes.map((plan) => {
               const abierto = planAbierto === plan.id
               return (
-                <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto} className="admin-card admin-plan-card__body">
+                <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto} className={`admin-card admin-plan-card__body${abierto ? ' matista-print' : ''}`} style={{ borderTop: `4px solid ${colorDePlan(plan.nombre)}` }}>
                   <div className="admin-plan-card__titular">
                     <span className="admin-plan-card__gema">
                       <GemaPlan nombre={plan.nombre} tamano="ficha" />
                     </span>
                     <h3 className="admin-plan-card__encabezado">{plan.nombre}</h3>
                   </div>
+                  <AccionesDocumento recurso={`planes/${plan.id}`} etiquetaImprimir="Imprimir detalle" etiquetaPdf="Exportar PDF del plan" />
                   <h3 className="admin-plan-card__subtitulo">Coberturas</h3>
                   {/* Tabla semántica de coberturas: los registros con tres campos
                       delimitados por `|` se separan en celdas; los registros

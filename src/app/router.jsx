@@ -12,12 +12,20 @@ import { ResendVerificationPage } from '../features/auth/pages/ResendVerificatio
 import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.jsx'
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
 import { AdminLayout } from '../features/admin/components/AdminLayout.jsx'
+import { AdminInicioPage } from '../features/admin/pages/AdminInicioPage.jsx'
 import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
 import { PlanesPage } from '../features/admin/pages/PlanesPage.jsx'
 import { TarifarioPage } from '../features/admin/pages/TarifarioPage.jsx'
 import { VersionesPage } from '../features/admin/pages/VersionesPage.jsx'
 import { ConfiguracionComercialPage } from '../features/admin/pages/ConfiguracionComercialPage.jsx'
 import { MiPerfilPage } from '../features/perfil/pages/MiPerfilPage.jsx'
+import { ComercialDashboard } from '../features/asesor/pages/ComercialDashboard.jsx'
+import { ListasPage } from '../features/asesor/pages/ListasPage.jsx'
+import { QuoteForm } from '../features/asesor/pages/QuoteForm.jsx'
+import { QuoteHistory } from '../features/asesor/pages/QuoteHistory.jsx'
+import { QuoteDetail } from '../features/asesor/pages/QuoteDetail.jsx'
+import { CondicionesPage } from '../features/asesor/pages/CondicionesPage.jsx'
+import { asesorCatalogoApi } from '../features/asesor/api/asesorApi.js'
 
 const routes = [
   {
@@ -81,9 +89,10 @@ const routes = [
     children: [
       {
         path: '/admin',
-        element: <AdminLayout section="Gestión de empleados" />,
+        element: <AdminLayout section="Módulo ADMIN" />,
         children: [
-          { index: true, element: <EmployeesPage /> },
+          { index: true, element: <AdminInicioPage /> },
+          { path: 'empleados', element: <EmployeesPage /> },
           { path: 'planes', element: <PlanesPage /> },
           { path: 'tarifario', element: <TarifarioPage /> },
           { path: 'versiones', element: <VersionesPage /> },
@@ -93,12 +102,20 @@ const routes = [
     ],
   },
   {
-    // La ruta inicial del rol ASESOR sigue registrada por la arquitectura AUTH;
-    // sin módulo propio aprobado resuelve hacia el perfil compartido de SL-1.
-    // Ninguna pantalla provisional de ASESOR queda expuesta antes de SL-2.
-    element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR, AUTH_ROLES.ADMIN]} />,
+    // ASESOR reutiliza el shell ADMIN y los componentes de catálogo compartidos.
+    element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR]} />,
     children: [
-      { path: '/asesor', element: <Navigate to="/perfil" replace /> },
+      { path: '/asesor', element: <AdminLayout section="Gestión comercial" />, children: [
+        { index: true, element: <ComercialDashboard /> },
+        { path: 'planes', element: <PlanesPage api={asesorCatalogoApi} basePath="/asesor" /> },
+        { path: 'precios', element: <ListasPage /> },
+        { path: 'condiciones', element: <CondicionesPage /> },
+        { path: 'nueva', element: <QuoteForm /> },
+        { path: 'cotizaciones', element: <QuoteHistory /> },
+        { path: 'cotizaciones/:id', element: <QuoteDetail /> },
+        { path: 'cotizaciones/:id/preparacion', element: <QuoteForm /> },
+        { path: 'cotizaciones/:id/recotizar', element: <QuoteForm recotizar /> },
+      ] },
     ],
   },
   {

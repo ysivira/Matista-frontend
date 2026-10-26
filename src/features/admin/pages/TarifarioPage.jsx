@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { adminApi } from '../api/adminApi.js'
 import { avisoAdminPara } from '../components/avisoAdmin.js'
@@ -7,6 +7,8 @@ import { ChipEstado } from '../components/ChipEstado.jsx'
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx'
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
 import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.jsx'
+import { AccionesDocumento } from '../components/AccionesDocumento.jsx'
+import '../../../shared/ui/documentos.css'
 
 /**
  * Modalidades de ingreso exactas definidas por el contrato SL-2. El valor es
@@ -63,9 +65,10 @@ function normalizar(texto) {
  * con el plan, la modalidad, la cantidad de segmentos y la tabla de precios
  * vigentes. Solo se emplean datos reales del backend: la versión, su estado y
  * su fecha de activación provienen de la respuesta vigente.
- * @returns {import('react').ReactElement} Lista de precios vigentes.
+ * @param {object} props API de lectura y modo de consulta para compartir presentación con ASESOR.
+ * @returns {import('react').ReactElement} Lista única de precios vigentes con documentos.
  */
-export function TarifarioPage() {
+export function TarifarioPage({ api = adminApi, modoConsulta = false }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const planIdParam = searchParams.get('planId')
   const modalidadParam = searchParams.get('modalidad')
@@ -89,21 +92,21 @@ export function TarifarioPage() {
    * @param {string} modalidad Modalidad exacta de la consulta.
    * @returns {Promise<void>} Finaliza al aplicar la matriz o el aviso.
    */
-  async function cargar(planIdParam, modalidad) {
+  const cargar = useCallback(async function cargar(planIdParam, modalidad) {
     const consulta = consultaActualRef.current + 1
     consultaActualRef.current = consulta
     if (datosCargadosRef.current) setRecargando(true)
     else setCargando(true)
     setAviso(null)
     try {
-      const catalogo = await adminApi.listarPlanes()
+      const catalogo = await api.listarPlanes()
       const planesVigentes = catalogo.planes ?? []
       const seleccion = planIdParam ?? planesVigentes[0]?.id ?? null
       if (seleccion == null) {
         setPlanes([])
         setMatriz(null)
       } else {
-        const respuesta = await adminApi.consultarTarifario(seleccion, modalidad)
+        const respuesta = await api.consultarTarifario(seleccion, modalidad)
         if (consulta !== consultaActualRef.current) return
         setPlanes(planesVigentes)
         setMatriz(respuesta)
@@ -118,14 +121,14 @@ export function TarifarioPage() {
         setRecargando(false)
       }
     }
-  }
+  }, [api])
 
   useEffect(() => {
     // cargar() se difiere un microtask para que sus setState iniciales queden
     // fuera del render del efecto (react-hooks/set-state-in-effect).
     queueMicrotask(() => { void cargar(planIdParam, tipoModalidad) })
     // Cada cambio de plan o modalidad consulta al servidor: única fuente de verdad.
-  }, [planIdParam, tipoModalidad])
+  }, [planIdParam, tipoModalidad, cargar])
 
   /**
    * Actualiza la URL con el plan elegido manteniendo la modalidad vigente.
@@ -178,7 +181,7 @@ export function TarifarioPage() {
   return (
     <div className="admin-directory">
       <EncabezadoContextual
-        etiqueta="Módulo ADMIN · Tarifario comercial"
+        etiqueta={modoConsulta ? 'Módulo ASESOR · Consulta de precios' : 'Módulo ADMIN · Tarifario comercial'}
         titulo="Listas de precios vigentes"
         descripcion="Consultá los valores vigentes de los planes de salud por modalidad tarifaria."
         acciones={matriz ? (
@@ -255,10 +258,11 @@ export function TarifarioPage() {
               de segmentos sobre la tabla de precios vigentes. */}
           {matriz ? (
             <div
-              className={`admin-card admin-tarifario${recargando ? ' admin-directory--actualizando' : ''}`}
+              className={`admin-card admin-tarifario matista-print${recargando ? ' admin-directory--actualizando' : ''}`}
               aria-busy={ocupado}
             >
               <>
+                <AccionesDocumento recurso={`listas/${matriz.plan.id}/${matriz.tipo_ingreso}`} />
                 <div className="admin-tarifario__cabecera">
                   <div className="admin-tarifario__titular">
                     <h2 className="admin-tarifario__plan">{matriz.plan?.nombre}</h2>
@@ -288,14 +292,7 @@ export function TarifarioPage() {
                           <td>
                             <span className="admin-tarifario__segmento">
                               <span className="admin-tarifario__punto" aria-hidden="true" />
-                              {tarifa.rango_etario}
-                            </span>
-                            {/* Clave y nota de la fila: datos reales del
-                                tarifario que completan el segmento sin
-                                reinterpretar sus valores. */}
-                            <span className="admin-tarifario__detalle">
-                              {tarifa.rango_clave}
-                              {tarifa.rango_nota ? ` · ${tarifa.rango_nota}` : ''}
+                              <span style={{ whiteSpace: 'nowrap' }}>{tarifa.rango_etario}</span>
                             </span>
                           </td>
                           <td className="admin-tarifario__precio">{formatearPrecioARS(tarifa.precio)}</td>

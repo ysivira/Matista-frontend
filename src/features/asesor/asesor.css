@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap');
+.ase-panel { background:#fff; color:#202236; border:1px solid #dcd6e9; border-radius:18px; padding:24px; margin:20px 0; box-shadow:0 8px 24px #14152212; }
+.ase-panel h3 { font-size:1.2rem; margin:0 0 16px; }
+.ase-panel h4 { margin:20px 0 10px; }
+.ase-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; align-items:end; }
+.ase-summary-sections { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.ase-summary-sections>section { border:1px solid #e7e1f2; border-radius:14px; padding:22px; }
+.ase-summary-sections h4 { margin:0 0 18px; color:#6d28d9; }
+.ase-summary-sections dl { display:grid; grid-template-columns:1fr 1.3fr; gap:12px; margin:0; font-size:.9rem; }
+.ase-summary-sections dt { margin:0; color:#69718a; font-weight:500; }
+.ase-summary-tramos { padding:0; list-style:none; display:grid; gap:10px; }
+.ase-summary-tramos li { border-left:3px solid #8b5cf6; background:#f8f6ff; padding:12px 16px; border-radius:0 10px 10px 0; display:flex; gap:12px; justify-content:space-between; font-size:.9rem; }
+.ase-summary-muted { color:#7a7d90; font-size:.9rem; }
+.ase-client-status.ase-client-status--nuevo { color:#5b21b6; background:#f5f2ff; border-color:#ddd6fe; }
+.ase-notice--restricted { color:#9f1239; background:#fff1f2; border-color:#fecdd3; }
+.ase-history tbody tr:hover { background:#faf8ff; }
+.ase-row-actions a:focus-visible { outline:2px solid #a78bfa; outline-offset:3px; }
+.ase-panel label { display:flex; flex-direction:column; gap:7px; font-size:.9rem; font-weight:600; margin:12px 0; }
+.ase-panel input,.ase-panel select { box-sizing:border-box; width:100%; min-height:42px; border:1px solid #bcb4d1; border-radius:9px; padding:10px; background:#fcfaff; color:#202236; font:inherit; }
+.ase-panel input:focus,.ase-panel select:focus { outline:2px solid #8b5cf6; outline-offset:2px; }
+.ase-panel button { border-radius:9px; background:#6d28d9; color:#fff; padding:11px 17px; border:1px solid #6d28d9; cursor:pointer; font:inherit; font-weight:600; }
+.ase-panel button:disabled { opacity:.5; cursor:not-allowed; }
+.ase-panel fieldset { min-width:0; border:1px solid #dcd6e9; border-radius:12px; padding:16px; margin:20px 0; }
+.ase-panel legend { padding:0 8px; font-weight:700; }
+.ase-panel p { line-height:1.6; }
+.ase-panel a { color:#6d28d9; }
+.ase-notice { padding:16px; background:#f5f2ff; color:#4c1d95; border:1px solid #ddd0fa; border-radius:12px; margin:16px 0; }
+.ase-actions,.ase-search { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:16px; }
+.ase-panel .ase-check { flex-direction:row; align-items:center; }
+.ase-check input { width:18px; min-height:18px; }
+.ase-stepper { display:flex; justify-content:center; text-align:center; gap:18px; padding:0; list-style:none; flex-wrap:wrap; color:#d9d0ef; }
+.ase-stepper li { border-bottom:3px solid #575269; padding:12px; }
+.ase-stepper [aria-current="step"] { border-color:#a78bfa; color:white; font-weight:700; }
+.ase-panel table { width:100%; border-collapse:collapse; text-align:left; font-size:.9rem; }
+.ase-panel th,.ase-panel td { padding:13px; border-bottom:1px solid #e7e1f2; }
+.ase-panel th { background:#f5f2ff; }
+.ase-panel small { display:block; }
+.ase-table { overflow:auto; }
+.ase-panel dt { font-weight:700; margin-top:12px; }
+.ase-panel dd { margin-left:0; }
+.ase-eyebrow { text-transform:uppercase; letter-spacing:.12em; color:#7c3aed; font-size:.72rem; font-weight:700; }
+.ase-section-heading { display:flex; align-items:center; gap:16px; padding-bottom:18px; margin-bottom:18px; border-bottom:1px solid #e7e1f2; }
+.ase-section-heading>span { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:12px; color:#6d28d9; background:#ede9fe; font-weight:700; }
+.ase-section-heading h3 { margin:0 0 5px; }
+.ase-section-heading p { margin:0; color:#64748b; font-weight:400; font-size:.9rem; }
+.ase-client-card .ase-search { background:#f8f6fe; border:1px solid #e7e1f2; border-radius:12px; padding:16px; }
+.ase-client-card .ase-search label { flex:1; max-width:480px; }
+.ase-client-status { padding:12px 16px; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; border-radius:10px; }
+.ase-config-layout { display:grid; grid-template-columns:minmax(0,2fr) minmax(260px,1fr); gap:24px; align-items:start; }
+.ase-config-summary { position:sticky; top:24px; }
+.ase-config-summary dd { padding-bottom:10px; border-bottom:1px solid #eee9f5; }
+.ase-tarifas-preview { padding:16px; border:1px solid #ddd6ef; border-radius:10px; margin:16px 0; }
+.ase-tarifas-preview summary { cursor:pointer; font-weight:700; color:#6d28d9; }
+.ase-history-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:20px 0; }
+.ase-history-stats>div { background:white; border-radius:14px; padding:20px; border:1px solid #e7e1f2; color:#64748b; }
+.ase-history-stats strong { display:block; font-size:1.8rem; color:#202236; margin:10px 0; }
+.ase-history-stats small { font-size:.75rem; }
+.ase-history-toolbar { display:flex; justify-content:space-between; align-items:center; gap:16px; border-top:1px solid #e7e1f2; padding-top:22px; margin-top:24px; }
+.ase-history-toolbar span { font-size:.8rem; color:#64748b; }
+.ase-reference { color:#6d28d9; white-space:nowrap; }
+.ase-state { padding:5px 9px; border-radius:99px; font-size:.7rem; font-weight:700; background:#f1f5f9; white-space:nowrap; }
+.ase-state--emitida { background:#ecfdf5; color:#065f46; }
+.ase-state--anulada { background:#fff1f2; color:#9f1239; }
+.ase-state--borrador { background:#f5f2ff; color:#6d28d9; }
+.ase-row-actions { display:flex; gap:10px; font-size:.8rem; }
+.ase-detail-modal .admin-modal { width:min(1080px,95vw); max-width:1080px; }
+.ase-detail-modal .ase-detail { box-shadow:none; border:0; margin:0; padding:0; }
+.ase-detail-summary { background:#f8f6fe; padding:16px; border-radius:12px; }
+.ase-detail-summary dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 18px; }
+@media (max-width:900px) { .ase-config-layout { grid-template-columns:1fr; } .ase-config-summary { position:static; } }
+@media (max-width:640px) { .ase-history-stats { grid-template-columns:1fr; } .ase-detail-summary dl { display:block; } }
+@media (max-width:640px) { .ase-panel { padding:16px; } .ase-grid,.ase-summary-sections { grid-template-columns:1fr; } }
+@media print {
+  body { background:white !important; }
+  body * { visibility:hidden; }
+  .ase-print,.ase-print * { visibility:visible; }
+  .ase-print { position:absolute; left:0; top:0; width:100%; margin:0; padding:0; box-shadow:none; border:0; }
+  .ase-print .ase-no-print,.ase-print .ase-no-print * { display:none; }
+}
+.ase-economic-summary { background:linear-gradient(135deg,#fff,#faf8ff); border:1px solid #ddd6ef; }
+.ase-economic-summary dl { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px 20px; }
+.ase-economic-summary dl>div { display:contents; }
+.ase-economic-summary dt { margin:0; font-weight:500; }
+.ase-economic-summary dd { margin:0; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.ase-economic-summary table { font-size:.9rem; }
+.ase-economic-summary td:last-child { text-align:right; white-space:nowrap; }
+@media (max-width:640px) { .ase-economic-summary { overflow-x:auto; } .ase-economic-summary dl { gap:12px; font-size:.85rem; } }
+
+/* == Paso 1: superficie operativa de Stitch, limitada al formulario de cotización == */
+.ase-client-step { background:#f5f2ff; border-radius:16px; padding:32px; box-shadow:0 4px 20px -2px #0b0d1733; }
+.ase-client-step .ase-section-heading { border:0; margin:0; padding:0; }
+.ase-client-step .ase-section-heading>span { width:56px; height:56px; border-radius:14px; background:#ede5fc; color:#8b5cf6; }
+.ase-client-step h3 { font-family:'Space Grotesk',sans-serif; font-size:1.3rem; margin:0 0 6px; color:#131424; }
+.ase-client-step .ase-section-heading p { color:#56586f; }
+/* Encabezado con píldoras de estado alineadas a la derecha, según el diseño Stitch. */
+.ase-step-header { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:24px; }
+.ase-client-pills { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; padding-top:4px; }
+.ase-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; font-size:.78rem; font-weight:700; background:#f0ecf9; color:#4f319c; white-space:nowrap; }
+.ase-pill-dot { width:8px; height:8px; border-radius:50%; background:#8b5cf6; }
+.ase-pill--info { background:#ede5fc; color:#5b2cbf; }
+.ase-pill--ok { background:#ecfdf5; color:#065f46; }
+.ase-pill--ok .ase-pill-dot { background:#10b981; }
+
+/* Campos con icono interno; el icono queda sobre el campo y el contenedor concentra el foco. */
+.ase-field { display:flex; flex-direction:column; min-width:0; }
+.ase-field--full { grid-column:1 / -1; }
+.ase-field-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+.ase-client-step .ase-field-row label { display:block; margin:0; font-size:.9rem; }
+.ase-field-hint { color:#75778f; font-size:.78rem; }
+.ase-verified { display:inline-flex; align-items:center; gap:2px; color:#047857; background:#ecfdf5; padding:2px 8px; border-radius:6px; font-weight:700; font-size:.78rem; }
+.ase-client-step .ase-input-shell { position:relative; display:flex; align-items:center; background:#fff; border:1px solid #cbc4de; border-radius:10px; min-height:44px; transition:box-shadow .15s; }
+.ase-client-step .ase-input-shell:focus-within { border-color:#8b5cf6; box-shadow:0 0 0 2px #8b5cf6; }
+.ase-client-step .ase-input-shell>svg { position:absolute; left:12px; color:#797a91; z-index:1; }
+.ase-client-step .ase-input-shell input { border:0; background:transparent; box-shadow:none; min-height:42px; flex:1; padding:0 12px 0 40px; }
+.ase-client-step .ase-input-shell input:focus { outline:none; }
+.ase-client-step .ase-input-shell input[readonly] { font-weight:600; color:#45475e; cursor:not-allowed; }
+.ase-client-step .ase-age-unit { padding-right:12px; color:#75778f; font-size:.8rem; }
+.ase-client-step .ase-input-shell button { height:36px; min-height:36px; margin:0 4px 0 0; padding:0 14px; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+.ase-input-chip { margin-right:8px; display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:6px; border:1px solid #ddd6fe; background:#f5f2ff; color:#5b2cbf; font-size:.72rem; font-weight:700; white-space:nowrap; }
+.ase-input-chip--ok { background:#ecfdf5; border-color:#a7f3d0; color:#047857; }
+
+/* Introducción de búsqueda: el botón vive dentro del campo y cede su lugar a la píldora de estado. */
+.ase-client-step .ase-search { display:block; background:transparent; border:0; padding:0; margin:0 0 4px; }
+.ase-client-step .ase-search label { flex:none; max-width:none; margin:0; }
+
+/* Bloques de datos con encabezado de sección y superficie interna blanca. */
+.ase-client-block { margin:24px 0; }
+.ase-block-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid #dcd6e9; padding-bottom:8px; margin-bottom:16px; }
+.ase-client-step .ase-client-section-title { display:flex; align-items:center; gap:8px; text-transform:uppercase; color:#4a4c62; font-size:.875rem; letter-spacing:.02em; margin:0; }
+.ase-client-step .ase-client-section-title::before { content:''; width:6px; height:16px; border-radius:4px; background:#8b5cf6; }
+.ase-client-step .ase-cambiar-dni { background:transparent; border:0; color:#6d28d9; padding:4px 6px; display:inline-flex; align-items:center; gap:4px; font-size:.85rem; font-weight:700; margin:0; }
+.ase-client-step .ase-cambiar-dni:hover:not(:disabled) { background:#ede5fc; }
+.ase-client-step .ase-block-surface { background:#fff; border-radius:12px; padding:20px; display:grid; gap:16px; }
+.ase-client-step .ase-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 24px; margin:0; }
+
+/* Aviso de resultado con icono circular, título y detalle. */
+.ase-client-step .ase-client-status { display:flex; align-items:flex-start; gap:12px; margin:0 0 4px; }
+.ase-status-icon { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; flex-shrink:0; justify-self:flex-start; background:#d1fae5; color:#059669; }
+.ase-client-status--nuevo .ase-status-icon { background:#ede5fc; color:#6d28d9; }
+.ase-client-step .ase-client-status strong { display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.ase-client-step .ase-client-status p { margin:4px 0 0; font-size:.875rem; }
+
+/* Panel informativo y barra de acciones al pie. */
+.ase-info-panel { display:flex; align-items:center; gap:12px; padding:14px 16px; background:#f1edfb; border:1px solid #ddd6ef; border-radius:10px; color:#484964; font-size:.85rem; margin:20px 0 0; }
+.ase-info-panel svg { color:#5516be; flex-shrink:0; }
+.ase-client-step .ase-actions { justify-content:space-between; border-top:1px solid #dcd6e9; padding-top:24px; }
+.ase-client-step .ase-actions button:first-child:not(:only-child) { background:#fff; border-color:#cbc4de; color:#202236; }
+.ase-client-step .ase-actions button:first-child:not(:only-child):hover { background:#ede5fc; }
+.ase-client-step .ase-actions button:only-child { margin-left:auto; }
+.ase-client-step button { background:#8b5cf6; border-color:#8b5cf6; border-radius:8px; }
+.ase-client-step button:hover:not(:disabled) { background:#5b2cbf; border-color:#5b2cbf; }
+.ase-client-step button:focus-visible { outline:2px solid #a78bfa; outline-offset:3px; }
+.ase-client-step input,.ase-client-step select { background:#fff; border-color:#dcd6e9; border-radius:8px; }
+.ase-client-step fieldset { background:#fff; border:0; padding:24px; border-radius:12px; margin:28px 0; }
+.ase-client-step legend { color:#5d607e; font-size:.875rem; text-transform:uppercase; letter-spacing:.02em; border-left:4px solid #8b5cf6; }
+.ase-client-step .ase-client-help { color:#5d607e; font-size:.75rem; }
+@media (max-width:640px) {
+  .ase-client-step { padding:20px; }
+  .ase-step-header { flex-direction:column; }
+  .ase-client-pills { justify-content:flex-start; }
+  .ase-client-step .ase-grid { grid-template-columns:minmax(0,1fr); }
+  .ase-client-step .ase-block-surface { padding:16px; }
+  .ase-client-step .ase-field-row .ase-field-hint { display:none; }
+  .ase-client-step .ase-input-shell button { padding:0 10px; }
+  .ase-client-step .ase-actions button { width:100%; }
+}
