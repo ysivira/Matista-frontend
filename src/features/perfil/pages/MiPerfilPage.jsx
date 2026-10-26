@@ -1,4 +1,3 @@
-import { AdminLayout } from '../../admin/components/AdminLayout.jsx'
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
 import { PasswordField, TextField } from '../../auth/components/AuthFields.jsx'
 import { useSession } from '../../auth/hooks/useSession.js'
@@ -18,7 +17,6 @@ export function MiPerfilPage() {
   const nombreCompleto = [user?.nombre, user?.apellido].filter(Boolean).join(' ') || '—'
 
   return (
-    <AdminLayout section="Mi perfil">
       <div className="admin-profile">
         {/* El título vive solo en el encabezado superior del shell (h1); la
             vista mantiene su descripción breve sin repetir «Mi perfil». */}
@@ -110,6 +108,5 @@ export function MiPerfilPage() {
           </form>
         </section>
       </div>
-    </AdminLayout>
   )
 }

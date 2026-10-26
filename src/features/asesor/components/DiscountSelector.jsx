@@ -1,4 +1,4 @@
-import { formatearPorcentaje } from '../../admin/components/politicaPresentacion.js'
+import { formatearPorcentaje } from '../../../shared/catalogo/politicaPresentacion.js'
 
 /** Controles Stitch de campaña y adicionales; envía opciones de ADMIN, nunca importes calculados. */
 export function DiscountSelector({ value, onChange, politica, validacion }) {

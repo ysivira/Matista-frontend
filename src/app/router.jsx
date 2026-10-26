@@ -11,7 +11,7 @@ import { ConfirmEmailChangePage } from '../features/auth/pages/ConfirmEmailChang
 import { ResendVerificationPage } from '../features/auth/pages/ResendVerificationPage.jsx'
 import { ForgotPasswordPage } from '../features/auth/pages/ForgotPasswordPage.jsx'
 import { ResetPasswordPage } from '../features/auth/pages/ResetPasswordPage.jsx'
-import { AdminLayout } from '../features/admin/components/AdminLayout.jsx'
+import { SessionLayout } from './SessionLayout.jsx'
 import { AdminInicioPage } from '../features/admin/pages/AdminInicioPage.jsx'
 import { EmployeesPage } from '../features/admin/pages/EmployeesPage.jsx'
 import { PlanesPage } from '../features/admin/pages/PlanesPage.jsx'
@@ -25,7 +25,7 @@ import { QuoteForm } from '../features/asesor/pages/QuoteForm.jsx'
 import { QuoteHistory } from '../features/asesor/pages/QuoteHistory.jsx'
 import { QuoteDetail } from '../features/asesor/pages/QuoteDetail.jsx'
 import { CondicionesPage } from '../features/asesor/pages/CondicionesPage.jsx'
-import { asesorCatalogoApi } from '../features/asesor/api/asesorApi.js'
+import { PlanesAsesorPage } from '../features/asesor/pages/PlanesPage.jsx'
 
 const routes = [
   {
@@ -89,7 +89,7 @@ const routes = [
     children: [
       {
         path: '/admin',
-        element: <AdminLayout section="Módulo ADMIN" />,
+        element: <SessionLayout section="Módulo ADMIN" />,
         children: [
           { index: true, element: <AdminInicioPage /> },
           { path: 'empleados', element: <EmployeesPage /> },
@@ -102,12 +102,12 @@ const routes = [
     ],
   },
   {
-    // ASESOR reutiliza el shell ADMIN y los componentes de catálogo compartidos.
+    // ASESOR reutiliza el shell neutral y el catálogo exclusivamente de consulta.
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ASESOR]} />,
     children: [
-      { path: '/asesor', element: <AdminLayout section="Gestión comercial" />, children: [
+      { path: '/asesor', element: <SessionLayout section="Gestión comercial" />, children: [
         { index: true, element: <ComercialDashboard /> },
-        { path: 'planes', element: <PlanesPage api={asesorCatalogoApi} basePath="/asesor" /> },
+        { path: 'planes', element: <PlanesAsesorPage /> },
         { path: 'precios', element: <ListasPage /> },
         { path: 'condiciones', element: <CondicionesPage /> },
         { path: 'nueva', element: <QuoteForm /> },
@@ -122,7 +122,7 @@ const routes = [
     // Perfil propio compartido por ambos roles con la misma sesión AUTH.
     element: <ProtectedRoute allowedRoles={[AUTH_ROLES.ADMIN, AUTH_ROLES.ASESOR]} />,
     children: [
-      { path: '/perfil', element: <MiPerfilPage /> },
+      { path: '/perfil', element: <SessionLayout section="Mi perfil"><MiPerfilPage /></SessionLayout> },
     ],
   },
   {

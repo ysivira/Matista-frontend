@@ -1,4 +1,4 @@
-import { formatearPrecioARS } from '../../admin/components/formatoMonetario.js'
+import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js'
 import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js'
 
 /** Presenta precios publicados del plan seleccionado sin sumar integrantes ni calcular una tarifa familiar. */

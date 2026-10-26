@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { AsesorDialog } from './AsesorDialog.jsx'
-import { formatearPrecioARS } from '../../admin/components/formatoMonetario.js'
+import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js'
 
 /** Muestra únicamente una emisión confirmada y releída del backend; nunca fabrica número, plan o importe. */
 export function QuoteConfirmation({ cotizacion }) {

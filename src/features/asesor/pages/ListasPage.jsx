@@ -1,7 +1,10 @@
-import { TarifarioPage } from '../../admin/pages/TarifarioPage.jsx'
-import { catalogoApi } from '../../admin/api/catalogoApi.js'
+import { ConsultaTarifario } from '../../../shared/catalogo/ConsultaTarifario.jsx'
+import { catalogoApi } from '../../../shared/api/catalogoApi.js'
 
-/** Reutiliza la pantalla ADMIN de precios en modo consulta, sin interfaz paralela. */
+/**
+ * Consulta precios mediante componentes y API comunes, sin importar páginas ni escrituras ADMIN.
+ * @returns {import('react').ReactElement} Lista compartida en el contexto ASESOR existente.
+ */
 export function ListasPage() {
-  return <TarifarioPage api={catalogoApi} modoConsulta />
+  return <ConsultaTarifario api={catalogoApi} etiqueta="Módulo ASESOR · Consulta de precios" />
 }

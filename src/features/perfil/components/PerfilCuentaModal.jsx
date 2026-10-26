@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { AdminModal } from '../../admin/components/AdminModal.jsx'
-import { inicialesDe } from '../../admin/components/iniciales.js'
+import { Modal } from '../../../shared/ui/Modal.jsx'
+import { inicialesDe } from '../../../shared/lib/iniciales.js'
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx'
 import { PasswordField, TextField } from '../../auth/components/AuthFields.jsx'
 import { useSession } from '../../auth/hooks/useSession.js'
@@ -149,7 +149,7 @@ export function PerfilCuentaModal({ onClose }) {
   )
 
   return (
-    <AdminModal
+    <Modal
       label="Mi perfil"
       title="Mi perfil"
       subtitle={nombreCompleto}
@@ -160,6 +160,6 @@ export function PerfilCuentaModal({ onClose }) {
       {vista === 'inicio' ? datosIniciales : null}
       {vista === 'password' ? formularioPassword : null}
       {vista === 'email' ? formularioEmail : null}
-    </AdminModal>
+    </Modal>
   )
 }

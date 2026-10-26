@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { SessionContext } from '../../auth/context/SessionContext.js'
 import { QuoteSummary } from './QuoteSummary.jsx'
-import { formatearPrecioARS } from '../../admin/components/formatoMonetario.js'
+import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js'
 
 /** Presenta el snapshot sin recalcularlo; en detalle prioriza identidad, tres tarjetas y economía, dejando familia secundaria. */
 export function QuoteReview({ solicitud, resultado, contacto = {}, detail = false }) {

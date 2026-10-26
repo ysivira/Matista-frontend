@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { AdminLayout } from '../src/features/admin/components/AdminLayout.jsx'
+import { SessionLayout } from '../src/app/SessionLayout.jsx'
 import { authApi } from '../src/features/auth/api/authApi.js'
 import { SessionContext } from '../src/features/auth/context/SessionContext.js'
 import { ApiError } from '../src/shared/lib/httpClient.js'
@@ -23,9 +23,9 @@ function renderShell(session = seededSession()) {
   return render(
     <SessionContext.Provider value={session}>
       <MemoryRouter initialEntries={['/admin']}>
-        <AdminLayout section="Gestión de empleados">
+        <SessionLayout section="Gestión de empleados">
           <p>Contenido de prueba</p>
-        </AdminLayout>
+        </SessionLayout>
       </MemoryRouter>
     </SessionContext.Provider>,
   )

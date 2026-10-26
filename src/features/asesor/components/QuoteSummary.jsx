@@ -1,4 +1,4 @@
-import { formatearPrecioARS } from '../../admin/components/formatoMonetario.js'
+import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js'
 
 /** Presenta conceptos capturados sin fórmulas; el detalle separa liquidación e importe destacado en dos columnas. */
 export function QuoteSummary({ resultado, compact = false, detail = false }) {

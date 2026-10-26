@@ -1,5 +1,5 @@
 import { httpClient } from '../../../shared/lib/httpClient.js'
-import { catalogoApi, consultarCatalogo } from '../../admin/api/catalogoApi.js'
+import { catalogoApi, consultarCatalogo } from '../../../shared/api/catalogoApi.js'
 
 /** Consulta el mismo catálogo ADMIN mediante las rutas compartidas autorizadas. */
 export function listarPlanes() {

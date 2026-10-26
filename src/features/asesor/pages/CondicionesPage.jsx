@@ -1,6 +1,6 @@
 import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js'
 import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.jsx'
-import { DetallePolitica } from '../../admin/components/DetallePolitica.jsx'
+import { DetallePolitica } from '../../../shared/catalogo/DetallePolitica.jsx'
 
 /** Muestra parámetros publicados de ADMIN como referencia, sin editar ni aplicar fórmulas. */
 export function CondicionesPage() {

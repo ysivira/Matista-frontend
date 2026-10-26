@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js'
-import { formatearPrecioARS } from '../../admin/components/formatoMonetario.js'
+import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js'
 import '../stitch.css'
 
 /** Presenta total y aportes históricos de Monotributo sin volver a calcularlos ni cambiar otros regímenes. */

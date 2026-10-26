@@ -1,4 +1,6 @@
 import { ApiError, NetworkError } from '../../shared/lib/httpClient.js'
+import { rateLimitNoticeFor } from '../../shared/lib/avisosApi.js'
+export { rateLimitNoticeFor, technicalNoticeFor } from '../../shared/lib/avisosApi.js'
 
 /**
  * Mapea los detalles públicos de un VALIDATION_FAILED a errores por campo del formulario.
@@ -45,40 +47,5 @@ export function loginNoticeFor(error) {
     default:
       // Los mensajes del contrato son públicos y seguros para la interfaz.
       return { tone: 'error', title: 'No se pudo iniciar la sesión', message: error.message || defaultMessage }
-  }
-}
-
-/**
- * Construye el aviso de límite de solicitudes confirmado por el backend (429 RATE_LIMIT_EXCEEDED).
- * @param {unknown} error Error capturado por una operación pública o personal de AUTH.
- * @returns {{tone: 'success'|'warning'|'error'|'info', title: string, message: string}|null} Aviso accesible; null cuando el código no es el confirmado por el contrato.
- */
-export function rateLimitNoticeFor(error) {
-  if (!(error instanceof ApiError) || error.code !== 'RATE_LIMIT_EXCEEDED') {
-    return null
-  }
-  // El contrato expone un mensaje público sin duración ni Retry-After: no se inventan temporizadores ni reintentos automáticos.
-  return { tone: 'warning', title: 'Demasiados intentos', message: error.message }
-}
-
-/**
- * Construye un aviso genérico para operaciones públicas distintas al login.
- * @param {unknown} error Error capturado por la operación.
- * @param {string} fallbackMessage Mensaje presentado cuando el error no transmite texto público.
- * @returns {{tone: 'success'|'warning'|'error'|'info', title: string, message: string}} Aviso accesible.
- */
-export function technicalNoticeFor(error, fallbackMessage) {
-  // El límite de solicitudes merece un tratamiento amable en todas las vistas que usan este traductor.
-  const rateLimitNotice = rateLimitNoticeFor(error)
-  if (rateLimitNotice) {
-    return rateLimitNotice
-  }
-  if (error instanceof NetworkError) {
-    return { tone: 'error', title: 'Sin conexión con la API', message: error.message }
-  }
-  return {
-    tone: 'error',
-    title: 'No se pudo completar la operación',
-    message: error?.message || fallbackMessage,
   }
 }

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { MiPerfilPage } from '../src/features/perfil/pages/MiPerfilPage.jsx'
+import { SessionLayout } from '../src/app/SessionLayout.jsx'
 import { authApi } from '../src/features/auth/api/authApi.js'
 import { SessionContext } from '../src/features/auth/context/SessionContext.js'
 import { ApiError } from '../src/shared/lib/httpClient.js'
@@ -23,7 +24,7 @@ function renderPerfil(session = seededSession()) {
   return render(
     <SessionContext.Provider value={session}>
       <MemoryRouter initialEntries={['/perfil']}>
-        <MiPerfilPage />
+        <SessionLayout section="Mi perfil"><MiPerfilPage /></SessionLayout>
       </MemoryRouter>
     </SessionContext.Provider>,
   )
