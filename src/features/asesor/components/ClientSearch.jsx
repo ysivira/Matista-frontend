@@ -42,8 +42,14 @@ export function ClientSearch({ onSelect, initialCliente = null, bloquearIdentida
       else { setCliente(r.cliente ?? { ...VACIO, dni }); setRegistrado(r.cliente ?? null); setEdadDeclarada(r.cliente?.edad_declarada ?? calcularEdad(r.cliente?.fecha_nacimiento) ?? ''); setConfirmar(Boolean(r.cliente)) }
     } catch (error) { setAviso(error.message) } finally { setBusy(false) }
   }
-  /** Cambia un campo personal, conservando datos y revisión hasta guardar o cancelar. */
-  function cambiar(campo, valor) { setCliente(actual => ({ ...actual, [campo]: valor })) }
+  /**
+   * Actualiza el campo indicado con el texto del input; solo nombres/apellidos pasan a mayúsculas.
+   * Conserva tildes, Ñ, otros campos y revisión; no persiste hasta guardar explícitamente.
+   */
+  function cambiar(campo, valor) {
+    const normalizado = ['nombres', 'apellidos'].includes(campo) ? valor.toUpperCase() : valor
+    setCliente(actual => ({ ...actual, [campo]: normalizado }))
+  }
   /** Limpia la búsqueda actual sin escribir en la base. */
   function nuevaBusqueda() { setDni(''); setCliente(null); setRegistrado(null); setAjeno(null); setAviso(''); setConfirmar(false); setEdadDeclarada('') }
   /** Guarda solo si hay cambios; reutiliza el registro propio sin crear revisiones innecesarias. */

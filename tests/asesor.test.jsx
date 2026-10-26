@@ -52,6 +52,43 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks() })
 
 describe('ASESOR con cálculo autoritativo', () => {
+  /** El formulario compartido convierte identidad al escribir sin modificar contacto ni ubicación. */
+  it('SPEC20 alta muestra y envía nombres compuestos con tildes y Ñ en mayúsculas', async () => {
+    const seleccionar = vi.fn()
+    httpClient.request.mockResolvedValueOnce({ encontrado: false }).mockImplementationOnce(async (_ruta, opciones) => ({ ...opciones.body, id: '4', revision: 0 }))
+    montar(<ClientSearch onSelect={seleccionar} />)
+    fireEvent.change(screen.getByLabelText('DNI'), { target: { value: '12345678' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Buscar cliente' }))
+    fireEvent.change(await screen.findByLabelText('Nombres'), { target: { value: 'maría josé' } })
+    fireEvent.change(screen.getByLabelText('Apellidos'), { target: { value: 'pérez muñoz' } })
+    for (const [campo, valor] of [['Correo electrónico', 'Maria.Jose@example.test'], ['Teléfono', '+54 000'], ['Provincia', 'Córdoba'], ['Localidad', 'Villa María'], ['Edad', '25']]) {
+      fireEvent.change(screen.getByLabelText(campo), { target: { value: valor } })
+    }
+    expect(screen.getByLabelText('Nombres').value).toBe('MARÍA JOSÉ')
+    expect(screen.getByLabelText('Apellidos').value).toBe('PÉREZ MUÑOZ')
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
+    await waitFor(() => expect(seleccionar).toHaveBeenCalled())
+    expect(httpClient.request.mock.calls[1][1]).toMatchObject({ method: 'POST', body: { dni: '12345678', nombres: 'MARÍA JOSÉ', apellidos: 'PÉREZ MUÑOZ', email: 'Maria.Jose@example.test', telefono: '+54 000', provincia: 'Córdoba', localidad: 'Villa María' } })
+    expect(seleccionar.mock.calls[0][0].nombres).toBe('MARÍA JOSÉ')
+  })
+
+  /** Cargar datos legados no los normaliza ni guarda automáticamente; editar usa el mismo cambio central. */
+  it('SPEC20 edición normaliza solo identidad modificada y preserva datos/revisión al guardar', async () => {
+    const inicial = { ...cliente, direccion: 'Dirección histórica' }, antes = structuredClone(cliente)
+    httpClient.request.mockImplementationOnce(async (_ruta, opciones) => ({ ...inicial, ...opciones.body, revision: 2 }))
+    montar(<ClientSearch initialCliente={inicial} />)
+    expect(screen.getByLabelText('Nombres').value).toBe('Titular')
+    expect(httpClient.request).not.toHaveBeenCalled()
+    fireEvent.change(screen.getByLabelText('Nombres'), { target: { value: 'juan carlos' } })
+    fireEvent.change(screen.getByLabelText('Apellidos'), { target: { value: "muñoz d'angelo" } })
+    expect(screen.getByLabelText('Nombres').value).toBe('JUAN CARLOS')
+    expect(screen.getByLabelText('Apellidos').value).toBe("MUÑOZ D'ANGELO")
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar cliente' }))
+    await screen.findByText('Cliente guardado.')
+    expect(httpClient.request.mock.calls[0]).toEqual(['/api/asesor/clientes/3', { method: 'PUT', body: expect.objectContaining({ nombres: 'JUAN CARLOS', apellidos: "MUÑOZ D'ANGELO", dni: cliente.dni, email: cliente.email, direccion: inicial.direccion, revision: 1 }) }])
+    expect(cliente).toEqual(antes)
+  })
+
   it('FIX07 cónyuge fija CASADO, impide duplicados y eliminarlo no presume soltería', () => {
     /** Conserva estado real del editor para comprobar secuencias de alta, cambio y eliminación. */
     function FamiliaEditable() {
