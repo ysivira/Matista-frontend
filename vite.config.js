@@ -10,6 +10,12 @@ export default defineConfig({
     // si el puerto ya esta ocupado, para liberar la instancia duplicada.
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:3000',
+        changeOrigin: false,
+      },
+    },
   },
   test: {
     clearMocks: true,
