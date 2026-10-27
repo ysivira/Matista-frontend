@@ -24,6 +24,7 @@ import { AuthAlert } from '../../auth/components/AuthAlert.jsx';
 import { PasswordField, TextField } from '../../auth/components/AuthFields.jsx';
 import { useSession } from '../../auth/hooks/useSession.js';
 import { usePerfilAcciones } from '../hooks/usePerfilAcciones.js';
+import './perfilCuentaModal.css';
 
 /**
  * Modal compacto de la cuenta operante bajo el diseño Amethyst Prism
@@ -155,6 +156,7 @@ export function PerfilCuentaModal({
       </div>
     </form>;
   return <Modal label="Mi perfil" title="Mi perfil" subtitle={nombreCompleto} tone="primary"
+    className={vista === 'inicio' ? '' : 'perfil-cuenta-modal'}
     icon={<span className="admin-avatar admin-avatar--small"
     aria-hidden="true">{inicialesDe(user).slice(0, 2).toUpperCase() || '—'}</span>} onClose={onClose}>
       {vista === 'inicio' ? datosIniciales : null}

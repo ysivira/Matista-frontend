@@ -12,6 +12,7 @@
  *   tone?: 'danger'|'primary'|'success',
  *   icon?: import('react').ReactNode,
  *   center?: boolean,
+ *   className?: string,
  *   onClose?: () => void,
  *   children?: import('react').ReactNode,
  *   footer?: import('react').ReactNode,
@@ -25,12 +26,13 @@ export function Modal({
   tone = 'primary',
   icon,
   center = false,
+  className = '',
   onClose,
   children,
   footer
 }) {
   return <div className="admin-modal__backdrop" role="presentation" onClick={onClose}>
-      <div className={center ? 'admin-modal admin-modal--center' : 'admin-modal'} role="dialog"
+      <div className={`${center ? 'admin-modal admin-modal--center' : 'admin-modal'}${className ? ` ${className}` : ''}`} role="dialog"
         aria-modal="true" aria-label={label} onClick={event => event.stopPropagation()}>
         {icon !== undefined ? <header className="admin-modal__header">
             <span className={`admin-modal__icon admin-modal__icon--${tone}`}>{icon}</span>
