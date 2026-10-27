@@ -1,4 +1,7 @@
-import { ApiError, NetworkError } from './httpClient.js'
+/**
+ * Avisos técnicos de API y límites de solicitudes para la interfaz.
+ */
+import { ApiError, NetworkError } from './httpClient.js';
 
 /**
  * Construye el aviso de límite de solicitudes confirmado por el backend.
@@ -7,10 +10,14 @@ import { ApiError, NetworkError } from './httpClient.js'
  */
 export function rateLimitNoticeFor(error) {
   if (!(error instanceof ApiError) || error.code !== 'RATE_LIMIT_EXCEEDED') {
-    return null
+    return null;
   }
   // El contrato no publica duración: no se inventan temporizadores ni reintentos automáticos.
-  return { tone: 'warning', title: 'Demasiados intentos', message: error.message }
+  return {
+    tone: 'warning',
+    title: 'Demasiados intentos',
+    message: error.message
+  };
 }
 
 /**
@@ -20,16 +27,20 @@ export function rateLimitNoticeFor(error) {
  * @returns {object} Aviso accesible sin trazas ni credenciales.
  */
 export function technicalNoticeFor(error, fallbackMessage) {
-  const rateLimitNotice = rateLimitNoticeFor(error)
+  const rateLimitNotice = rateLimitNoticeFor(error);
   if (rateLimitNotice) {
-    return rateLimitNotice
+    return rateLimitNotice;
   }
   if (error instanceof NetworkError) {
-    return { tone: 'error', title: 'Sin conexión con la API', message: error.message }
+    return {
+      tone: 'error',
+      title: 'Sin conexión con la API',
+      message: error.message
+    };
   }
   return {
     tone: 'error',
     title: 'No se pudo completar la operación',
-    message: error?.message || fallbackMessage,
-  }
+    message: error?.message || fallbackMessage
+  };
 }

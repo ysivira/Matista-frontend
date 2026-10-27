@@ -1,4 +1,18 @@
-import { useState } from 'react'
+/**
+ * MATISTA - Frontend · Autenticación
+ * Archivo: AuthFields.jsx
+ *
+ * RESPONSABILIDAD:
+ * Componente AuthFields del módulo Autenticación; unidad de interfaz reutilizable de la feature.
+ *
+ * CONTENIDO:
+ * - Función TextField.
+ * - Función PasswordField.
+ *
+ * DEPENDENCIAS:
+ * - react
+ */
+import { useState } from 'react';
 
 /**
  * Campo de texto con etiqueta, pistas y errores accesibles para los formularios públicos AUTH.
@@ -29,15 +43,13 @@ export function TextField({
   autoComplete,
   placeholder,
   inputMode,
-  maxLength,
+  maxLength
 }) {
   const describedByIds = [
     error ? `${id}-error` : null,
-    !error && hint ? `${id}-hint` : null,
-  ].filter(Boolean)
-
-  return (
-    <div className="auth-field">
+    !error && hint ? `${id}-hint` : null
+  ].filter(Boolean);
+  return <div className="auth-field">
       <label className="auth-label" htmlFor={id}>
         {label}
         {required ? <span className="auth-label__required" aria-hidden="true">*</span> : null}
@@ -48,7 +60,7 @@ export function TextField({
         className={error ? 'auth-input auth-input--invalid' : 'auth-input'}
         type={type}
         value={value}
-        onChange={(event) => onValueChange(event.target.value)}
+        onChange={event => onValueChange(event.target.value)}
         autoComplete={autoComplete}
         placeholder={placeholder}
         inputMode={inputMode}
@@ -57,13 +69,9 @@ export function TextField({
         aria-invalid={error ? true : undefined}
         aria-describedby={describedByIds.length > 0 ? describedByIds.join(' ') : undefined}
       />
-      {error ? (
-        <p className="auth-field-error" id={`${id}-error`}>{error}</p>
-      ) : hint ? (
-        <p className="auth-hint" id={`${id}-hint`}>{hint}</p>
-      ) : null}
-    </div>
-  )
+      {error ? <p className="auth-field-error" id={`${id}-error`}>{error}</p> : hint
+        ? <p className="auth-hint" id={`${id}-hint`}>{hint}</p> : null}
+    </div>;
 }
 
 /**
@@ -89,49 +97,37 @@ export function PasswordField({
   hint,
   required = false,
   autoComplete,
-  placeholder,
+  placeholder
 }) {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
   const describedByIds = [
     error ? `${id}-error` : null,
-    !error && hint ? `${id}-hint` : null,
-  ].filter(Boolean)
-
-  return (
-    <div className="auth-field">
+    !error && hint ? `${id}-hint` : null
+  ].filter(Boolean);
+  return <div className="auth-field">
       <label className="auth-label" htmlFor={id}>
         {label}
         {required ? <span className="auth-label__required" aria-hidden="true">*</span> : null}
       </label>
       <div className="auth-input-wrap">
-        <input
-          id={id}
-          name={id}
-          className={`auth-input auth-input--with-toggle${error ? ' auth-input--invalid' : ''}`}
+        <input id={id} name={id} className={`auth-input auth-input--with-toggle${error
+          ? ' auth-input--invalid' : ''}`}
           type={visible ? 'text' : 'password'}
           value={value}
-          onChange={(event) => onValueChange(event.target.value)}
+          onChange={event => onValueChange(event.target.value)}
           autoComplete={autoComplete}
           placeholder={placeholder}
           aria-required={required || undefined}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedByIds.length > 0 ? describedByIds.join(' ') : undefined}
         />
-        <button
-          className="auth-input-toggle"
-          type="button"
-          onClick={() => setVisible((current) => !current)}
-          aria-pressed={visible}
-          aria-label={visible ? `Ocultar ${label.toLowerCase()}` : `Mostrar ${label.toLowerCase()}`}
-        >
+        <button className="auth-input-toggle" type="button"
+          onClick={() => setVisible(current => !current)} aria-pressed={visible} aria-label={visible
+          ? `Ocultar ${label.toLowerCase()}` : `Mostrar ${label.toLowerCase()}`}>
           {visible ? 'Ocultar' : 'Ver'}
         </button>
       </div>
-      {error ? (
-        <p className="auth-field-error" id={`${id}-error`}>{error}</p>
-      ) : hint ? (
-        <p className="auth-hint" id={`${id}-hint`}>{hint}</p>
-      ) : null}
-    </div>
-  )
+      {error ? <p className="auth-field-error" id={`${id}-error`}>{error}</p> : hint
+        ? <p className="auth-hint" id={`${id}-hint`}>{hint}</p> : null}
+    </div>;
 }

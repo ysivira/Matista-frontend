@@ -1,20 +1,32 @@
-import { useEffect, useRef, useState } from 'react'
-import { ApiError } from '../../../shared/lib/httpClient.js'
-import { authApi } from '../api/authApi.js'
-import { SessionContext, SESSION_STATUS } from './SessionContext.js'
-
-const SESSION_ABSENCE_CODES = new Set([
-  'SESSION_REQUIRED',
-  'ACCESS_TOKEN_INVALID',
-  'SESSION_INVALID',
-])
+/**
+ * MATISTA - Frontend · Autenticación
+ * Archivo: SessionProvider.jsx
+ *
+ * RESPONSABILIDAD:
+ * Contexto SessionProvider del módulo Autenticación; comparte estado de sesión entre componentes.
+ *
+ * CONTENIDO:
+ * - Función SessionProvider.
+ *
+ * DEPENDENCIAS:
+ * - react
+ * - ../../../shared/lib/httpClient.js
+ * - ../api/authApi.js
+ * - ./SessionContext.js
+ */
+import { useEffect, useRef, useState } from 'react';
+import { ApiError } from '../../../shared/lib/httpClient.js';
+import { authApi } from '../api/authApi.js';
+import { SessionContext, SESSION_STATUS } from './SessionContext.js';
+const SESSION_ABSENCE_CODES = new Set(['SESSION_REQUIRED', 'ACCESS_TOKEN_INVALID',
+  'SESSION_INVALID']);
 
 /**
  * Mensaje para rechazar una segunda mutación de sesión mientras otra está en curso.
  * Regla de negocio: solo una operación login/logout a la vez para evitar desincronizar
  * la cookie HttpOnly del servidor con el estado en memoria.
  */
-const SESSION_MUTATION_IN_PROGRESS_MESSAGE = 'Ya existe una operación de inicio o cierre de sesión en curso.'
+const SESSION_MUTATION_IN_PROGRESS_MESSAGE = 'Ya existe una operación de inicio o cierre de sesión en curso.';
 
 /**
  * Determina si el backend confirmó que no existe una sesión utilizable.
@@ -22,9 +34,7 @@ const SESSION_MUTATION_IN_PROGRESS_MESSAGE = 'Ya existe una operación de inicio
  * @returns {boolean} true para los tres códigos 401 documentados por AUTH.
  */
 function isSessionAbsence(error) {
-  return error instanceof ApiError
-    && error.status === 401
-    && SESSION_ABSENCE_CODES.has(error.code)
+  return error instanceof ApiError && error.status === 401 && SESSION_ABSENCE_CODES.has(error.code);
 }
 
 /**
@@ -36,15 +46,26 @@ function isSessionAbsence(error) {
  */
 async function resolveCurrentSession(authClient, signal) {
   try {
-    const response = await authClient.getMe({ signal })
+    const response = await authClient.getMe({
+      signal
+    });
     if (!response?.user) {
-      throw new Error('La respuesta de sesión no contiene un usuario.')
+      throw new Error('La respuesta de sesión no contiene un usuario.');
     }
-    return { user: response.user, error: null }
+    return {
+      user: response.user,
+      error: null
+    };
   } catch (error) {
-    if (error?.name === 'AbortError') throw error
-    if (isSessionAbsence(error)) return { user: null, error: null }
-    return { user: null, error }
+    if (error?.name === 'AbortError') throw error;
+    if (isSessionAbsence(error)) return {
+      user: null,
+      error: null
+    };
+    return {
+      user: null,
+      error
+    };
   }
 }
 
@@ -54,8 +75,8 @@ async function resolveCurrentSession(authClient, signal) {
  * @returns {string} Estado autenticado, anónimo o error técnico.
  */
 function statusForSessionResult(result) {
-  if (result.user) return SESSION_STATUS.AUTHENTICATED
-  return result.error ? SESSION_STATUS.ERROR : SESSION_STATUS.ANONYMOUS
+  if (result.user) return SESSION_STATUS.AUTHENTICATED;
+  return result.error ? SESSION_STATUS.ERROR : SESSION_STATUS.ANONYMOUS;
 }
 
 /**
@@ -65,17 +86,20 @@ function statusForSessionResult(result) {
  * @param {object} [props.authClient] API AUTH inyectable para pruebas.
  * @returns {import('react').ReactElement} Proveedor centralizado de sesión.
  */
-export function SessionProvider({ children, authClient = authApi }) {
-  const [status, setStatus] = useState(SESSION_STATUS.CHECKING)
-  const [user, setUser] = useState(null)
-  const [error, setError] = useState(null)
+export function SessionProvider({
+  children,
+  authClient = authApi
+}) {
+  const [status, setStatus] = useState(SESSION_STATUS.CHECKING);
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
   // Reflejos sincronizados del estado para tomar instantáneas coherentes dentro de callbacks async.
-  const userMirrorRef = useRef(null)
-  const statusMirrorRef = useRef(SESSION_STATUS.CHECKING)
-  const operationIdRef = useRef(0)
-  const sessionControllerRef = useRef(null)
+  const userMirrorRef = useRef(null);
+  const statusMirrorRef = useRef(SESSION_STATUS.CHECKING);
+  const operationIdRef = useRef(0);
+  const sessionControllerRef = useRef(null);
   // Bandera de mutación de sesión: login y logout no pueden superponerse.
-  const sessionMutationActiveRef = useRef(false)
+  const sessionMutationActiveRef = useRef(false);
 
   /**
    * Aplica una instantánea completa y coherente de la sesión a los estados React y sus reflejos.
@@ -83,36 +107,39 @@ export function SessionProvider({ children, authClient = authApi }) {
    * @returns {void}
    */
   function applySessionSnapshot(snapshot) {
-    userMirrorRef.current = snapshot.user
-    statusMirrorRef.current = snapshot.status
-    setUser(snapshot.user)
-    setError(snapshot.error)
-    setStatus(snapshot.status)
+    userMirrorRef.current = snapshot.user;
+    statusMirrorRef.current = snapshot.status;
+    setUser(snapshot.user);
+    setError(snapshot.error);
+    setStatus(snapshot.status);
   }
-
   useEffect(() => {
-    const controller = new AbortController()
-    const operationId = operationIdRef.current + 1
-    operationIdRef.current = operationId
-    sessionControllerRef.current = controller
-    let active = true
-
-    resolveCurrentSession(authClient, controller.signal)
-      .then((result) => {
-        if (!active || operationId !== operationIdRef.current) return
-        applySessionSnapshot({ user: result.user, error: result.error, status: statusForSessionResult(result) })
-      })
-      .catch((caughtError) => {
-        if (caughtError?.name !== 'AbortError' && active && operationId === operationIdRef.current) {
-          applySessionSnapshot({ user: null, error: caughtError, status: SESSION_STATUS.ERROR })
-        }
-      })
-
+    const controller = new AbortController();
+    const operationId = operationIdRef.current + 1;
+    operationIdRef.current = operationId;
+    sessionControllerRef.current = controller;
+    let active = true;
+    resolveCurrentSession(authClient, controller.signal).then(result => {
+      if (!active || operationId !== operationIdRef.current) return;
+      applySessionSnapshot({
+        user: result.user,
+        error: result.error,
+        status: statusForSessionResult(result)
+      });
+    }).catch(caughtError => {
+      if (caughtError?.name !== 'AbortError' && active && operationId === operationIdRef.current) {
+        applySessionSnapshot({
+          user: null,
+          error: caughtError,
+          status: SESSION_STATUS.ERROR
+        });
+      }
+    });
     return () => {
-      active = false
-      controller.abort()
-    }
-  }, [authClient])
+      active = false;
+      controller.abort();
+    };
+  }, [authClient]);
 
   /**
    * Revalida la cookie HttpOnly mediante /me y actualiza el usuario en memoria.
@@ -120,16 +147,24 @@ export function SessionProvider({ children, authClient = authApi }) {
    * @throws {Error} AbortError cuando otra operación canceló esta revalidación.
    */
   async function refreshSession() {
-    sessionControllerRef.current?.abort()
-    const controller = new AbortController()
-    const operationId = operationIdRef.current + 1
-    operationIdRef.current = operationId
-    sessionControllerRef.current = controller
-    applySessionSnapshot({ user: userMirrorRef.current, error: null, status: SESSION_STATUS.CHECKING })
-    const result = await resolveCurrentSession(authClient, controller.signal)
-    if (operationId !== operationIdRef.current) return result.user
-    applySessionSnapshot({ user: result.user, error: result.error, status: statusForSessionResult(result) })
-    return result.user
+    sessionControllerRef.current?.abort();
+    const controller = new AbortController();
+    const operationId = operationIdRef.current + 1;
+    operationIdRef.current = operationId;
+    sessionControllerRef.current = controller;
+    applySessionSnapshot({
+      user: userMirrorRef.current,
+      error: null,
+      status: SESSION_STATUS.CHECKING
+    });
+    const result = await resolveCurrentSession(authClient, controller.signal);
+    if (operationId !== operationIdRef.current) return result.user;
+    applySessionSnapshot({
+      user: result.user,
+      error: result.error,
+      status: statusForSessionResult(result)
+    });
+    return result.user;
   }
 
   /**
@@ -140,7 +175,7 @@ export function SessionProvider({ children, authClient = authApi }) {
    * @returns {string} Estado estable para publicar junto con el error.
    */
   function restoreStatusAfterFailure(previousStatus) {
-    return previousStatus === SESSION_STATUS.CHECKING ? SESSION_STATUS.ANONYMOUS : previousStatus
+    return previousStatus === SESSION_STATUS.CHECKING ? SESSION_STATUS.ANONYMOUS : previousStatus;
   }
 
   /**
@@ -151,35 +186,44 @@ export function SessionProvider({ children, authClient = authApi }) {
    */
   async function login(credentials) {
     if (sessionMutationActiveRef.current) {
-      throw new Error(SESSION_MUTATION_IN_PROGRESS_MESSAGE)
+      throw new Error(SESSION_MUTATION_IN_PROGRESS_MESSAGE);
     }
-    sessionMutationActiveRef.current = true
+    sessionMutationActiveRef.current = true;
     try {
-      sessionControllerRef.current?.abort()
-      sessionControllerRef.current = null
-      const operationId = operationIdRef.current + 1
-      operationIdRef.current = operationId
-      const previousSnapshot = { user: userMirrorRef.current, status: statusMirrorRef.current }
+      sessionControllerRef.current?.abort();
+      sessionControllerRef.current = null;
+      const operationId = operationIdRef.current + 1;
+      operationIdRef.current = operationId;
+      const previousSnapshot = {
+        user: userMirrorRef.current,
+        status: statusMirrorRef.current
+      };
       try {
-        const response = await authClient.login(credentials)
-        if (!response?.user) throw new Error('La respuesta de login no contiene un usuario.')
-        if (operationId !== operationIdRef.current) return response.user
-        applySessionSnapshot({ user: response.user, error: null, status: SESSION_STATUS.AUTHENTICATED })
-        return response.user
+        const response = await authClient.login(credentials);
+        if (!response?.user) throw new Error('La respuesta de login no contiene un usuario.');
+        if (operationId !== operationIdRef.current) return response.user;
+        applySessionSnapshot({
+          user: response.user,
+          error: null,
+          status: SESSION_STATUS.AUTHENTICATED
+        });
+        return response.user;
       } catch (loginError) {
         if (operationId === operationIdRef.current) {
-          // Un login fallido nunca debe dejar la sesión en "checking"; restaura el último estado estable.
+          // Un login fallido nunca debe dejar la sesión en "checking"; restaura el último estado
+          // estable.
           applySessionSnapshot({
             user: previousSnapshot.user,
             error: loginError,
-            status: restoreStatusAfterFailure(previousSnapshot.status),
-          })
+            status: restoreStatusAfterFailure(previousSnapshot.status)
+          });
         }
-        throw loginError
+        throw loginError;
       }
     } finally {
-      // Se libera la bandera siempre: sin ella una operación cancelada bloquearía todas las futuras.
-      sessionMutationActiveRef.current = false
+      // Se libera la bandera siempre: sin ella una operación cancelada bloquearía todas las
+      // futuras.
+      sessionMutationActiveRef.current = false;
     }
   }
 
@@ -190,32 +234,40 @@ export function SessionProvider({ children, authClient = authApi }) {
    */
   async function logout() {
     if (sessionMutationActiveRef.current) {
-      throw new Error(SESSION_MUTATION_IN_PROGRESS_MESSAGE)
+      throw new Error(SESSION_MUTATION_IN_PROGRESS_MESSAGE);
     }
-    sessionMutationActiveRef.current = true
+    sessionMutationActiveRef.current = true;
     try {
-      sessionControllerRef.current?.abort()
-      sessionControllerRef.current = null
-      const operationId = operationIdRef.current + 1
-      operationIdRef.current = operationId
-      const previousSnapshot = { user: userMirrorRef.current, status: statusMirrorRef.current }
+      sessionControllerRef.current?.abort();
+      sessionControllerRef.current = null;
+      const operationId = operationIdRef.current + 1;
+      operationIdRef.current = operationId;
+      const previousSnapshot = {
+        user: userMirrorRef.current,
+        status: statusMirrorRef.current
+      };
       try {
-        await authClient.logout()
-        if (operationId !== operationIdRef.current) return
-        applySessionSnapshot({ user: null, error: null, status: SESSION_STATUS.ANONYMOUS })
+        await authClient.logout();
+        if (operationId !== operationIdRef.current) return;
+        applySessionSnapshot({
+          user: null,
+          error: null,
+          status: SESSION_STATUS.ANONYMOUS
+        });
       } catch (logoutError) {
         if (operationId === operationIdRef.current) {
-          // Un logout conservó potencialmente la cookie: se muestra el error manteniendo el estado previo.
+          // Un logout conservó potencialmente la cookie: se muestra el error manteniendo el estado
+          // previo.
           applySessionSnapshot({
             user: previousSnapshot.user,
             error: logoutError,
-            status: restoreStatusAfterFailure(previousSnapshot.status),
-          })
+            status: restoreStatusAfterFailure(previousSnapshot.status)
+          });
         }
-        throw logoutError
+        throw logoutError;
       }
     } finally {
-      sessionMutationActiveRef.current = false
+      sessionMutationActiveRef.current = false;
     }
   }
 
@@ -224,23 +276,26 @@ export function SessionProvider({ children, authClient = authApi }) {
    * @returns {void}
    */
   function clearSession() {
-    operationIdRef.current += 1
-    sessionControllerRef.current?.abort()
-    sessionControllerRef.current = null
-    applySessionSnapshot({ user: null, error: null, status: SESSION_STATUS.ANONYMOUS })
+    operationIdRef.current += 1;
+    sessionControllerRef.current?.abort();
+    sessionControllerRef.current = null;
+    applySessionSnapshot({
+      user: null,
+      error: null,
+      status: SESSION_STATUS.ANONYMOUS
+    });
   }
-
-  return (
-    <SessionContext.Provider value={{
+  return <SessionContext.Provider
+    value={{
       status,
       user,
       error,
       login,
       logout,
       refreshSession,
-      clearSession,
-    }}>
-      {children}
-    </SessionContext.Provider>
-  )
+      clearSession
+    }}
+  >
+    {children}
+  </SessionContext.Provider>;
 }

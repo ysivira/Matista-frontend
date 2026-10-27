@@ -1,3 +1,6 @@
+/**
+ * Etiquetas públicas para los estados de versiones administrativas.
+ */
 /** Etiquetas compartidas de los estados del DTO del tarifario. */
 const ETIQUETAS_ESTADO = Object.freeze({
   PREPARACION: 'En preparación',
@@ -7,8 +10,8 @@ const ETIQUETAS_ESTADO = Object.freeze({
   // El valor heredado CANCELADA (013, sin productor propio) es el estado
   // interno del descarte de versiones no activadas; en pantalla se
   // muestra 'Descartada' para no duplicar estados en el negocio.
-  CANCELADA: 'Descartada',
-})
+  CANCELADA: 'Descartada'
+});
 
 /**
  * Traduce el estado del ciclo de vida del tarifario a una etiqueta amigable
@@ -17,5 +20,5 @@ const ETIQUETAS_ESTADO = Object.freeze({
  * @returns {string} Etiqueta visible del chip.
  */
 export function etiquetaEstado(estado) {
-  return ETIQUETAS_ESTADO[estado] ?? String(estado ?? '')
+  return ETIQUETAS_ESTADO[estado] ?? String(estado ?? '');
 }

@@ -1,15 +1,29 @@
+/**
+ * MATISTA - Frontend · Autenticación
+ * Archivo: auth.constants.js
+ *
+ * RESPONSABILIDAD:
+ * Define constantes y políticas compartidas.
+ *
+ * CONTENIDO:
+ * - Constante AUTH_ROLES.
+ * - Constante ACTIVE_ACCOUNT_STATUS.
+ * - Constante ROLE_DESTINATION_PATHS.
+ * - Constante PRIVATE_PATHS_BY_ROLE.
+ * - Función isRolePrivatePath.
+ * - Función destinationPathForRole.
+ */
 export const AUTH_ROLES = Object.freeze({
   ADMIN: 'ADMIN',
-  ASESOR: 'ASESOR',
-})
-
-export const ACTIVE_ACCOUNT_STATUS = 'ACTIVO'
+  ASESOR: 'ASESOR'
+});
+export const ACTIVE_ACCOUNT_STATUS = 'ACTIVO';
 
 /** Destinos de arranque por rol establecidos por la arquitectura de rutas de D.2. */
 export const ROLE_DESTINATION_PATHS = Object.freeze({
   [AUTH_ROLES.ADMIN]: '/admin',
-  [AUTH_ROLES.ASESOR]: '/asesor',
-})
+  [AUTH_ROLES.ASESOR]: '/asesor'
+});
 
 /**
  * Rutas privadas registradas para cada rol, en coincidencia exacta.
@@ -19,8 +33,8 @@ export const ROLE_DESTINATION_PATHS = Object.freeze({
  */
 export const PRIVATE_PATHS_BY_ROLE = Object.freeze({
   [AUTH_ROLES.ADMIN]: Object.freeze(['/admin']),
-  [AUTH_ROLES.ASESOR]: Object.freeze(['/asesor']),
-})
+  [AUTH_ROLES.ASESOR]: Object.freeze(['/asesor'])
+});
 
 /**
  * Indica si un path de retorno pertenece a las rutas privadas registradas del rol indicado.
@@ -30,9 +44,9 @@ export const PRIVATE_PATHS_BY_ROLE = Object.freeze({
  */
 export function isRolePrivatePath(path, role) {
   if (typeof path !== 'string' || !path.startsWith('/') || path.startsWith('//')) {
-    return false
+    return false;
   }
-  return (PRIVATE_PATHS_BY_ROLE[role] ?? []).includes(path)
+  return (PRIVATE_PATHS_BY_ROLE[role] ?? []).includes(path);
 }
 
 /**
@@ -41,5 +55,5 @@ export function isRolePrivatePath(path, role) {
  * @returns {string} Ruta de destino del módulo correspondiente o cuenta no disponible.
  */
 export function destinationPathForRole(role) {
-  return ROLE_DESTINATION_PATHS[role] ?? '/account-unavailable'
+  return ROLE_DESTINATION_PATHS[role] ?? '/account-unavailable';
 }

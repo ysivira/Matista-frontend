@@ -1,14 +1,32 @@
-import { Link } from 'react-router-dom'
-import { BrandLogo } from '../shared/ui/BrandLogo.jsx'
+/**
+ * MATISTA - Frontend · Composición de la aplicación
+ * Archivo: PlaceholderPages.jsx
+ *
+ * RESPONSABILIDAD:
+ * Compone la aplicación: proveedores, enrutado y disposición general de la sesión.
+ *
+ * CONTENIDO:
+ * - Función RoutePlaceholder.
+ * - Función InfrastructurePage.
+ *
+ * DEPENDENCIAS:
+ * - react-router-dom
+ * - ../shared/ui/BrandLogo.jsx
+ */
+import { Link } from 'react-router-dom';
+import { BrandLogo } from '../shared/ui/BrandLogo.jsx';
 
 /**
  * Presenta una tarjeta provisional para validar rutas sin anticipar las pantallas de D.3.
  * @param {object} props Textos descriptivos de la ruta provisional.
  * @returns {import('react').ReactElement} Placeholder accesible de infraestructura.
  */
-export function RoutePlaceholder({ eyebrow, title, description }) {
-  return (
-    <main className="infrastructure-shell">
+export function RoutePlaceholder({
+  eyebrow,
+  title,
+  description
+}) {
+  return <main className="infrastructure-shell">
       <div className="infrastructure-content">
         <BrandLogo surface="dark" compact />
         <section className="infrastructure-card">
@@ -20,8 +38,7 @@ export function RoutePlaceholder({ eyebrow, title, description }) {
           </nav>
         </section>
       </div>
-    </main>
-  )
+    </main>;
 }
 
 /**
@@ -29,8 +46,7 @@ export function RoutePlaceholder({ eyebrow, title, description }) {
  * @returns {import('react').ReactElement} Página provisional pública.
  */
 export function InfrastructurePage() {
-  return (
-    <main className="infrastructure-shell">
+  return <main className="infrastructure-shell">
       <div className="infrastructure-content">
         <BrandLogo surface="dark" />
         <section className="infrastructure-card">
@@ -43,6 +59,5 @@ export function InfrastructurePage() {
           </nav>
         </section>
       </div>
-    </main>
-  )
+    </main>;
 }

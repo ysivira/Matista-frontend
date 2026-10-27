@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { avisoAdminPara } from '../lib/avisosConsulta.js'
-import { LoadingState } from '../ui/LoadingState.jsx'
-import { AuthAlert } from '../ui/AuthAlert.jsx'
-import { EncabezadoContextual } from '../ui/EncabezadoContextual.jsx'
-import { GemaPlan } from '../ui/GemaPlan.jsx'
-import { colorDePlan } from '../ui/gemasPlan.js'
-import { AccionesDocumento } from '../ui/AccionesDocumento.jsx'
-import '../ui/documentos.css'
+/**
+ * Consulta compartida de planes y presentación de su detalle documental.
+ */
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { avisoAdminPara } from '../lib/avisosConsulta.js';
+import { LoadingState } from '../ui/LoadingState.jsx';
+import { AuthAlert } from '../ui/AuthAlert.jsx';
+import { EncabezadoContextual } from '../ui/EncabezadoContextual.jsx';
+import { GemaPlan } from '../ui/GemaPlan.jsx';
+import { colorDePlan } from '../ui/gemasPlan.js';
+import { AccionesDocumento } from '../ui/AccionesDocumento.jsx';
+import '../ui/documentos.css';
 
 /**
  * Separa el detalle de un plan en su lista de líneas (una por prestación según
@@ -18,7 +21,7 @@ import '../ui/documentos.css'
  * @returns {string[]} Líneas no vacías del detalle, en su orden original.
  */
 function lineasDeDetalles(detalles) {
-  return String(detalles ?? '').split('\n').filter((linea) => linea.trim() !== '')
+  return String(detalles ?? '').split('\n').filter(linea => linea.trim() !== '');
 }
 
 /**
@@ -32,15 +35,18 @@ function lineasDeDetalles(detalles) {
  *   existe, la porción de glosario; en ambos casos sin líneas vacías extremas.
  */
 function partirCondiciones(condiciones) {
-  const lineas = String(condiciones ?? '').split('\n')
-  const indiceGlosario = lineas.findIndex((linea) => linea.trim().startsWith('Referencias:'))
+  const lineas = String(condiciones ?? '').split('\n');
+  const indiceGlosario = lineas.findIndex(linea => linea.trim().startsWith('Referencias:'));
   if (indiceGlosario === -1) {
-    return { cuerpo: String(condiciones ?? ''), glosario: null }
+    return {
+      cuerpo: String(condiciones ?? ''),
+      glosario: null
+    };
   }
   return {
     cuerpo: lineas.slice(0, indiceGlosario).join('\n').trim(),
-    glosario: lineas.slice(indiceGlosario).join('\n').trim(),
-  }
+    glosario: lineas.slice(indiceGlosario).join('\n').trim()
+  };
 }
 
 /**
@@ -53,11 +59,15 @@ function partirCondiciones(condiciones) {
  *   sus bordes, o el texto original completo para la fila extendida.
  */
 function descomponerCobertura(linea) {
-  const partes = linea.split('|')
+  const partes = linea.split('|');
   if (partes.length !== 3) {
-    return { original: linea }
+    return {
+      original: linea
+    };
   }
-  return { celdas: partes.map((parte) => parte.trim()) }
+  return {
+    celdas: partes.map(parte => parte.trim())
+  };
 }
 
 /**
@@ -68,16 +78,22 @@ function descomponerCobertura(linea) {
  * expandido a la vez. El texto recibido se preserva íntegro sin extraer ni
  * reformular coberturas, porque el separador `|` de la fuente no es consistente
  * entre planes y cualquier recorte podría alterar el significado contractual.
- * @param {{api: object, etiqueta: string, rutaTarifario: string}} props API solo de lectura, texto contextual y destino de consulta explícitos.
+ * @param {{api: object, etiqueta: string, rutaTarifario: string}} props API solo de lectura, texto
+ * contextual y destino de consulta explícitos.
  * @returns {import('react').ReactElement} Catálogo desplegable de planes.
  */
-export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
-  const navigate = useNavigate()
-  const [planes, setPlanes] = useState([])
-  const [cargando, setCargando] = useState(true)
-  const [aviso, setAviso] = useState(null)
-  const [planAbierto, setPlanAbierto] = useState(null) // Único plan expandido; null = todos contraídos
-  const consultaActualRef = useRef(0)
+export function ConsultaPlanes({
+  api,
+  etiqueta,
+  rutaTarifario
+}) {
+  const navigate = useNavigate();
+  const [planes, setPlanes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [aviso, setAviso] = useState(null);
+  const [planAbierto,
+    setPlanAbierto] = useState(null); // Único plan expandido; null = todos contraídos
+  const consultaActualRef = useRef(0);
 
   /**
    * Consulta el catálogo vigente; las respuestas solapadas se descartan
@@ -85,27 +101,27 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
    * @returns {Promise<void>} Finaliza al aplicar el catálogo o el aviso.
    */
   const cargar = useCallback(async function cargar() {
-    const consulta = consultaActualRef.current + 1
-    consultaActualRef.current = consulta
-    setCargando(true)
-    setAviso(null)
+    const consulta = consultaActualRef.current + 1;
+    consultaActualRef.current = consulta;
+    setCargando(true);
+    setAviso(null);
     try {
-      const respuesta = await api.listarPlanes()
-      if (consulta !== consultaActualRef.current) return
-      setPlanes(respuesta.planes ?? [])
+      const respuesta = await api.listarPlanes();
+      if (consulta !== consultaActualRef.current) return;
+      setPlanes(respuesta.planes ?? []);
     } catch (error) {
-      if (consulta !== consultaActualRef.current) return
-      setAviso(avisoAdminPara(error, 'No se pudo obtener el catálogo de planes. Intenta nuevamente.'))
+      if (consulta !== consultaActualRef.current) return;
+      setAviso(avisoAdminPara(error,
+        'No se pudo obtener el catálogo de planes. Intenta nuevamente.'));
     } finally {
-      if (consulta === consultaActualRef.current) setCargando(false)
+      if (consulta === consultaActualRef.current) setCargando(false);
     }
-  }, [api])
-
+  }, [api]);
   useEffect(() => {
     // cargar() se difiere un microtask: sus setState iniciales quedan
     // asíncronos respecto del efecto (react-hooks/set-state-in-effect).
-    queueMicrotask(cargar)
-  }, [cargar])
+    queueMicrotask(cargar);
+  }, [cargar]);
 
   /**
    * Conmuta el plan expandido: abrir uno contrae el anterior y abrir el
@@ -114,7 +130,7 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
    * @returns {void}
    */
   function alternarDetalles(planId) {
-    setPlanAbierto((actual) => (actual === planId ? null : planId))
+    setPlanAbierto(actual => actual === planId ? null : planId);
   }
 
   /**
@@ -124,65 +140,47 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
    * @returns {void}
    */
   function abrirTarifario(planId, tipoIngreso) {
-    navigate(`${rutaTarifario}?planId=${planId}&modalidad=${encodeURIComponent(tipoIngreso)}`)
+    navigate(`${rutaTarifario}?planId=${planId}&modalidad=${encodeURIComponent(tipoIngreso)}`);
   }
+  return <div className="admin-directory">
+      <EncabezadoContextual etiqueta={etiqueta} titulo="Catálogo de planes"
+        descripcion="Consultá los planes activos publicados en el tarifario." />
 
-  return (
-    <div className="admin-directory">
-      <EncabezadoContextual
-        etiqueta={etiqueta}
-        titulo="Catálogo de planes"
-        descripcion="Consultá los planes activos publicados en el tarifario."
-      />
+      {aviso ? <AuthAlert tone={aviso.tone} title={aviso.title}>{aviso.message}</AuthAlert> : null}
 
-      {aviso ? (
-        <AuthAlert tone={aviso.tone} title={aviso.title}>{aviso.message}</AuthAlert>
-      ) : null}
-
-      {cargando ? (
-        <LoadingState message="Cargando el catálogo de planes..." />
-      ) : planes.length === 0 ? (
-        <div className="admin-card admin-plan-card">
+      {cargando ? <LoadingState message="Cargando el catálogo de planes..." /> :
+        planes.length === 0 ? <div className="admin-card admin-plan-card">
           <p className="admin-plan-card__empty">No hay planes activos.</p>
-        </div>
-      ) : (
-        <>
+        </div> : <>
           {/* Rejilla de tarjetas compactas del catálogo aprobado: gema, nombre
               y acciones de ADMIN por plan; el plan abierto recibe el anillo
               violeta de selección. La ficha técnica vive inmediatamente
               debajo, no dentro de la tarjeta, como el diseño aprobado. */}
           <div className="admin-plan-lista">
-            {planes.map((plan) => {
-              const abierto = planAbierto === plan.id
-              return (
-                <article key={plan.id} className={`admin-card admin-plan-card${abierto ? ' admin-plan-card--abierto' : ''}`}>
+            {planes.map(plan => {
+          const abierto = planAbierto === plan.id;
+          return <article key={plan.id} className={`admin-card admin-plan-card${abierto
+            ? ' admin-plan-card--abierto' : ''}`}>
                   <div className="admin-plan-card__header">
                     <span className="admin-plan-card__gema">
                       <GemaPlan nombre={plan.nombre} />
                     </span>
                     <h2 className="admin-plan-card__nombre">{plan.nombre}</h2>
                     <div className="admin-plan-card__acciones">
-                      <button
-                        type="button"
-                        className="admin-button admin-button--ghost"
-                        aria-expanded={abierto}
-                        aria-controls={`plan-${plan.id}-detalles`}
-                        onClick={() => alternarDetalles(plan.id)}
-                      >
+                      <button type="button" className="admin-button admin-button--ghost"
+                        aria-expanded={abierto} aria-controls={`plan-${plan.id}-detalles`}
+                        onClick={() => alternarDetalles(plan.id)}>
                         {abierto ? 'Ocultar detalles' : 'Ver detalles'}
                       </button>
-                      <button
-                        type="button"
+                      <button type="button"
                         className="admin-button admin-button--subtle admin-button--wide"
-                        onClick={() => abrirTarifario(plan.id, 'Obligatorio')}
-                      >
+                        onClick={() => abrirTarifario(plan.id, 'Obligatorio')}>
                         Ver tarifas
                       </button>
                     </div>
                   </div>
-                </article>
-              )
-            })}
+                </article>;
+        })}
           </div>
           {/* Fichas técnicas (una por plan, solo la elegida visible): los
               paneles conservan el contrato accesible de tarjetas SL-2E con
@@ -190,17 +188,20 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
               El grupo se separa de la rejilla con aire suficiente para leer
               la ficha como bloque propio. */}
           <div className="admin-plan-fichas">
-            {planes.map((plan) => {
-              const abierto = planAbierto === plan.id
-              return (
-                <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto} className={`admin-card admin-plan-card__body${abierto ? ' matista-print' : ''}`} style={{ borderTop: `4px solid ${colorDePlan(plan.nombre)}` }}>
+            {planes.map(plan => {
+          const abierto = planAbierto === plan.id;
+          return <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto}
+            className={`admin-card admin-plan-card__body${abierto ? ' matista-print' : ''}`} style={{
+            borderTop: `4px solid ${colorDePlan(plan.nombre)}`
+          }}>
                   <div className="admin-plan-card__titular">
                     <span className="admin-plan-card__gema">
                       <GemaPlan nombre={plan.nombre} tamano="ficha" />
                     </span>
                     <h3 className="admin-plan-card__encabezado">{plan.nombre}</h3>
                   </div>
-                  <AccionesDocumento recurso={`planes/${plan.id}`} etiquetaImprimir="Imprimir detalle" etiquetaPdf="Exportar PDF del plan" />
+                  <AccionesDocumento recurso={`planes/${plan.id}`}
+                    etiquetaImprimir="Imprimir detalle" etiquetaPdf="Exportar PDF del plan" />
                   <h3 className="admin-plan-card__subtitulo">Coberturas</h3>
                   {/* Tabla semántica de coberturas: los registros con tres campos
                       delimitados por `|` se separan en celdas; los registros
@@ -208,9 +209,8 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
                       con la indicación «Detalle original», sin inventar
                       correspondencias. `NO` y las abreviaturas quedan literales. */}
                   {(() => {
-                    const filas = lineasDeDetalles(plan.detalles).map(descomponerCobertura)
-                    return filas.length > 0 ? (
-                      <table className="admin-plan-tabla">
+              const filas = lineasDeDetalles(plan.detalles).map(descomponerCobertura);
+              return filas.length > 0 ? <table className="admin-plan-tabla">
                         <caption className="admin-plan-tabla__captura">
                           Coberturas del plan {plan.nombre}
                         </caption>
@@ -230,61 +230,50 @@ export function ConsultaPlanes({ api, etiqueta, rutaTarifario }) {
                           </tr>
                         </thead>
                         <tbody>
-                          {filas.map((fila, indice) => (
-                            fila.celdas ? (
-                              <tr key={indice}>
+                          {filas.map((fila, indice) => fila.celdas ? <tr key={indice}>
                                 {/* Punto de color del plan junto a la prestación
                                     y píldora de fondo violeta para la cobertura:
                                     lenguaje visual del catálogo aprobado. */}
                                 <td data-label="Prestación">
-                                  <span className="admin-plan-tabla__bullet" style={{ background: colorDePlan(plan.nombre) }} aria-hidden="true" />
+                                  <span className="admin-plan-tabla__bullet" style={{
+                        background: colorDePlan(plan.nombre)
+                      }} aria-hidden="true" />
                                   {fila.celdas[0]}
                                 </td>
                                 <td data-label="Cobertura">
                                   <span className="admin-plan-tabla__cobertura">{fila.celdas[1]}</span>
                                 </td>
                                 <td data-label="Observaciones">{fila.celdas[2]}</td>
-                              </tr>
-                            ) : (
-                              <tr key={indice} className="admin-plan-tabla__fila-completa">
+                              </tr> : <tr key={indice} className="admin-plan-tabla__fila-completa">
                                 <td colSpan={3}>
                                   <span className="admin-plan-tabla__etiqueta">Detalle original</span>
                                   {fila.original}
                                 </td>
-                              </tr>
-                            )
-                          ))}
+                              </tr>)}
                         </tbody>
-                      </table>
-                    ) : (
-                      <p className="admin-plan-card__texto">—</p>
-                    )
-                  })()}
+                      </table> : <p className="admin-plan-card__texto">—</p>;
+            })()}
                   <h3 className="admin-plan-card__subtitulo">Condiciones generales</h3>
                   {(() => {
-                    const { cuerpo, glosario } = partirCondiciones(plan.condiciones_generales)
-                    return (
-                      <>
+              const {
+                cuerpo,
+                glosario
+              } = partirCondiciones(plan.condiciones_generales);
+              return <>
                         <p className="admin-plan-card__texto">{cuerpo !== '' ? cuerpo : '—'}</p>
-                        {glosario !== null ? (
-                          <div className="admin-plan-card__glosario">
+                        {glosario !== null ? <div className="admin-plan-card__glosario">
                             <h4 className="admin-plan-card__subtitulo">Glosario de referencias</h4>
                             <p className="admin-plan-card__texto admin-plan-card__texto--glosario">{glosario}</p>
-                          </div>
-                        ) : null}
-                      </>
-                    )
-                  })()}
-                </section>
-              )
-            })}
+                          </div> : null}
+                      </>;
+            })()}
+                </section>;
+        })}
           </div>
-        </>
-      )}
+        </>}
 
       <p className="admin-directory__hint">
         Consultá las tarifas actualizadas de cada plan en Gestión de Precios.
       </p>
-    </div>
-  )
+    </div>;
 }

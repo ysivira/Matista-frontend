@@ -1,5 +1,8 @@
-import { BrandLogo } from './BrandLogo.jsx'
-import './uiCompartidos.css'
+/**
+ * Encabezado de sección con identidad del usuario y cierre de sesión.
+ */
+import { BrandLogo } from './BrandLogo.jsx';
+import './uiCompartidos.css';
 
 /**
  * Encabezado superior del shell de los módulos ADMIN y ASESOR, adaptado del
@@ -11,7 +14,7 @@ import './uiCompartidos.css'
  */
 
 /** Trazo del icono de salida (símbolo «logout» del diseño aprobado). */
-const ICONO_SALIDA = 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H9'
+const ICONO_SALIDA = 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H9';
 
 /**
  * Encabezado superior compartido con la identidad de la sesión.
@@ -20,11 +23,13 @@ const ICONO_SALIDA = 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H9
  *   nombre, apellido y rol; onCerrarSesion: acción de cierre de sesión.
  * @returns {import('react').ReactElement} Encabezado superior del shell.
  */
-export function EncabezadoSuperior({ seccion, usuario, onCerrarSesion }) {
-  const nombreCompleto = [usuario?.nombre, usuario?.apellido].filter(Boolean).join(' ')
-
-  return (
-    <header className="ui-cabecera">
+export function EncabezadoSuperior({
+  seccion,
+  usuario,
+  onCerrarSesion
+}) {
+  const nombreCompleto = [usuario?.nombre, usuario?.apellido].filter(Boolean).join(' ');
+  return <header className="ui-cabecera">
       <h1 className="ui-cabecera__seccion">{seccion}</h1>
 
       <div className="ui-cabecera__identidad">
@@ -32,17 +37,18 @@ export function EncabezadoSuperior({ seccion, usuario, onCerrarSesion }) {
           <BrandLogo surface="dark" compact />
         </span>
         <span className="ui-cabecera__datos">
-          <span className="ui-cabecera__nombre">{nombreCompleto !== '' ? nombreCompleto : '—'}</span>
+          <span className="ui-cabecera__nombre">{nombreCompleto !== '' ? nombreCompleto :
+            '—'}</span>
           <span className="ui-cabecera__rol">{usuario?.rol ?? ''}</span>
         </span>
       </div>
 
       <button type="button" className="ui-cabecera__salir" onClick={onCerrarSesion}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"
+          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d={ICONO_SALIDA} />
         </svg>
         <span>Cerrar sesión</span>
       </button>
-    </header>
-  )
+    </header>;
 }

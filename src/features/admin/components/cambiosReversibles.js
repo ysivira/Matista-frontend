@@ -1,4 +1,15 @@
 /**
+ * MATISTA - Frontend · Administración
+ * Archivo: cambiosReversibles.js
+ *
+ * RESPONSABILIDAD:
+ * Componente cambiosReversibles del módulo Administración; unidad de interfaz reutilizable de la
+ * feature.
+ *
+ * CONTENIDO:
+ * - Función hayCambiosReversibles.
+ */
+/**
  * Indica si un borrador registra cambios económicos aún reversibles,
  * espejando la semántica del scanner del backend (ultimoCambioEconomico):
  * reconstruye cronológicamente una pila de operaciones y quita una entrada
@@ -10,28 +21,27 @@
  * @returns {boolean} true cuando hay al menos un cambio económico reversible.
  */
 export function hayCambiosReversibles(eventos) {
-  if (!Array.isArray(eventos)) return false
-  const operacionesVigentes = []
-  const gruposRegistrados = new Set()
-
+  if (!Array.isArray(eventos)) return false;
+  const operacionesVigentes = [];
+  const gruposRegistrados = new Set();
   for (const evento of eventos.toReversed()) {
     if (typeof evento.detalle === 'string' && evento.detalle.startsWith('DESHACE')) {
-      if (evento.tipo_operacion === 'AUMENTO_MASIVO'
-        || (evento.tipo_operacion === 'PRECIO' && !evento.agrupador)) {
-        operacionesVigentes.pop()
+      if (evento.tipo_operacion === 'AUMENTO_MASIVO' || evento.tipo_operacion === 'PRECIO'
+        && !evento.agrupador) {
+        operacionesVigentes.pop();
       }
-      continue
+      continue;
     }
-    if (evento.tipo_operacion !== 'PRECIO') continue
+    if (evento.tipo_operacion !== 'PRECIO') continue;
     if (!evento.agrupador) {
-      operacionesVigentes.push(evento)
-      continue
+      operacionesVigentes.push(evento);
+      continue;
     }
-    const agrupador = String(evento.agrupador)
+    const agrupador = String(evento.agrupador);
     if (!gruposRegistrados.has(agrupador)) {
-      gruposRegistrados.add(agrupador)
-      operacionesVigentes.push(evento)
+      gruposRegistrados.add(agrupador);
+      operacionesVigentes.push(evento);
     }
   }
-  return operacionesVigentes.length > 0
+  return operacionesVigentes.length > 0;
 }

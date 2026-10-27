@@ -1,4 +1,7 @@
-import { etiquetaEstado } from '../lib/etiquetasEstado.js'
+/**
+ * Etiqueta visual del estado administrativo recibido.
+ */
+import { etiquetaEstado } from '../lib/etiquetasEstado.js';
 
 /**
  * Píldora de estado del diseño Stitch con su punto de color asociado.
@@ -7,10 +10,10 @@ import { etiquetaEstado } from '../lib/etiquetasEstado.js'
  * @param {{estado: string}} props Estado del DTO público.
  * @returns {import('react').ReactElement} Chip accesible con etiqueta amigable.
  */
-export function ChipEstado({ estado }) {
-  return (
-    <span className={`admin-chip ${claseEstado(estado)}`}>{etiquetaEstado(estado)}</span>
-  )
+export function ChipEstado({
+  estado
+}) {
+  return <span className={`admin-chip ${claseEstado(estado)}`}>{etiquetaEstado(estado)}</span>;
 }
 
 /**
@@ -19,5 +22,5 @@ export function ChipEstado({ estado }) {
  * @returns {string} Clase CSS del chip de estado.
  */
 function claseEstado(estado) {
-  return `admin-chip--estado-${String(estado || '').toLowerCase()}`
+  return `admin-chip--estado-${String(estado || '').toLowerCase()}`;
 }

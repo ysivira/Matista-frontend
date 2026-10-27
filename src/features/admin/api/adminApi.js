@@ -1,6 +1,19 @@
-import { httpClient } from '../../../shared/lib/httpClient.js'
-
-const ADMIN_BASE_PATH = '/api/admin'
+/**
+ * MATISTA - Frontend · Administración
+ * Archivo: adminApi.js
+ *
+ * RESPONSABILIDAD:
+ * Cliente HTTP del módulo Administración; centraliza las llamadas a los endpoints del backend.
+ *
+ * CONTENIDO:
+ * - Función createAdminApi.
+ * - Constante adminApi.
+ *
+ * DEPENDENCIAS:
+ * - ../../../shared/lib/httpClient.js
+ */
+import { httpClient } from '../../../shared/lib/httpClient.js';
+const ADMIN_BASE_PATH = '/api/admin';
 
 /**
  * Compone las operaciones del módulo ADMIN (directorio SL-1 y catálogo de
@@ -15,33 +28,38 @@ export function createAdminApi(client) {
    * @returns {Promise<{empleados: object[]}>} Listado público sin credenciales.
    */
   function listEmployees(filters = {}) {
-    const parameters = new URLSearchParams()
-    if (filters.estado && filters.estado !== 'todos') parameters.set('estado', filters.estado)
-    if (filters.rol && filters.rol !== 'todos') parameters.set('rol', filters.rol)
-    if (filters.busqueda && filters.busqueda.trim()) parameters.set('busqueda', filters.busqueda.trim())
-    const query = parameters.toString()
-    return client.request(`${ADMIN_BASE_PATH}/employees${query ? `?${query}` : ''}`)
+    const parameters = new URLSearchParams();
+    if (filters.estado && filters.estado !== 'todos') parameters.set('estado', filters.estado);
+    if (filters.rol && filters.rol !== 'todos') parameters.set('rol', filters.rol);
+    if (filters.busqueda && filters.busqueda.trim()) parameters.set('busqueda',
+      filters.busqueda.trim());
+    const query = parameters.toString();
+    return client.request(`${ADMIN_BASE_PATH}/employees${query ? `?${query}` : ''}`);
   }
 
   /** Recupera el detalle público de un empleado por su legajo. */
   function getEmployee(legajo) {
-    return client.request(`${ADMIN_BASE_PATH}/employees/${legajo}`)
+    return client.request(`${ADMIN_BASE_PATH}/employees/${legajo}`);
   }
 
   /** Aplica el cambio de estado con la matriz de transiciones del backend. */
   function changeEstado(legajo, estado) {
     return client.request(`${ADMIN_BASE_PATH}/employees/${legajo}/estado`, {
       method: 'PATCH',
-      body: { estado },
-    })
+      body: {
+        estado
+      }
+    });
   }
 
   /** Aplica el cambio de rol entre ADMIN y ASESOR para cuentas ACTIVO. */
   function changeRol(legajo, rol) {
     return client.request(`${ADMIN_BASE_PATH}/employees/${legajo}/rol`, {
       method: 'PATCH',
-      body: { rol },
-    })
+      body: {
+        rol
+      }
+    });
   }
 
   /**
@@ -49,7 +67,7 @@ export function createAdminApi(client) {
    * @returns {Promise<{planes: object[]}>} Planes con datos públicos sin precios.
    */
   function listarPlanes() {
-    return client.request(`${ADMIN_BASE_PATH}/planes`)
+    return client.request(`${ADMIN_BASE_PATH}/planes`);
   }
 
   /**
@@ -59,13 +77,13 @@ export function createAdminApi(client) {
    * @returns {Promise<object>} Plan, modalidad, versión vigente y tarifas en orden comercial.
    */
   function consultarTarifario(planId, tipoIngreso) {
-    const modalidad = encodeURIComponent(tipoIngreso)
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/planes/${planId}/${modalidad}`)
+    const modalidad = encodeURIComponent(tipoIngreso);
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/planes/${planId}/${modalidad}`);
   }
 
   /** Lista el historial completo de versiones del tarifario (SL-3). */
   function listarVersiones() {
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones`)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones`);
   }
 
   /**
@@ -76,19 +94,20 @@ export function createAdminApi(client) {
    * @param {number|string} versionId Version historica seleccionada.
    * @returns {Promise<object>} Borrador creado, con version_base_id del origen.
    */
-  function recuperarVersionHistorica(versionId) {    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/recuperacion`, {
-      method: 'POST',
-    })
+  function recuperarVersionHistorica(versionId) {
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/recuperacion`, {
+      method: 'POST'
+    });
   }
 
   /** Recupera la cabecera pública de una versión del historial (SL-3). */
   function obtenerVersion(versionId) {
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}`)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}`);
   }
 
   /** Lista el snapshot completo de tarifas de una versión, activas e inactivas (SL-3). */
   function listarTarifasVersion(versionId) {
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/tarifas`)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/tarifas`);
   }
 
   /**
@@ -97,7 +116,7 @@ export function createAdminApi(client) {
    * @param {number|string} versionId Versión del historial.
    */
   function obtenerEventosVersion(versionId) {
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/eventos`)
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/eventos`);
   }
 
   /**
@@ -107,8 +126,8 @@ export function createAdminApi(client) {
   function crearBorradorTarifario() {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones`, {
       method: 'POST',
-      body: {},
-    })
+      body: {}
+    });
   }
 
   /**
@@ -119,8 +138,8 @@ export function createAdminApi(client) {
   function aumentarVersion(versionId, cuerpo) {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/aumentos`, {
       method: 'POST',
-      body: cuerpo,
-    })
+      body: cuerpo
+    });
   }
 
   /**
@@ -129,12 +148,18 @@ export function createAdminApi(client) {
    * aumento definitivo; React no implementa la regla de cálculo.
    * @param {number|string} versionId Versión del borrador.
    * @param {{porcentaje: string, tipoIngreso?: string}} parametros Porcentaje y modalidad opcional.
-   * @returns {Promise<{version: object, porcentaje: string, tipo_ingreso: string|null, filas: object[]}>} Importes por fila en DECIMAL.
+   * @returns {Promise<{version: object, porcentaje: string, tipo_ingreso: string|null, filas:
+   * object[]}>} Importes por fila en DECIMAL.
    */
-  function previsualizarAumentoVersion(versionId, { porcentaje, tipoIngreso }) {
-    const parameters = new URLSearchParams({ porcentaje })
-    if (tipoIngreso) parameters.set('tipoIngreso', tipoIngreso)
-    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/aumentos/vista-previa?${parameters.toString()}`)
+  function previsualizarAumentoVersion(versionId, {
+    porcentaje,
+    tipoIngreso
+  }) {
+    const parameters = new URLSearchParams({
+      porcentaje
+    });
+    if (tipoIngreso) parameters.set('tipoIngreso', tipoIngreso);
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/aumentos/vista-previa?${parameters.toString()}`);
   }
 
   /**
@@ -144,10 +169,10 @@ export function createAdminApi(client) {
    * @param {{precio: string, revision: string}} cuerpo Precio nuevo y revisión optimista.
    */
   function editarPrecioTarifa(versionId, tarifaId, cuerpo) {
-    return client.request(
-      `${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/tarifas/${tarifaId}`,
-      { method: 'PATCH', body: cuerpo },
-    )
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/tarifas/${tarifaId}`, {
+      method: 'PATCH',
+      body: cuerpo
+    });
   }
 
   /**
@@ -157,8 +182,8 @@ export function createAdminApi(client) {
    */
   function reanudarVersion(versionId) {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/reanudacion`, {
-      method: 'POST',
-    })
+      method: 'POST'
+    });
   }
 
   /**
@@ -173,15 +198,20 @@ export function createAdminApi(client) {
   function descartarVersion(versionId, cuerpo) {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/descarte`, {
       method: 'POST',
-      body: cuerpo,
-    })
+      body: cuerpo
+    });
   }
-
+  /**
+   * Finaliza una versión LISTA_PARA_ACTIVAR mediante su endpoint dedicado.
+   * @param {string} versionId Identificador de la versión de tarifario.
+   * @param {object} cuerpo Confirmación requerida por el contrato de finalización.
+   * @returns {Promise<object>} Versión finalizada según la respuesta del backend.
+   */
   function finalizarVersion(versionId, cuerpo) {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/finalizacion`, {
       method: 'POST',
-      body: cuerpo,
-    })
+      body: cuerpo
+    });
   }
 
   /**
@@ -191,87 +221,89 @@ export function createAdminApi(client) {
   function activarVersion(versionId) {
     return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/activacion`, {
       method: 'POST',
-      body: {},
-    })
+      body: {}
+    });
   }
 
-/**
- * Deshace el último cambio económico vigente de un borrador en PREPARACION
- * (edición individual o aumento masivo completo), con revisión optimista.
- * @param {number|string} versionId Versión en PREPARACION.
- * @param {number|string} revision Revisión vigente del borrador.
- */
-function deshacerUltimoCambio(versionId, revision) {
-  return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/deshacer`, {
-    method: 'POST',
-    body: { revision: String(revision) },
-  })
-}
+  /**
+   * Deshace el último cambio económico vigente de un borrador en PREPARACION
+   * (edición individual o aumento masivo completo), con revisión optimista.
+   * @param {number|string} versionId Versión en PREPARACION.
+   * @param {number|string} revision Revisión vigente del borrador.
+   */
+  function deshacerUltimoCambio(versionId, revision) {
+    return client.request(`${ADMIN_BASE_PATH}/tarifario/versiones/${versionId}/deshacer`, {
+      method: 'POST',
+      body: {
+        revision: String(revision)
+      }
+    });
+  }
 
-/**
- * Obtiene la política comercial actualmente vigente.
- * @returns {Promise<object>} Política comercial vigente.
- */
-function obtenerPoliticaComercial() {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial`)
-}
+  /**
+   * Obtiene la política comercial actualmente vigente.
+   * @returns {Promise<object>} Política comercial vigente.
+   */
+  function obtenerPoliticaComercial() {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial`);
+  }
 
-/**
- * Actualiza la política comercial vigente o su programación pendiente.
- * El cuerpo puede llevar `activacion` ({ modo, fecha }) y `revision` para
- * editar una programación con concurrencia optimista.
- * @param {number|string} politicaId ID de la política comercial.
- * @param {object} datos Datos a actualizar.
- * @returns {Promise<object>} Política comercial actualizada.
- */
-function actualizarPoliticaComercial(politicaId, datos) {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`, {
-    method: 'PUT',
-    body: datos,
-  })
-}
+  /**
+   * Actualiza la política comercial vigente o su programación pendiente.
+   * El cuerpo puede llevar `activacion` ({ modo, fecha }) y `revision` para
+   * editar una programación con concurrencia optimista.
+   * @param {number|string} politicaId ID de la política comercial.
+   * @param {object} datos Datos a actualizar.
+   * @returns {Promise<object>} Política comercial actualizada.
+   */
+  function actualizarPoliticaComercial(politicaId, datos) {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`, {
+      method: 'PUT',
+      body: datos
+    });
+  }
 
-/** Recupera todas las versiones de política comercial con sus descuentos. */
-function listarHistorialPoliticaComercial() {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/historial`)
-}
+  /** Recupera todas las versiones de política comercial con sus descuentos. */
+  function listarHistorialPoliticaComercial() {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/historial`);
+  }
 
-/** Recupera el snapshot completo de una versión de política comercial. */
-function obtenerDetallePoliticaComercial(politicaId) {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`)
-}
+  /** Recupera el snapshot completo de una versión de política comercial. */
+  function obtenerDetallePoliticaComercial(politicaId) {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}`);
+  }
 
-/** Reactiva un snapshot histórico creando una nueva versión vigente. */
-function recuperarPoliticaComercial(politicaId) {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/recuperacion`, {
-    method: 'POST',
-    body: {},
-  })
-}
+  /** Reactiva un snapshot histórico creando una nueva versión vigente. */
+  function recuperarPoliticaComercial(politicaId) {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/recuperacion`, {
+      method: 'POST',
+      body: {}
+    });
+  }
 
-/**
- * Cancela la única programación pendiente sin tocar la vigente.
- * @param {number|string} politicaId Programación pendiente.
- * @param {{revision: number|string, motivo: string}} cuerpo Revisión optimista y motivo auditable.
- * @returns {Promise<{version: object, evento: object}>} Versión cancelada y evento.
- */
-function cancelarProgramacionPoliticaComercial(politicaId, cuerpo) {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/cancelacion`, {
-    method: 'POST',
-    body: cuerpo,
-  })
-}
+  /**
+   * Cancela la única programación pendiente sin tocar la vigente.
+   * @param {number|string} politicaId Programación pendiente.
+   * @param {{revision: number|string, motivo: string}} cuerpo Revisión optimista y motivo
+   * auditable.
+   * @returns {Promise<{version: object, evento: object}>} Versión cancelada y evento.
+   */
+  function cancelarProgramacionPoliticaComercial(politicaId, cuerpo) {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/cancelacion`, {
+      method: 'POST',
+      body: cuerpo
+    });
+  }
 
-/**
- * Lista la auditoría de ciclo de vida de una versión con nombre y legajo
- * preservados por el backend (migración 023).
- * @param {number|string} politicaId Versión consultada.
- * @returns {Promise<object[]>} Eventos ordenados del más reciente al más antiguo.
- */
-function obtenerEventosPoliticaComercial(politicaId) {
-  return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/eventos`)
-}
-
+  /**
+   * Lista la auditoría de ciclo de vida de una versión con nombre y legajo
+   * preservados por el backend (migración 023).
+   * @param {number|string} politicaId Versión consultada.
+   * @returns {Promise<object[]>} Eventos ordenados del más reciente al más antiguo.
+   */
+  function obtenerEventosPoliticaComercial(politicaId) {
+    return client.request(`${ADMIN_BASE_PATH}/politica-comercial/${politicaId}/eventos`);
+  }
   return {
     listEmployees,
     getEmployee,
@@ -299,8 +331,7 @@ function obtenerEventosPoliticaComercial(politicaId) {
     obtenerDetallePoliticaComercial,
     recuperarPoliticaComercial,
     cancelarProgramacionPoliticaComercial,
-    obtenerEventosPoliticaComercial,
-  }
+    obtenerEventosPoliticaComercial
+  };
 }
-
-export const adminApi = createAdminApi(httpClient)
+export const adminApi = createAdminApi(httpClient);

@@ -1,5 +1,8 @@
+/**
+ * Presentación de importes decimales en pesos argentinos sin recalcularlos.
+ */
 /** Formato compartido de importes: `$ 1.234.567,89` (punto de miles y coma decimal). */
-const PATRON_PRECIO = /^-?\d+(\.\d+)?$/
+const PATRON_PRECIO = /^-?\d+(\.\d+)?$/;
 
 /**
  * Formatea visualmente la cadena decimal exacta del contrato SL-2 como importe
@@ -15,16 +18,14 @@ const PATRON_PRECIO = /^-?\d+(\.\d+)?$/
  */
 export function formatearPrecioARS(precio) {
   if (typeof precio !== 'string' || !PATRON_PRECIO.test(precio)) {
-    return '—'
+    return '—';
   }
-
-  const [entero, decimales = ''] = precio.split('.')
-  const negativo = entero.startsWith('-')
-  const digitos = negativo ? entero.slice(1) : entero
+  const [entero, decimales = ''] = precio.split('.');
+  const negativo = entero.startsWith('-');
+  const digitos = negativo ? entero.slice(1) : entero;
   // Agrupacion de miles por expresion regular sobre la propia cadena: sin operaciones numericas.
-  const digitosConMiles = digitos.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  const digitosConMiles = digitos.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   // Dos decimales exactos: se completan con ceros a la derecha sin redondear.
-  const dosDecimales = `${decimales}00`.slice(0, 2)
-
-  return `${negativo ? '-' : ''}$ ${digitosConMiles},${dosDecimales}`
+  const dosDecimales = `${decimales}00`.slice(0, 2);
+  return `${negativo ? '-' : ''}$ ${digitosConMiles},${dosDecimales}`;
 }

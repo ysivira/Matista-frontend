@@ -1,11 +1,32 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { authApi } from '../api/authApi.js'
-import { AuthLayout } from '../components/AuthLayout.jsx'
-import { AuthAlert } from '../components/AuthAlert.jsx'
-import { TextField } from '../components/AuthFields.jsx'
-import { fieldErrorsFromApiError, technicalNoticeFor } from '../auth.messages.js'
-import { INVALID_EMAIL_MESSAGE, REQUIRED_FIELD_MESSAGE, isValidEmail } from '../auth.validation.js'
+/**
+ * MATISTA - Frontend · Autenticación
+ * Archivo: ResendVerificationPage.jsx
+ *
+ * RESPONSABILIDAD:
+ * Página ResendVerificationPage del módulo Autenticación; compone componentes de la feature para su
+ * caso de uso.
+ *
+ * CONTENIDO:
+ * - Función ResendVerificationPage.
+ *
+ * DEPENDENCIAS:
+ * - react
+ * - react-router-dom
+ * - ../api/authApi.js
+ * - ../components/AuthLayout.jsx
+ * - ../components/AuthAlert.jsx
+ * - ../components/AuthFields.jsx
+ * - ../auth.messages.js
+ * - ../auth.validation.js
+ */
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { authApi } from '../api/authApi.js';
+import { AuthLayout } from '../components/AuthLayout.jsx';
+import { AuthAlert } from '../components/AuthAlert.jsx';
+import { TextField } from '../components/AuthFields.jsx';
+import { fieldErrorsFromApiError, technicalNoticeFor } from '../auth.messages.js';
+import { INVALID_EMAIL_MESSAGE, REQUIRED_FIELD_MESSAGE, isValidEmail } from '../auth.validation.js';
 
 /**
  * Solicita de forma neutral un nuevo correo de verificación para una cuenta pendiente.
@@ -14,11 +35,11 @@ import { INVALID_EMAIL_MESSAGE, REQUIRED_FIELD_MESSAGE, isValidEmail } from '../
  * @returns {import('react').ReactElement} Pantalla pública de reenvío de verificación.
  */
 export function ResendVerificationPage() {
-  const [email, setEmail] = useState('')
-  const [fieldErrors, setFieldErrors] = useState({})
-  const [notice, setNotice] = useState(null)
-  const [submitting, setSubmitting] = useState(false)
-  const [accepted, setAccepted] = useState(false)
+  const [email, setEmail] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [notice, setNotice] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [accepted, setAccepted] = useState(false);
 
   /**
    * Envía la solicitud de reenvío al contrato y presenta una confirmación neutra.
@@ -26,42 +47,44 @@ export function ResendVerificationPage() {
    * @returns {Promise<void>} Finaliza al aceptar la solicitud o al presentar el error.
    */
   async function handleSubmit(event) {
-    event.preventDefault()
-    if (submitting) return
-
-    const trimmedEmail = email.trim()
-    let validationError
+    event.preventDefault();
+    if (submitting) return;
+    const trimmedEmail = email.trim();
+    let validationError;
     if (!trimmedEmail) {
-      validationError = REQUIRED_FIELD_MESSAGE
+      validationError = REQUIRED_FIELD_MESSAGE;
     } else if (!isValidEmail(trimmedEmail)) {
-      validationError = INVALID_EMAIL_MESSAGE
+      validationError = INVALID_EMAIL_MESSAGE;
     }
-    setFieldErrors(validationError ? { email: validationError } : {})
+    setFieldErrors(validationError ? {
+      email: validationError
+    } : {});
     if (validationError) {
-      setNotice(null)
-      return
+      setNotice(null);
+      return;
     }
-
-    setSubmitting(true)
-    setNotice(null)
+    setSubmitting(true);
+    setNotice(null);
     try {
-      await authApi.resendVerification(trimmedEmail.toLowerCase())
-      setAccepted(true)
+      await authApi.resendVerification(trimmedEmail.toLowerCase());
+      setAccepted(true);
     } catch (caught) {
-      const mappedErrors = fieldErrorsFromApiError(caught)
+      const mappedErrors = fieldErrorsFromApiError(caught);
       if (Object.keys(mappedErrors).length > 0) {
-        setFieldErrors((current) => ({ ...current, ...mappedErrors }))
+        setFieldErrors(current => ({
+          ...current,
+          ...mappedErrors
+        }));
       } else {
-        setNotice(technicalNoticeFor(caught, 'No se pudo procesar la solicitud. Intenta nuevamente.'))
+        setNotice(technicalNoticeFor(caught,
+          'No se pudo procesar la solicitud. Intenta nuevamente.'));
       }
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
   }
-
   if (accepted) {
-    return (
-      <AuthLayout>
+    return <AuthLayout>
         <h1 className="auth-title">Reenviar verificación</h1>
         <AuthAlert tone="success" title="Solicitud recibida">
           Si el correo corresponde a una cuenta con verificación pendiente, te enviaremos un
@@ -70,35 +93,21 @@ export function ResendVerificationPage() {
         <div className="auth-actions">
           <Link className="auth-button" to="/login">Volver a iniciar sesión</Link>
         </div>
-      </AuthLayout>
-    )
+      </AuthLayout>;
   }
-
-  return (
-    <AuthLayout>
+  return <AuthLayout>
       <h1 className="auth-title">Reenviar verificación</h1>
       <p className="auth-lead">
         Solicita un nuevo correo de verificación para tu cuenta de MATISTA.
       </p>
 
-      {notice ? (
-        <AuthAlert tone={notice.tone} title={notice.title}>
+      {notice ? <AuthAlert tone={notice.tone} title={notice.title}>
           {notice.message}
-        </AuthAlert>
-      ) : null}
+        </AuthAlert> : null}
 
       <form className="auth-form" noValidate onSubmit={handleSubmit}>
-        <TextField
-          id="resend-email"
-          type="email"
-          label="Email"
-          required
-          autoComplete="email"
-          placeholder="ejemplo@email.com"
-          value={email}
-          onValueChange={setEmail}
-          error={fieldErrors.email}
-        />
+        <TextField id="resend-email" type="email" label="Email" required autoComplete="email"
+          placeholder="ejemplo@email.com" value={email} onValueChange={setEmail} error={fieldErrors.email} />
         <button className="auth-button" type="submit" disabled={submitting}>
           {submitting ? 'Enviando...' : 'Reenviar correo de confirmación'}
         </button>
@@ -108,6 +117,5 @@ export function ResendVerificationPage() {
       <p className="auth-footer">
         <Link className="auth-link" to="/login">Volver a iniciar sesión</Link>
       </p>
-    </AuthLayout>
-  )
+    </AuthLayout>;
 }
