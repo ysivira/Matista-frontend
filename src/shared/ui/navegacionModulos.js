@@ -26,31 +26,36 @@ export const NAVEGACION_ADMIN = [{
   titulo: 'Gestión de empleados',
   tituloTarjeta: 'Gestión de empleados',
   icono: ICONOS.DIRECTORIO,
-  detalle: 'Administra las cuentas y el estado de los empleados.'
+  detalle: 'Administra las cuentas y el estado de los empleados.',
+  puntos: ['Directorio de cuentas', 'Activación y estados', 'Cambio de roles']
 }, {
   ruta: '/admin/planes',
   titulo: 'Planes',
   tituloTarjeta: 'Planes',
   icono: ICONOS.PLANES,
-  detalle: 'Consulta planes, prestaciones y coberturas.'
+  detalle: 'Consulta planes, prestaciones y coberturas.',
+  puntos: ['Catálogo de planes', 'Coberturas publicadas']
 }, {
   ruta: '/admin/tarifario',
   titulo: 'Gestión de precios',
   tituloTarjeta: 'Gestión de precios',
   icono: ICONOS.PRECIOS,
-  detalle: 'Consulta las listas y gestiona el tarifario.'
+  detalle: 'Consulta las listas y gestiona el tarifario.',
+  puntos: ['Listas de precios', 'Mantenimiento de tarifas', 'Exportar tarifas']
 }, {
   ruta: '/admin/versiones',
   titulo: 'Versiones',
   tituloTarjeta: 'Versiones',
   icono: ICONOS.VERSIONES,
-  detalle: 'Consulta y gestiona las versiones del tarifario.'
+  detalle: 'Consulta y gestiona las versiones del tarifario.',
+  puntos: ['Historial de versiones', 'Comparar versiones', 'Detalle de cambios']
 }, {
   ruta: '/admin/configuracion',
   titulo: 'Configuración',
   tituloTarjeta: 'Configuración',
   icono: ICONOS.CONFIGURACION,
-  detalle: 'Administra la política comercial vigente.'
+  detalle: 'Administra la política comercial vigente.',
+  puntos: ['Reglas de negocio', 'Descuentos comerciales', 'Parámetros generales']
 }];
 
 /** Rutas y textos de navegación del módulo ASESOR. */
@@ -64,29 +69,34 @@ export const NAVEGACION_ASESOR = [{
   titulo: 'Nueva cotización',
   tituloTarjeta: 'Nueva cotización',
   icono: ICONOS.NUEVA,
-  detalle: 'Prepara cliente, plan y condiciones comerciales.'
+  detalle: 'Prepara cliente, plan y condiciones comerciales.',
+  puntos: ['Datos del cliente', 'Selección de plan', 'Cálculo y resumen']
 }, {
   ruta: '/asesor/cotizaciones',
   titulo: 'Historial',
   tituloTarjeta: 'Historial',
   icono: ICONOS.HISTORIAL,
-  detalle: 'Consulta cotizaciones, detalle y trazabilidad.'
+  detalle: 'Consulta cotizaciones, detalle y trazabilidad.',
+  puntos: ['Cotizaciones emitidas', 'Detalle y PDF', 'Recotización y anulación']
 }, {
   ruta: '/asesor/planes',
   titulo: 'Planes',
   tituloTarjeta: 'Catálogo de planes',
   icono: ICONOS.PLANES,
-  detalle: 'Consulta las coberturas publicadas.'
+  detalle: 'Consulta las coberturas publicadas.',
+  puntos: ['Listado de planes', 'Coberturas y prestaciones']
 }, {
   ruta: '/asesor/precios',
   titulo: 'Consultar precios',
   tituloTarjeta: 'Listas de precios',
   icono: ICONOS.PRECIOS,
-  detalle: 'Consulta, imprime y exporta tarifas vigentes.'
+  detalle: 'Consulta, imprime y exporta tarifas vigentes.',
+  puntos: ['Consulta de tarifas', 'Descargar listas', 'Imprimir tarifas']
 }, {
   ruta: '/asesor/condiciones',
   titulo: 'Condiciones comerciales',
   tituloTarjeta: 'Condiciones comerciales',
   icono: ICONOS.CONDICIONES,
-  detalle: 'Consulta los aportes, descuentos y condiciones vigentes.'
+  detalle: 'Consulta los aportes, descuentos y condiciones vigentes.',
+  puntos: ['Descuentos vigentes', 'Aportes y contribuciones', 'Condiciones generales']
 }];

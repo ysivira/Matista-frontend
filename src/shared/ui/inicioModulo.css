@@ -1,10 +1,51 @@
-.inicio-modulo { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; align-items:stretch; }
-.inicio-modulo__tarjeta { grid-column:span 2; display:flex; gap:20px; align-items:center; position:relative; min-height:150px; padding:28px; background:#fff; color:#202236; border:1px solid #dcd6e9; border-top:3px solid #ede9fe; border-radius:18px; box-shadow:0 8px 24px #14152212; text-decoration:none; transition:transform .18s,box-shadow .18s,border-color .18s; }
-.inicio-modulo__tarjeta:last-child:nth-child(odd) { grid-column:2/span 2; }
-.inicio-modulo__tarjeta:hover { transform:translateY(-3px); border-top-color:#8b5cf6; box-shadow:0 5px 24px #8b5cf64d; }
-.inicio-modulo__tarjeta:focus-visible { outline:3px solid #a78bfa; outline-offset:4px; }
-.inicio-modulo__icono { flex-shrink:0; display:grid; place-items:center; width:54px; height:54px; border-radius:16px; color:#7c3aed; background:linear-gradient(135deg,#f5f2ff,#ede9fe); border:1px solid #e7ddfa; }
-.inicio-modulo__tarjeta h3 { font-size:1.15rem; letter-spacing:-.02em; padding-right:18px; margin:0 0 8px; }
-.inicio-modulo__tarjeta p { font-size:.88rem; color:#69718a; margin:0; line-height:1.6; }
-.inicio-modulo__flecha { position:absolute; top:20px; right:20px; color:#a78bfa; font-size:20px; }
-@media (max-width:700px) { .inicio-modulo { grid-template-columns:minmax(0,1fr); } .inicio-modulo__tarjeta,.inicio-modulo__tarjeta:last-child:nth-child(odd) { grid-column:auto; padding:22px; gap:14px; } }
+/* Secciones de Inicio (SPEC-26): rediseño oscuro compartido por ADMIN y
+   ASESOR. Se integran al lienzo institucional sin tarjetas blancas: ícono
+   violeta, título blanco, descripción clara, divisor fino y puntos
+   descriptivos. Grilla de 6 columnas: 3 secciones en la primera fila y 2
+   amplias en la segunda; 2 columnas en tablet y 1 en móvil. */
+.inicio-modulo { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:20px 32px; align-items:stretch; }
+.inicio-modulo__seccion { grid-column:span 2; display:flex; flex-direction:column; gap:14px; min-width:0; padding:18px 4px 6px; color:inherit; text-decoration:none; border-radius:14px; transition:background .18s ease; }
+.inicio-modulo__seccion:nth-child(n+4) { grid-column:span 3; }
+.inicio-modulo__seccion:hover { background:rgba(139,92,246,.05); }
+.inicio-modulo__seccion:focus-visible { outline:3px solid #a78bfa; outline-offset:4px; }
+.inicio-modulo__cabeza { display:flex; gap:16px; align-items:flex-start; min-block-size:6.25rem; }
+.inicio-modulo__icono { flex-shrink:0; display:grid; place-items:center; width:52px; height:52px; border-radius:15px; color:#b79bfa; background:linear-gradient(140deg,rgba(91,44,191,.42),rgba(139,92,246,.14)); border:1px solid rgba(139,92,246,.32); box-shadow:0 0 18px rgba(124,58,237,.16); transition:box-shadow .18s ease,color .18s ease; }
+.inicio-modulo__seccion:hover .inicio-modulo__icono { color:#cdb8fc; box-shadow:0 0 26px rgba(139,92,246,.28); }
+.inicio-modulo__titular { min-width:0; }
+.inicio-modulo__titular h3 { display:flex; align-items:center; gap:8px; font-size:1.08rem; letter-spacing:-.02em; margin:2px 0 6px; color:#fff; }
+.inicio-modulo__chevron { color:#a78bfa; font-size:1.05rem; transition:transform .18s ease; }
+.inicio-modulo__seccion:hover .inicio-modulo__chevron { transform:translateX(3px); }
+.inicio-modulo__titular p { font-size:.88rem; color:#aab0c9; margin:0; line-height:1.55; }
+.inicio-modulo__linea { height:1px; background:rgba(167,139,250,.22); }
+/* Puntos descriptivos del área: información, no enlaces; sin chevron para
+   no sugerir navegación inexistente. */
+.inicio-modulo__puntos { list-style:none; display:flex; flex-direction:column; gap:9px; margin:0; padding:0 0 4px; }
+.inicio-modulo__puntos li { display:flex; align-items:center; gap:10px; font-size:.85rem; color:#c3c8dd; line-height:1.4; }
+.inicio-modulo__punto { flex-shrink:0; width:5px; height:5px; border-radius:50%; background:#8b5cf6; }
+@media (max-width:1024px) {
+  .inicio-modulo { grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 24px; }
+  .inicio-modulo__seccion,.inicio-modulo__seccion:nth-child(n+4) { grid-column:auto; }
+  .inicio-modulo__cabeza { min-block-size:0; }
+}
+@media (max-width:640px) {
+  .inicio-modulo { grid-template-columns:minmax(0,1fr); }
+  .inicio-modulo__seccion { padding:16px 2px 2px; }
+  .inicio-modulo__cabeza { gap:12px; }
+  .inicio-modulo__icono { width:46px; height:46px; border-radius:13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inicio-modulo__seccion,.inicio-modulo__icono,.inicio-modulo__chevron { transition:none; }
+}
+
+/* Encabezado común de escritorio: 6.25rem mínimos alojan el icono, el título
+   y dos líneas de descripción en ambas filas, sin fijar una altura máxima
+   ni recortar texto. En tablet/móvil se recupera la altura natural.
+   Subgrid alinea las divisorias por fila si algún texto necesita crecer;
+   los 14px internos conservan la misma separación hasta la lista.
+   Cada sección ocupa 3 pistas (encabezado → divisoria → puntos), manteniendo
+   el reparto 3+2 / 2 / 1 columnas. Sin soporte se conserva el flex anterior. */
+@supports (grid-template-rows: subgrid) {
+  .inicio-modulo { grid-auto-rows:auto auto auto; row-gap:14px; }
+  .inicio-modulo__seccion { display:grid; grid-template-rows:subgrid; grid-row:span 3; row-gap:14px; }
+  .inicio-modulo__cabeza { align-self:start; }
+}

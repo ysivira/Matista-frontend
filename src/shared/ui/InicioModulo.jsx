@@ -1,5 +1,5 @@
 /**
- * Tarjetas de acceso a las funciones de cada módulo.
+ * Secciones de acceso a las funciones de cada módulo sobre el lienzo oscuro.
  */
 import { Link } from 'react-router-dom';
 import { EncabezadoContextual } from './EncabezadoContextual.jsx';
@@ -7,9 +7,14 @@ import { IconoNavegacion } from './IconoNavegacion.jsx';
 import './inicioModulo.css';
 
 /**
- * Reutiliza las tarjetas MATISTA para navegar a las funciones autorizadas de cada módulo.
- * @param {{etiqueta:string, descripcion:string, accesos:object[]}} props Datos de presentación; no
- * otorgan permisos.
+ * Reutiliza las secciones MATISTA para navegar a las funciones autorizadas de
+ * cada módulo, con el rediseño oscuro de SPEC-26: secciones integradas al
+ * fondo institucional (sin tarjetas blancas), ícono violeta, título blanco,
+ * descripción clara, línea divisoria fina y puntos descriptivos del área.
+ * Los `puntos` son solo descriptivos: no crean rutas ni accesos nuevos; los
+ * permisos y la navegación viven en el router y el backend.
+ * @param {{etiqueta:string, descripcion:string, accesos:object[]}} props Datos de
+ *   presentación; no otorgan permisos.
  * @returns {import('react').ReactElement} Presentación accesible sin operaciones de negocio.
  */
 export function InicioModulo({
@@ -20,14 +25,23 @@ export function InicioModulo({
   return <><EncabezadoContextual etiqueta={etiqueta} titulo="Inicio" descripcion={descripcion} />
     <div className="inicio-modulo">
       {accesos.map(acceso => <Link key={acceso.ruta} to={acceso.ruta}
-        className="inicio-modulo__tarjeta">
-        <span className="inicio-modulo__icono"><IconoNavegacion trazo={acceso.icono}
-          tamano={27} /></span>
-        <div>
-          <h3>{acceso.tituloTarjeta}</h3>
-          <p>{acceso.detalle}</p>
+        className="inicio-modulo__seccion">
+        <div className="inicio-modulo__cabeza">
+          <span className="inicio-modulo__icono" aria-hidden="true"><IconoNavegacion trazo={acceso.icono}
+            tamano={24} /></span>
+          <div className="inicio-modulo__titular">
+            <h3>{acceso.tituloTarjeta}<span className="inicio-modulo__chevron"
+              aria-hidden="true">›</span></h3>
+            <p>{acceso.detalle}</p>
+          </div>
         </div>
-        <span className="inicio-modulo__flecha" aria-hidden="true">↗</span>
+        {acceso.puntos?.length ? <>
+          <div className="inicio-modulo__linea" aria-hidden="true" />
+          <ul className="inicio-modulo__puntos">
+            {acceso.puntos.map(punto => <li key={punto}><span className="inicio-modulo__punto"
+              aria-hidden="true" />{punto}</li>)}
+          </ul>
+        </> : null}
       </Link>)}
     </div></>;
 }
