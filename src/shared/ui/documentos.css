@@ -1,19 +1,114 @@
-.admin-documentos { display:flex; flex-wrap:wrap; gap:10px; padding:16px 20px; align-items:center; justify-content:flex-end; border-bottom:1px solid #eee8f7; background:#fcfbff; }
-.admin-documento-accion { display:inline-flex; gap:9px; align-items:center; justify-content:center; min-height:40px; padding:9px 16px; border-radius:10px; text-decoration:none; font-size:.85rem; font-weight:600; transition:background .15s,box-shadow .15s; }
-.admin-documento-accion svg { width:18px; height:18px; flex-shrink:0; }
-.admin-documento-accion--imprimir { border:1px solid #dcd4ec; color:#514363; background:white; }
-.admin-documento-accion--pdf { border:1px solid #6d28d9; background:#6d28d9; color:white; box-shadow:0 3px 8px #6d28d920; }
-.admin-documento-accion:hover { box-shadow:0 4px 12px #6d28d930; }
-.admin-documento-accion:focus-visible { outline:3px solid #c4b5fd; outline-offset:3px; }
-.admin-csv-interno { display:inline-block; margin:0 20px 12px; font-size:.8rem; }
+.admin-documentos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 16px 20px;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom: 1px solid #eee8f7;
+  background: #fcfbff;
+}
+
+.admin-documento-accion {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: .85rem;
+  font-weight: 600;
+  transition: background .15s, box-shadow .15s;
+}
+
+.admin-documento-accion svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.admin-documento-accion--imprimir {
+  border: 1px solid #dcd4ec;
+  color: #514363;
+  background: white;
+}
+
+.admin-documento-accion--pdf {
+  border: 1px solid #6d28d9;
+  background: #6d28d9;
+  color: white;
+  box-shadow: 0 3px 8px #6d28d920;
+}
+
+.admin-documento-accion:hover {
+  box-shadow: 0 4px 12px #6d28d930;
+}
+
+.admin-documento-accion:focus-visible {
+  outline: 3px solid #c4b5fd;
+  outline-offset: 3px;
+}
+
+.admin-csv-interno {
+  display: inline-block;
+  margin: 0 20px 12px;
+  font-size: .8rem;
+}
+
 @media print {
-  body { background:white !important; }
-  html,body,.admin-shell,.admin-canvas,.admin-content { height:auto !important; overflow:visible !important; }
-  body * { visibility:hidden; }
-  .matista-print,.matista-print * { visibility:visible; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
-  .matista-print { position:absolute; top:0; left:0; width:100%; padding:20px; border:0; box-shadow:none; background:white; color:#202236; }
-  .matista-print .matista-no-print { display:none; }
-  .matista-print table { width:100%; border-collapse:collapse; }
-  .matista-print tr { break-inside:avoid; }
-  .matista-print .admin-tarifario__scroll { max-height:none; overflow:visible; }
+  body {
+    background: white !important;
+  }
+
+  html,
+  body,
+  .admin-shell,
+  .admin-canvas,
+  .admin-content {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .matista-print,
+  .matista-print * {
+    visibility: visible;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .matista-print {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    border: 0;
+    box-shadow: none;
+    background: white;
+    color: #202236;
+  }
+
+  .matista-print .matista-no-print {
+    display: none;
+  }
+
+  .matista-print table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .matista-print tr {
+    break-inside: avoid;
+  }
+
+  .matista-print .admin-tarifario__scroll {
+    max-height: none;
+    overflow: visible;
+  }
 }
