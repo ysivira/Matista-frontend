@@ -18,6 +18,7 @@
  * - ../components/AuthFields.jsx
  * - ../auth.messages.js
  * - ../auth.validation.js
+ * - ../../../shared/ui/MatistaLoadingModal.jsx
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -25,6 +26,7 @@ import { authApi } from '../api/authApi.js';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
 import { PasswordField, TextField } from '../components/AuthFields.jsx';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { fieldErrorsFromApiError, technicalNoticeFor } from '../auth.messages.js';
 import { INVALID_EMAIL_MESSAGE, INVALID_LEGAJO_MESSAGE, INVALID_PASSWORD_CONFIRMATION_MESSAGE,
   REQUIRED_FIELD_MESSAGE, isValidEmail, isValidLegajo } from '../auth.validation.js';
@@ -178,6 +180,8 @@ export function RegisterPage() {
       </AuthLayout>;
   }
   return <AuthLayout wide>
+      <MatistaLoadingModal abierto={submitting} titulo="Estamos creando tu cuenta"
+        descripcion="Estamos procesando tu solicitud y preparando el correo de verificación. Por favor, esperá unos instantes." />
       <div className="auth-title-block">
         <h1 className="auth-title">Crear Cuenta</h1>
         <span className="auth-badge">Nuevo colaborador</span>

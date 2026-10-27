@@ -168,4 +168,64 @@ describe('RegisterPage', () => {
 
     expect(await screen.findByText('El correo de verificación no se envió en este momento')).toBeTruthy()
   })
+
+  it('no muestra el loading ante validaciones locales fallidas (SPEC-26)', () => {
+    renderRegister()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Registrarme' }))
+
+    expect(screen.queryByRole('dialog', { name: 'Estamos creando tu cuenta' })).toBeNull()
+    expect(authApi.register).not.toHaveBeenCalled()
+  })
+
+  it('muestra el loading durante el envío y lo cierra con la confirmación (SPEC-26)', async () => {
+    let resolver
+    authApi.register.mockImplementation(() => new Promise(res => { resolver = res }))
+    renderRegister()
+
+    fillAndSubmit()
+    const dialogo = await screen.findByRole('dialog', { name: 'Estamos creando tu cuenta' })
+    expect(dialogo.getAttribute('aria-busy')).toBe('true')
+    expect(screen.getByText(/preparando el correo de verificación/)).toBeTruthy()
+    // El aviso inferior persiste mientras la solicitud sigue pendiente.
+    expect(screen.getByText(/No cierres esta ventana/)).toBeTruthy()
+
+    resolver({})
+    expect(await screen.findByText('Registro completado')).toBeTruthy()
+    expect(screen.queryByRole('dialog', { name: 'Estamos creando tu cuenta' })).toBeNull()
+  })
+
+  it('cierra el loading y restablece el envío cuando el backend rechaza (SPEC-26)', async () => {
+    let rechazar
+    authApi.register.mockImplementation(() => new Promise((_, rej) => { rechazar = rej }))
+    renderRegister()
+
+    fillAndSubmit()
+    await screen.findByRole('dialog', { name: 'Estamos creando tu cuenta' })
+
+    rechazar(new ApiError({ status: 400, code: 'IDENTITY_CONFLICT', message: 'El DNI o correo ya se encuentra reservado.' }))
+    expect(await screen.findByText(/ya se encuentra reservado|reservado/i)).toBeTruthy()
+    expect(screen.queryByRole('dialog', { name: 'Estamos creando tu cuenta' })).toBeNull()
+
+    // El formulario vuelve a estar disponible: puede reintentar sin doble envío previo.
+    authApi.register.mockResolvedValue({})
+    fireEvent.click(screen.getByRole('button', { name: 'Registrarme' }))
+    await waitFor(() => expect(authApi.register).toHaveBeenCalledTimes(2))
+    expect(await screen.findByText('Registro completado')).toBeTruthy()
+  })
+
+  it('evita envíos duplicados mientras el loading está abierto (SPEC-26)', async () => {
+    let resolver
+    authApi.register.mockImplementation(() => new Promise(res => { resolver = res }))
+    renderRegister()
+
+    fillAndSubmit()
+    await screen.findByRole('dialog', { name: 'Estamos creando tu cuenta' })
+
+    // El botón queda deshabilitado durante el envío; ningún doble clic reenvía.
+    expect(screen.getByRole('button', { name: 'Registrando...' }).disabled).toBe(true)
+    fireEvent.click(screen.getByRole('button', { name: 'Registrando...' }))
+    resolver({})
+    await waitFor(() => expect(authApi.register).toHaveBeenCalledTimes(1))
+  })
 })
