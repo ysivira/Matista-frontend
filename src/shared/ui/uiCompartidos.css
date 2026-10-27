@@ -141,6 +141,29 @@
   .ui-encabezado__punto { animation: none; }
 }
 
+/* SPEC-27 — topbar compacta en móviles angostos (≤479 px): sin isotipo (ya
+   vive en el drawer) y con «Cerrar sesión» como icono accesible (el texto
+   queda oculto con el patrón sr-only, pero continúa en el árbol accesible).
+   Nombre y rol se conservan con corte elíptico para que la fila entre en
+   320 px sin desplazamiento horizontal. */
+@media (max-width: 479.98px) {
+  .ui-cabecera { gap: 0.6rem; padding-inline: 1rem; }
+  .ui-cabecera__marca { display: none; }
+  .ui-cabecera__seccion { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-cabecera__identidad { margin-left: auto; gap: 0.5rem; }
+  .ui-cabecera__datos { min-width: 0; }
+  .ui-cabecera__nombre { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-cabecera__salir span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .ui-cabecera__salir { padding: 0.4rem 0.55rem; }
+}
+
 .ui-encabezado__titulo {
   margin: 0;
   font-family: 'Plus Jakarta Sans', sans-serif;

@@ -1310,9 +1310,97 @@
 }
 
 /* Responsive */
+/* SPEC-27 — Navegación responsive compartida (ADMIN y ASESOR). Por debajo de
+   900 px el sidebar deja de apilarse sobre el lienzo (causa del header
+   desplazado a 768 px): pasa a drawer fijo fuera de pantalla, con botón
+   hamburguesa en la topbar, velo oscuro semitransparente y cierre por
+   botón, Escape, selección de opción o toque fuera del drawer. En
+   escritorio (>900 px) ninguna de estas reglas aplica: el shell de dos
+   columnas queda intacto y el botón hamburguesa se oculta. */
+/* El botón de cierre del drawer solo existe en pantallas angostas. */
+.admin-sidebar__cerrar { display: none; }
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    width: min(286px, 84vw);
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    overflow-y: auto;
+    background: #14152a;
+    transform: translateX(-102%);
+    visibility: hidden;
+    transition: transform 0.24s ease, visibility 0s 0.24s;
+    box-shadow: 18px 0 44px rgba(5, 6, 14, 0.5);
+  }
+
+  .admin-sidebar--abierto {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.24s ease;
+  }
+
+  .admin-sidebar__cerrar {
+    display: grid;
+    place-items: center;
+    align-self: flex-end;
+    width: 2.1rem;
+    height: 2.1rem;
+    margin: 0.7rem 0.9rem 0;
+    border: 1px solid rgba(149, 142, 160, 0.2);
+    border-radius: 0.6rem;
+    background: rgba(36, 38, 56, 0.85);
+    color: #cbc3d7;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .admin-sidebar__cerrar:hover { background: rgba(46, 48, 68, 0.9); color: #fff; }
+}
+
+/* Botón hamburguesa de la topbar: solo visible en pantallas angostas; el
+   header vuelve a ser la primera franja de la pantalla en móvil. */
+.ui-cabecera__menu {
+  display: none;
+  flex: 0 0 auto;
+  width: 2.4rem;
+  height: 2.4rem;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(149, 142, 160, 0.22);
+  border-radius: 0.65rem;
+  background: rgba(36, 38, 56, 0.85);
+  color: #e9e8f4;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ui-cabecera__menu:hover { background: rgba(46, 48, 68, 0.95); }
+
+.ui-cabecera__menu svg { width: 1.3rem; height: 1.3rem; }
+
+@media (max-width: 900px) {
+  .ui-cabecera { padding-inline: 1rem; }
+  .ui-cabecera__menu { display: grid; }
+}
+
+/* Velo oscuro semitransparente sobre el contenido mientras el drawer está
+   abierto; su clic cierra el menú. */
+.admin-velo {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(9, 10, 20, 0.55);
+}
+
 @media (max-width: 900px) {
   .admin-shell { grid-template-columns: 1fr; }
-  .admin-sidebar { min-height: auto; }
   .admin-search { min-width: 0; }
   .admin-content { padding: 1.2rem; }
 }
@@ -1675,6 +1763,22 @@
   overflow-y: auto;
 }
 
+/* SPEC-27 — indicación discreta de desplazamiento horizontal: cuando el
+   contenido excede el ancho del contenedor, una franja sombreada en el
+   borde derecho (fondo del contenedor, que no se desplaza con el scroll)
+   advierte que hay más datos hacia la derecha. */
+.admin-tarifario__scroll--desplazable {
+  background: linear-gradient(to left, rgba(16, 18, 34, 0.10), transparent 20px) right / 20px 100% no-repeat;
+}
+
+/* A 320 px el costo del padding ocupaba las columnas: se reducen paddings
+   y tipografía de encabezado para conservar rango etario y precio legibles
+   sin cortes, manteniendo el desplazamiento interno de la tabla. */
+@media (max-width: 479.98px) {
+  .admin-tarifario__tabla thead th { padding: 0.6rem 0.8rem; font-size: 0.66rem; letter-spacing: 0.04em; }
+  .admin-tarifario__tabla tbody td { padding: 0.6rem 0.8rem; font-size: 0.84rem; }
+}
+
 .admin-tarifario__tabla {
   width: 100%;
   border-collapse: collapse;
@@ -1756,8 +1860,12 @@
 .admin-table__precio { text-align: right; font-variant-numeric: tabular-nums; }
 
 @media (max-width: 900px) {
-  /* Pantallas estrechas: los filtros se apilan y la acción baja al final. */
-  .admin-tarifario-filtros { flex-direction: column; align-items: stretch; }
+  /* Pantallas estrechas: los filtros se apilan y la acción baja al final.
+     SPEC-27: en dirección columna el flex-basis de 12rem de .admin-campo
+     se interpreta como ALTURA (causa de los grandes huecos verticales a
+     320/768 px); los campos pasan a altura natural. */
+  .admin-tarifario-filtros { flex-direction: column; align-items: stretch; gap: 0.8rem; padding: 1rem; }
+  .admin-tarifario-filtros .admin-campo { flex: 0 0 auto; }
   .admin-tarifario-filtros__limpiar { margin-left: 0; align-self: flex-start; }
 }
 
@@ -1842,6 +1950,16 @@
 /* Guardia explícita: el panel contraído queda oculto incluso si una regla
    agregada después volviera a declarar display para el panel. */
 .admin-plan-card__body[hidden] { display: none; }
+
+/* SPEC-27 — acordeón contextual en pantallas angostas: la ficha vive dentro
+   de la tarjeta seleccionada; se separa del header con un margen que respeta
+   el padding de la tarjeta y radios suaves para leerse como bloque interno. */
+@media (max-width: 767px) {
+  .admin-plan-card .admin-plan-card__body {
+    margin: 0 0.9rem 0.9rem;
+    border-radius: 12px;
+  }
+}
 
 /* Titular de la ficha técnica aprobada: gema de tamaño mayor y epígrafe. */
 .admin-plan-card__titular {
@@ -1986,12 +2104,14 @@
 
 .admin-plan-card__empty { margin: 0; padding: 1.1rem; color: var(--admin-muted); }
 
-@media (max-width: 720px) {
+@media (max-width: 900px) {
   .admin-plan-card__header { padding: 0.85rem 0.9rem; }
   .admin-plan-card__body { padding: 0.85rem 0.9rem 1.1rem; }
 
-  /* La tabla se vuelve fichas apiladas con etiquetas visibles de cada campo:
-     sin desplazamiento horizontal de la página ni contenido cortado. */
+  /* SPEC-29: cada prestación usa el ancho completo. La etiqueta fija de
+     7.5rem dejaba una columna mínima para los valores del acordeón móvil.
+     Nombre arriba, Cobertura y Observaciones debajo, sin columnas internas;
+     también cubre las fichas estrechas del catálogo en tablet. */
   .admin-plan-tabla thead { display: none; }
 
   .admin-plan-tabla,
@@ -2011,22 +2131,25 @@
   }
 
   .admin-plan-tabla tbody td {
-    display: flex;
-    gap: 0.4rem;
+    display: block;
     padding: 0.15rem 0;
     border-bottom: none;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: none;
   }
 
   .admin-plan-tabla tbody td::before {
-    content: attr(data-label);
-    flex: 0 0 7.5rem;
-    padding-top: 0.1rem;
+    content: attr(data-label) ": ";
     font-size: 0.66rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--admin-muted);
   }
+
+  .admin-plan-tabla tbody td[data-label="Prestación"] { font-weight:600; }
+  .admin-plan-tabla tbody td[data-label="Prestación"]::before { content:none; }
 
   /* La fila extendida del «Detalle original» no repite etiquetas de campo:
      conserva su propia indicación y el texto completo debajo. */

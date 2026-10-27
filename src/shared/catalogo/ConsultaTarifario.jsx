@@ -89,6 +89,24 @@ export function ConsultaTarifario({
   const [aviso, setAviso] = useState(null);
   const consultaActualRef = useRef(0);
   const datosCargadosRef = useRef(false); // La primera consulta despliega la pantalla completa
+  const referenciaScroll = useRef(null); // Contenedor de la tabla para el aviso de desplazamiento
+  const [desplazable, setDesplazable] = useState(false); // true: la tabla excede el ancho
+
+  // Indicador discreto de desplazamiento horizontal (SPEC-27): se reevalúa
+  // al cambiar la matriz, al desplazar la tabla y al redimensionar; el aviso
+  // desaparece cuando el contenido entra por completo en el ancho visible.
+  useEffect(() => {
+    const nodo = referenciaScroll.current;
+    if (!nodo) return undefined;
+    const revisar = () => setDesplazable(nodo.scrollWidth > nodo.clientWidth + 1);
+    revisar();
+    nodo.addEventListener('scroll', revisar, { passive: true });
+    window.addEventListener('resize', revisar);
+    return () => {
+      nodo.removeEventListener('scroll', revisar);
+      window.removeEventListener('resize', revisar);
+    };
+  }, [matriz]);
 
   /**
    * Carga el catálogo y la matriz vigente de la selección actual. El plan viene
@@ -265,7 +283,8 @@ export function ConsultaTarifario({
                     <span className="admin-tarifario__conteo-valor">{tarifasVisibles.length}</span>
                   </div>
                 </div>
-                <div className="admin-tarifario__scroll">
+                <div className={`admin-tarifario__scroll${desplazable
+                  ? ' admin-tarifario__scroll--desplazable' : ''}`} ref={referenciaScroll}>
                   <table className="admin-tarifario__tabla">
                     <thead>
                       <tr>

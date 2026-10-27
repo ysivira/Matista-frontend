@@ -18,18 +18,34 @@ const ICONO_SALIDA = 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H9
 
 /**
  * Encabezado superior compartido con la identidad de la sesión.
- * @param {{seccion?: string, usuario?: object|null, onCerrarSesion?: () => void}} props
+ * @param {{seccion?: string, usuario?: object|null, onCerrarSesion?: () => void,
+ *   menuControl?: ?{abierto: boolean, alternar: () => void, destino: string}}} props
  *   seccion: título de la pantalla activa; usuario: sesión vigente con
  *   nombre, apellido y rol; onCerrarSesion: acción de cierre de sesión.
+ *   menuControl: control opcional del menú lateral móvil (SPEC-27); cuando
+ *   llega, se presenta el botón hamburguesa antes del título. Solo tiene
+ *   efecto en pantallas angostas (el botón se oculta por CSS en escritorio).
  * @returns {import('react').ReactElement} Encabezado superior del shell.
  */
 export function EncabezadoSuperior({
   seccion,
   usuario,
-  onCerrarSesion
+  onCerrarSesion,
+  menuControl = null
 }) {
   const nombreCompleto = [usuario?.nombre, usuario?.apellido].filter(Boolean).join(' ');
   return <header className="ui-cabecera">
+      {menuControl ? <button type="button" className="ui-cabecera__menu"
+        aria-label={menuControl.abierto ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+        aria-expanded={menuControl.abierto} aria-controls={menuControl.destino}
+        onClick={menuControl.alternar}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9"
+          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          {menuControl.abierto
+            ? <path d="M6 6l12 12M18 6L6 18" />
+            : <path d="M4 7h16M4 12h16M4 17h16" />}
+        </svg>
+      </button> : null}
       <h1 className="ui-cabecera__seccion">{seccion}</h1>
 
       <div className="ui-cabecera__identidad">

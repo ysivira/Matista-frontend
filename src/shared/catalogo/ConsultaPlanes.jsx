@@ -78,6 +78,14 @@ function descomponerCobertura(linea) {
  * expandido a la vez. El texto recibido se preserva íntegro sin extraer ni
  * reformular coberturas, porque el separador `|` de la fuente no es consistente
  * entre planes y cualquier recorte podría alterar el significado contractual.
+ *
+ * SPEC-27: en pantallas angostas (≤767 px) la ficha técnica del plan abierto
+ * se presenta como acordeón contextual, inmediatamente después de la tarjeta
+ * seleccionada (antes quedaba después de toda la rejilla y obligaba a
+ * desplazarse hasta el final); en escritorio se conserva el panel ancho bajo
+ * la rejilla. La ficha se renderiza con una única función, así que ambos
+ * modos comparten el mismo contenido sin duplicación y el contrato accesible
+ * (aria-controls + hidden) no cambia.
  * @param {{api: object, etiqueta: string, rutaTarifario: string}} props API solo de lectura, texto
  * contextual y destino de consulta explícitos.
  * @returns {import('react').ReactElement} Catálogo desplegable de planes.
@@ -93,7 +101,19 @@ export function ConsultaPlanes({
   const [aviso, setAviso] = useState(null);
   const [planAbierto,
     setPlanAbierto] = useState(null); // Único plan expandido; null = todos contraídos
+  const [esPantallaAngosta, setEsPantallaAngosta] = useState(
+    () => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      && window.matchMedia('(max-width: 767px)').matches
+  );
   const consultaActualRef = useRef(0);
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return undefined;
+    const consulta = window.matchMedia('(max-width: 767px)');
+    const reaccionar = evento => setEsPantallaAngosta(evento.matches);
+    consulta.addEventListener('change', reaccionar);
+    return () => consulta.removeEventListener('change', reaccionar);
+  }, []);
 
   /**
    * Consulta el catálogo vigente; las respuestas solapadas se descartan
@@ -142,6 +162,95 @@ export function ConsultaPlanes({
   function abrirTarifario(planId, tipoIngreso) {
     navigate(`${rutaTarifario}?planId=${planId}&modalidad=${encodeURIComponent(tipoIngreso)}`);
   }
+
+  /**
+   * Ficha técnica de un plan (coberturas, condiciones, glosario y acciones).
+   * Un único renderizador evita duplicar el contenido entre el modo acordeón
+   * (móvil) y el panel bajo la rejilla (escritorio).
+   * @param {object} plan Plan vigente recibido de la API.
+   * @returns {import('react').ReactElement} Panel de detalle del plan.
+   */
+  function renderFicha(plan) {
+    const abierto = planAbierto === plan.id;
+    return <section id={`plan-${plan.id}-detalles`} hidden={!abierto}
+      className={`admin-card admin-plan-card__body${abierto ? ' matista-print' : ''}`} style={{
+        borderTop: `4px solid ${colorDePlan(plan.nombre)}`
+      }}>
+      <div className="admin-plan-card__titular">
+        <span className="admin-plan-card__gema">
+          <GemaPlan nombre={plan.nombre} tamano="ficha" />
+        </span>
+        <h3 className="admin-plan-card__encabezado">{plan.nombre}</h3>
+      </div>
+      <AccionesDocumento recurso={`planes/${plan.id}`}
+        etiquetaImprimir="Imprimir detalle" etiquetaPdf="Exportar PDF del plan" />
+      <h3 className="admin-plan-card__subtitulo">Coberturas</h3>
+      {/* Tabla semántica de coberturas: los registros con tres campos
+          delimitados por `|` se separan en celdas; los registros
+          ambiguos conservan su texto íntegro en una fila extendida
+          con la indicación «Detalle original», sin inventar
+          correspondencias. `NO` y las abreviaturas quedan literales. */}
+      {(() => {
+        const filas = lineasDeDetalles(plan.detalles).map(descomponerCobertura);
+        return filas.length > 0 ? <table className="admin-plan-tabla">
+          <caption className="admin-plan-tabla__captura">
+            Coberturas del plan {plan.nombre}
+          </caption>
+          {/* Proporciones de columna definidas en admin.css con
+              layout fijo: prestación más ancha y campos de
+              cobertura/observación equivalentes. */}
+          <colgroup>
+            <col />
+            <col />
+            <col />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Prestación</th>
+              <th scope="col">Cobertura</th>
+              <th scope="col">Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filas.map((fila, indice) => fila.celdas ? <tr key={indice}>
+              {/* Punto de color del plan junto a la prestación
+                  y píldora de fondo violeta para la cobertura:
+                  lenguaje visual del catálogo aprobado. */}
+              <td data-label="Prestación">
+                <span className="admin-plan-tabla__bullet" style={{
+                  background: colorDePlan(plan.nombre)
+                }} aria-hidden="true" />
+                {fila.celdas[0]}
+              </td>
+              <td data-label="Cobertura">
+                <span className="admin-plan-tabla__cobertura">{fila.celdas[1]}</span>
+              </td>
+              <td data-label="Observaciones">{fila.celdas[2]}</td>
+            </tr> : <tr key={indice} className="admin-plan-tabla__fila-completa">
+              <td colSpan={3}>
+                <span className="admin-plan-tabla__etiqueta">Detalle original</span>
+                {fila.original}
+              </td>
+            </tr>)}
+          </tbody>
+        </table> : <p className="admin-plan-card__texto">—</p>;
+      })()}
+      <h3 className="admin-plan-card__subtitulo">Condiciones generales</h3>
+      {(() => {
+        const {
+          cuerpo,
+          glosario
+        } = partirCondiciones(plan.condiciones_generales);
+        return <>
+          <p className="admin-plan-card__texto">{cuerpo !== '' ? cuerpo : '—'}</p>
+          {glosario !== null ? <div className="admin-plan-card__glosario">
+            <h4 className="admin-plan-card__subtitulo">Glosario de referencias</h4>
+            <p className="admin-plan-card__texto admin-plan-card__texto--glosario">{glosario}</p>
+          </div> : null}
+        </>;
+      })()}
+    </section>;
+  }
   return <div className="admin-directory">
       <EncabezadoContextual etiqueta={etiqueta} titulo="Catálogo de planes"
         descripcion="Consultá los planes activos publicados en el tarifario." />
@@ -154,8 +263,9 @@ export function ConsultaPlanes({
         </div> : <>
           {/* Rejilla de tarjetas compactas del catálogo aprobado: gema, nombre
               y acciones de ADMIN por plan; el plan abierto recibe el anillo
-              violeta de selección. La ficha técnica vive inmediatamente
-              debajo, no dentro de la tarjeta, como el diseño aprobado. */}
+              violeta de selección. En pantallas angostas (SPEC-27) la ficha
+              técnica del plan abierto se presenta inmediatamente debajo,
+              como acordeón contextual. */}
           <div className="admin-plan-lista">
             {planes.map(plan => {
           const abierto = planAbierto === plan.id;
@@ -179,97 +289,19 @@ export function ConsultaPlanes({
                       </button>
                     </div>
                   </div>
+                  {esPantallaAngosta && abierto ? renderFicha(plan) : null}
                 </article>;
         })}
           </div>
-          {/* Fichas técnicas (una por plan, solo la elegida visible): los
-              paneles conservan el contrato accesible de tarjetas SL-2E con
-              `hidden` por plan y `aria-controls` en la tarjeta que los abre.
-              El grupo se separa de la rejilla con aire suficiente para leer
-              la ficha como bloque propio. */}
-          <div className="admin-plan-fichas">
-            {planes.map(plan => {
-          const abierto = planAbierto === plan.id;
-          return <section key={plan.id} id={`plan-${plan.id}-detalles`} hidden={!abierto}
-            className={`admin-card admin-plan-card__body${abierto ? ' matista-print' : ''}`} style={{
-            borderTop: `4px solid ${colorDePlan(plan.nombre)}`
-          }}>
-                  <div className="admin-plan-card__titular">
-                    <span className="admin-plan-card__gema">
-                      <GemaPlan nombre={plan.nombre} tamano="ficha" />
-                    </span>
-                    <h3 className="admin-plan-card__encabezado">{plan.nombre}</h3>
-                  </div>
-                  <AccionesDocumento recurso={`planes/${plan.id}`}
-                    etiquetaImprimir="Imprimir detalle" etiquetaPdf="Exportar PDF del plan" />
-                  <h3 className="admin-plan-card__subtitulo">Coberturas</h3>
-                  {/* Tabla semántica de coberturas: los registros con tres campos
-                      delimitados por `|` se separan en celdas; los registros
-                      ambiguos conservan su texto íntegro en una fila extendida
-                      con la indicación «Detalle original», sin inventar
-                      correspondencias. `NO` y las abreviaturas quedan literales. */}
-                  {(() => {
-              const filas = lineasDeDetalles(plan.detalles).map(descomponerCobertura);
-              return filas.length > 0 ? <table className="admin-plan-tabla">
-                        <caption className="admin-plan-tabla__captura">
-                          Coberturas del plan {plan.nombre}
-                        </caption>
-                        {/* Proporciones de columna definidas en admin.css con
-                            layout fijo: prestación más ancha y campos de
-                            cobertura/observación equivalentes. */}
-                        <colgroup>
-                          <col />
-                          <col />
-                          <col />
-                        </colgroup>
-                        <thead>
-                          <tr>
-                            <th scope="col">Prestación</th>
-                            <th scope="col">Cobertura</th>
-                            <th scope="col">Observaciones</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {filas.map((fila, indice) => fila.celdas ? <tr key={indice}>
-                                {/* Punto de color del plan junto a la prestación
-                                    y píldora de fondo violeta para la cobertura:
-                                    lenguaje visual del catálogo aprobado. */}
-                                <td data-label="Prestación">
-                                  <span className="admin-plan-tabla__bullet" style={{
-                        background: colorDePlan(plan.nombre)
-                      }} aria-hidden="true" />
-                                  {fila.celdas[0]}
-                                </td>
-                                <td data-label="Cobertura">
-                                  <span className="admin-plan-tabla__cobertura">{fila.celdas[1]}</span>
-                                </td>
-                                <td data-label="Observaciones">{fila.celdas[2]}</td>
-                              </tr> : <tr key={indice} className="admin-plan-tabla__fila-completa">
-                                <td colSpan={3}>
-                                  <span className="admin-plan-tabla__etiqueta">Detalle original</span>
-                                  {fila.original}
-                                </td>
-                              </tr>)}
-                        </tbody>
-                      </table> : <p className="admin-plan-card__texto">—</p>;
-            })()}
-                  <h3 className="admin-plan-card__subtitulo">Condiciones generales</h3>
-                  {(() => {
-              const {
-                cuerpo,
-                glosario
-              } = partirCondiciones(plan.condiciones_generales);
-              return <>
-                        <p className="admin-plan-card__texto">{cuerpo !== '' ? cuerpo : '—'}</p>
-                        {glosario !== null ? <div className="admin-plan-card__glosario">
-                            <h4 className="admin-plan-card__subtitulo">Glosario de referencias</h4>
-                            <p className="admin-plan-card__texto admin-plan-card__texto--glosario">{glosario}</p>
-                          </div> : null}
-                      </>;
-            })()}
-                </section>;
-        })}
-          </div>
+          {/* Fichas técnicas de escritorio (una por plan, solo la elegida
+              visible): los paneles conservan el contrato accesible de
+              tarjetas SL-2E con `hidden` por plan y `aria-controls` en la
+              tarjeta que los abre. El grupo se separa de la rejilla con aire
+              suficiente para leer la ficha como bloque propio. En móvil el
+              acordeón contextual de la tarjeta seleccionada evita este
+              bloque final (SPEC-27). */}
+          {!esPantallaAngosta
+            ? <div className="admin-plan-fichas">{planes.map(plan => renderFicha(plan))}</div> : null}
         </>}
 
       <p className="admin-directory__hint">

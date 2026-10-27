@@ -414,15 +414,17 @@ describe('candado de layout del shell ADMIN (SL-2E, corrección de desplazamient
 
   it('convierte la tabla en fichas apiladas con etiquetas en móvil, sin posiciones fijas', () => {
     const css = readFileSync(resolve(import.meta.dirname, '../src/features/admin/admin.css'), 'utf8')
-    // Existen varios bloques de 720px (tarifario y tarjetas): se toma el de la tabla.
+    // SPEC-29: también las fichas estrechas de tablet usan el flujo vertical.
     let movil = null
-    for (const bloque of css.matchAll(/@media\s*\(max-width:\s*720px\)\s*\{[\s\S]*?\n\}/g)) {
+    for (const bloque of css.matchAll(/@media\s*\(max-width:\s*900px\)\s*\{[\s\S]*?\n\}/g)) {
       if (bloque[0].includes('admin-plan-tabla')) movil = bloque[0]
     }
     expect(movil).toBeTruthy()
     // El encabezado desaparece y cada celda gana su etiqueta visible.
     expect(movil).toMatch(/\.admin-plan-tabla thead\s*\{[^}]*display:\s*none/)
     expect(movil).toMatch(/content:\s*attr\(data-label\)/)
+    expect(movil).toMatch(/\.admin-plan-tabla tbody td\s*\{[^}]*display:\s*block/)
+    expect(movil).not.toMatch(/flex:\s*0 0 7\.5rem/)
     // La fila extendida conserva su propia indicación, sin etiquetas ajenas.
     expect(movil).toMatch(/\.admin-plan-tabla tr\.admin-plan-tabla__fila-completa td::before\s*\{[^}]*content:\s*none/)
     // Sin desplazamiento horizontal del documento en móvil.
@@ -431,7 +433,13 @@ describe('candado de layout del shell ADMIN (SL-2E, corrección de desplazamient
 
   it('no usa posiciones fijas para el anclaje de topbar ni sidebar', () => {
     const css = readFileSync(resolve(import.meta.dirname, '../src/features/admin/admin.css'), 'utf8')
-    expect(css).not.toMatch(/\.admin-(shell|topbar|sidebar)\s*\{[^}]*position:\s*fixed/)
+    // Excepción SPEC-27: el drawer de navegación móvil (≤900 px) usa
+    // `position: fixed` por diseño (off-canvas + velo); el candado SL-2E
+    // sigue aplicando a TODO el anclaje de escritorio, por lo que el
+    // análisis excluye únicamente los bloques de esa media query.
+    const cssSinDrawer = css.replace(/@media \(max-width: 900px\)[^{]*\{(?:[^{}]|\{[^{}]*\})*\}/g, '')
+    expect(cssSinDrawer).not.toMatch(/\.admin-(shell|topbar|sidebar)\s*\{[^}]*position:\s*fixed/)
+    expect(css).not.toMatch(/\.admin-(shell|topbar)\s*\{[^}]*position:\s*fixed/)
     expect(css).not.toMatch(/\.admin-(shell|topbar|content)\s*\{[^}]*position:\s*sticky/)
   })
 })
