@@ -164,3 +164,21 @@
   .ase-client-step .ase-input-shell button { padding:0 10px; }
   .ase-client-step .ase-actions button { width:100%; }
 }
+
+/* SPEC-27 — flujo de cotización utilizable en pantallas angostas: el stepper
+   compacta sus etiquetas (antes nowrap forzaba anchos de ~280px por paso y
+   desbordaba a 320px), y las franjas de acciones/encabezado reducen su
+   padding para no empujar los botones fuera del viewport. */
+@media (max-width:640px) {
+  .ase-ui .ase-stitch-stepper { gap:10px; }
+  .ase-ui .ase-stitch-stepper li { flex:0 1 auto; }
+  .ase-ui .ase-stitch-stepper li:not(:last-child)::after { min-width:8px; margin-left:6px; }
+  .ase-ui .ase-stitch-stepper li>span { width:32px; height:32px; font-size:14px; }
+  .ase-ui .ase-stitch-stepper strong { font-size:12px; white-space:normal; line-height:1.25; }
+  .ase-ui .ase-stitch-stepper small { display:none; }
+  .ase-ui .ase-operation { padding:20px 16px 4px; }
+  .ase-ui .ase-review-header { flex-direction:column; gap:10px; padding:20px 16px; }
+  .ase-ui .ase-workspace-actions { flex-direction:column; align-items:stretch; padding:16px 20px; }
+  .ase-ui .ase-workspace-actions>div { justify-content:stretch; flex-direction:column; }
+  .ase-ui .ase-workspace-actions>div a,.ase-ui .ase-workspace-actions>div button { width:100%; }
+}

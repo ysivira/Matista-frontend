@@ -113,7 +113,17 @@ export function DiscountSelector({
               })}>×</button>
           </div>
           <div className="ase-grid">
-            <label>Meses tramo {i + 1}<input {...atributosTramo(i, 'meses')}
+            <label>Descuento tramo {i + 1}<select {...atributosTramo(i, 'porcentaje_id')}
+              data-comercial="true" data-field={`condiciones.tramos.${i}.porcentaje_id`} required
+              aria-invalid={Boolean(mensaje(`condiciones.tramos.${i}.porcentaje_id`))}
+              aria-describedby={`ase-pct-error-${i}`} value={t.porcentaje_id}
+              onBlur={() => abandonar(`condiciones.tramos.${i}.porcentaje_id`)} onChange={e => cambiar(i,
+              'porcentaje_id', e.target.value)}>
+                <option value="">Seleccionar</option>
+                {porcentajes.map(p => <option key={p.id}
+                  value={p.id}>{formatearPorcentaje(p.porcentaje)}</option>)}
+              </select><small id={`ase-pct-error-${i}`} className="ase-field-error">{mensaje(`condiciones.tramos.${i}.porcentaje_id`)}</small></label>
+          <label>Meses tramo {i + 1}<input {...atributosTramo(i, 'meses')}
             data-comercial="true" data-field={`condiciones.tramos.${i}.meses`} required type="text"
             inputMode="numeric" pattern="[0-9]+" autoComplete="off"
             aria-invalid={Boolean(mensaje(`condiciones.tramos.${i}.meses`))}
@@ -122,17 +132,6 @@ export function DiscountSelector({
             /^\d+$/.test(e.target.value) ? Number(e.target.value) :
             e.target.value)} /><small id={`ase-meses-error-${i}`}
             className="ase-field-error">{mensaje(`condiciones.tramos.${i}.meses`)}</small></label>
-          <label>Descuento tramo {i + 1}<select {...atributosTramo(i, 'porcentaje_id')}
-            data-comercial="true" data-field={`condiciones.tramos.${i}.porcentaje_id`} required
-            aria-invalid={Boolean(mensaje(`condiciones.tramos.${i}.porcentaje_id`))}
-            aria-describedby={`ase-pct-error-${i}`} value={t.porcentaje_id}
-            onBlur={() => abandonar(`condiciones.tramos.${i}.porcentaje_id`)} onChange={e => cambiar(i,
-            'porcentaje_id',
-            e.target.value)}>
-              <option value="">Seleccionar</option>
-              {porcentajes.map(p => <option key={p.id}
-                value={p.id}>{formatearPorcentaje(p.porcentaje)}</option>)}
-            </select><small id={`ase-pct-error-${i}`} className="ase-field-error">{mensaje(`condiciones.tramos.${i}.porcentaje_id`)}</small></label>
           </div>
         </section>)}
       </div>

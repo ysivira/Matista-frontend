@@ -79,6 +79,11 @@ function QuoteWizard({
   const form = useRef(null);
   const emisionEnCurso = useRef(false);
   const enfocarPendiente = useRef(false);
+  // SPEC-28 — reposicionamiento entre pasos: el indicador de progreso es el
+  // ancla del desplazamiento y del foco; scrollIntoView resuelve el
+  // contenedor real (documento en móvil, .admin-content en escritorio).
+  const referenciaPasos = useRef(null);
+  const pasoAnterior = useRef(null);
   const [cliente, setCliente] = useState(clienteInicial);
   const [paso, setPaso] = useState(origen || clienteInicial ? 2 : 1);
   const [entrada, setEntrada] = useState(origen ? {
@@ -117,6 +122,32 @@ function QuoteWizard({
   const [vista, setVista] = useState(null);
   const validacion = useCommercialValidation(entrada.familia);
   const [errorServidor, setErrorServidor] = useState(null);
+  // SPEC-28 — al cambiar de paso (avanzar o retroceder, nunca al montar ni
+  // ante cambios ordinarios de campos) la vista queda al inicio del paso:
+  // indicador de progreso visible y comienzo del contenido a la vista. El
+  // desplazamiento es instantáneo (sin animación que retrase el cambio; esto
+  // satisface también prefers-reduced-motion) y se ejecuta tras el render de
+  // React sobre el contenedor real (documento en móvil, lienzo en escritorio).
+  // Este efecto se define ANTES del foco de error y cede cuando hay un error
+  // pendiente: ese flujo posiciona la vista por su cuenta, y robarle el foco
+  // al control enfocado dispararía su onBlur (POST duplicado de validación).
+  useEffect(() => {
+    if (pasoAnterior.current === null) {
+      pasoAnterior.current = paso;
+      return;
+    }
+    if (pasoAnterior.current === paso || enfocarPendiente.current) return;
+    pasoAnterior.current = paso;
+    const ancla = referenciaPasos.current;
+    if (!ancla) return;
+    ancla.scrollIntoView?.({
+      behavior: 'auto',
+      block: 'start'
+    });
+    ancla.focus?.({
+      preventScroll: true
+    });
+  }, [paso]);
   // El foco se aplica después de rehabilitar el fieldset; no depende de un temporizador que pueda
   // adelantarse al render.
   useEffect(() => {
@@ -293,7 +324,7 @@ function QuoteWizard({
     }
   };
   return <div className="ase-ui">
-    <ol className="ase-stitch-stepper" aria-label="Progreso de la cotización">{['Datos del Cliente',
+    <ol ref={referenciaPasos} tabIndex={-1} className="ase-stitch-stepper" aria-label="Progreso de la cotización">{['Datos del Cliente',
       'Configurar Cotización', 'Resumen y Emisión'].map((nombre, i) => <li key={nombre}
       className={paso > i + 1 ? 'is-done' : ''} aria-current={paso === i + 1 ? 'step' :
       undefined}>
@@ -336,8 +367,13 @@ function QuoteWizard({
         </div>
       </header>
       <fieldset disabled={busy} className="ase-operation">
-        <div className="ase-config-top">
-          <div className="ase-config-primary">
+        {/* SPEC-28 — sin contenedor lateral rígido: en escritorio (≥1024 px) la
+            grilla con áreas ubica la vista previa a la derecha y las demás
+            secciones a ancho completo; en móvil/tablet (≤1023 px) el orden
+            visual es Plan → Modalidad → Grupo familiar → Descuentos → Vista
+            previa → Acciones, con CSS `order` (una única instancia montada,
+            sin remontados ni llamadas nuevas por cambios de disposición). */}
+        <div className="ase-config-primary">
             <section className="ase-config-card">
               <div className="ase-card-title">
                 <h3><b>1</b> Plan de Salud</h3>
@@ -436,18 +472,19 @@ function QuoteWizard({
             {errorServidor && ['modalidad', 'plan'].includes(errorServidor.seccion)
               && <p role="alert"
               className="ase-field-error">{errorServidor.mensaje}</p>}
-          </div>
-          <EconomicPreview
-            entrada={efectiva}
-            onResult={setVista}
-            errorExterno={errorServidor?.seccion === 'motor' ? errorServidor.mensaje : null}
-          />
         </div>
         <FamilyGroupEditor value={entrada.familia} cliente={cliente}
           errorServidor={errorServidor?.seccion === 'familia' ? errorServidor.mensaje : null}
           onChange={v => cambiar('familia', v)} />
-        <DiscountSelector value={entrada.condiciones} politica={configuracion.politica}
-          validacion={validacion} onChange={v => cambiar('condiciones', v)} />
+        <div className="ase-config-descuentos">
+          <DiscountSelector value={entrada.condiciones} politica={configuracion.politica}
+            validacion={validacion} onChange={v => cambiar('condiciones', v)} />
+        </div>
+        <EconomicPreview
+          entrada={efectiva}
+          onResult={setVista}
+          errorExterno={errorServidor?.seccion === 'motor' ? errorServidor.mensaje : null}
+        />
       </fieldset>
       <footer className="ase-workspace-actions">
         <Link to="/asesor">Cancelar Cotización</Link>

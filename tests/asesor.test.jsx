@@ -692,3 +692,70 @@ describe('SPEC-28 validación del teléfono', () => {
     await waitFor(() => expect(httpClient.request).toHaveBeenCalledWith('/api/asesor/cotizaciones/1/contacto', expect.objectContaining({ method: 'PATCH' })))
   })
 })
+
+/** SPEC-28 · scroll entre pasos y orden de las secciones del paso 2. */
+describe('SPEC-28 navegación entre pasos', () => {
+  beforeEach(() => {
+    vi.resetAllMocks()
+    httpClient.request.mockImplementation(async (ruta) => {
+      if (ruta === '/api/asesor/condiciones/validacion') return { errores: [] }
+      if (ruta === '/api/catalogo/planes') return { planes: [{ id: 1, nombre: 'RUBÍ' }] }
+      if (ruta === '/api/catalogo/condiciones') return { politica, categorias_monotributo: ['A'], motor_disponible: true }
+      if (ruta === '/api/asesor/clientes/3') return cliente
+      throw new Error('Ruta no prevista')
+    })
+  })
+
+  /** Alta de cliente (paso 2 → 1 → 2) para ejercitar el cambio de paso. */
+  async function prepararDesdePaso2() {
+    montar(<QuoteForm />, '/asesor/nueva?cliente=3')
+    await screen.findByText('Plan de Salud')
+    fireEvent.click(screen.getByRole('button', { name: 'Volver a Datos del Cliente' }))
+    await screen.findByLabelText('Teléfono')
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
+    await screen.findByText('Plan de Salud')
+  }
+
+  it('al cambiar de paso el foco queda en el indicador de progreso (ancla del reposicionamiento)', async () => {
+    await prepararDesdePaso2()
+    expect(document.activeElement?.getAttribute('aria-label')).toBe('Progreso de la cotización')
+  })
+
+  it('el paso 2 presenta una única vista previa con el orden familiar → descuentos → vista previa', async () => {
+    await prepararDesdePaso2()
+    const fieldset = document.querySelector('fieldset.ase-operation')
+    const hijos = [...fieldset.children].map(n => n.getAttribute('data-section') ?? n.className)
+    expect(screen.getAllByText('Vista Previa Económica')).toHaveLength(1)
+    const indiceFamilia = hijos.findIndex(c => c === 'familia' || c.includes('ase-family'))
+    const indiceDescuentos = hijos.findIndex(c => c.includes('ase-config-descuentos'))
+    const indicePreview = hijos.findIndex(c => c.includes('ase-preview'))
+    expect(indiceFamilia).toBeGreaterThan(0)
+    expect(indiceDescuentos).toBeGreaterThan(indiceFamilia)
+    expect(indicePreview).toBeGreaterThan(indiceDescuentos)
+  })
+
+  it('conserva los datos al retroceder del paso 3 al 2 sin reconsultar el catálogo', async () => {
+    httpClient.request.mockImplementation(async (ruta) => {
+      if (ruta === '/api/asesor/condiciones/validacion') return { errores: [] }
+      if (ruta === '/api/catalogo/planes') return { planes: [{ id: 1, nombre: 'RUBÍ' }] }
+      if (ruta === '/api/catalogo/condiciones') return { politica, categorias_monotributo: ['A'], motor_disponible: true }
+      if (ruta === '/api/asesor/clientes/3') return cliente
+      if (ruta === '/api/asesor/cotizaciones') return { id: '10', revision: 0 }
+      if (ruta === '/api/asesor/cotizaciones/10/calculo') return { revision: 0, huella: 'h'.repeat(64), resultado: { precio_base: '100.00', total: '100.00', tramos: [{ desde_mes: 1, hasta_mes: 12, porcentaje_comercial: '0', total: '100.00' }], beneficios: [], aportes: [], impuestos: [], advertencias: [] } }
+      throw new Error('Ruta no prevista')
+    })
+    montar(<QuoteForm />, '/asesor/nueva?cliente=3')
+    await screen.findByText('Plan de Salud')
+    fireEvent.change(screen.getByLabelText('Plan de salud'), { target: { value: '1' } })
+    fireEvent.click(screen.getByRole('radio', { name: 'Monotributo' }))
+    fireEvent.change(screen.getByLabelText('Categoría de Monotributo'), { target: { value: 'A' } })
+    const consultasCatalogo = httpClient.request.mock.calls.filter(([ruta]) => ruta.includes('catalogo')).length
+    fireEvent.click(screen.getByRole('button', { name: 'Continuar a Resumen y Emisión →' }))
+    await screen.findByText('Previsualización de Cotización')
+    fireEvent.click(screen.getByRole('button', { name: 'Volver a Configurar Cotización' }))
+    await screen.findByText('Plan de Salud')
+    expect(screen.getByLabelText('Categoría de Monotributo').value).toBe('A')
+    expect(screen.getByLabelText('Plan de salud').value).toBe('1')
+    expect(httpClient.request.mock.calls.filter(([ruta]) => ruta.includes('catalogo')).length).toBe(consultasCatalogo)
+  })
+})
