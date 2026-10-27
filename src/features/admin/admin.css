@@ -1159,6 +1159,13 @@
   color: var(--admin-text);
 }
 
+/* Aviso de bloqueo por verificacion de correo pendiente (SPEC-25): se
+   muestra con la tonalidad de error del modal en lugar del texto neutro. */
+.admin-modal__lead--error {
+  color: var(--admin-danger, #b42318);
+  font-weight: 600;
+}
+
 .admin-modal__actions {
   display: flex;
   justify-content: flex-end;

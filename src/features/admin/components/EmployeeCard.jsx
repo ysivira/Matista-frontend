@@ -61,7 +61,7 @@ export function MenuRolEmpleados({
  * estado y el rol. Solo presenta; las reglas viven en el servidor y las
  * confirmaciones reutilizan el modal compartido de la página.
  * @param {{empleado: object, nombreMostrado: string, acciones: Array<{accion: string, label:
- * string, icono: string}>, accionRol: ?{accion: string, label: string}, menuAbierto: boolean,
+ * string, icono: string, bloqueada?: boolean}>, accionRol: ?{accion: string, label: string}, menuAbierto: boolean,
  * onMenuRol: () => void, onPedirAccion: (accion: string, empleado: object) => void, onVerDetalle:
  * () => void, onElegirRol: (accion: string, empleado: object) => void}} props Datos y callbacks de
  * la fila.
@@ -108,9 +108,10 @@ export function EmployeeCard({
           {acciones.map(({
             accion,
             label,
-            icono
+            icono,
+            bloqueada
           }) => <button key={accion} className="admin-icon-button" type="button" aria-label={label}
-            title={label} onClick={() => onPedirAccion(accion, empleado)}>
+            title={label} disabled={bloqueada} onClick={() => onPedirAccion(accion, empleado)}>
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d={icono} />

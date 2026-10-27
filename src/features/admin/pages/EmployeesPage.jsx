@@ -108,6 +108,10 @@ function ModalAccion({
   const restrictivo = accion === 'desactivar' || accion === 'darBaja';
   // El detalle llega por la petición getEmployee; hasta que llegue se usa la fila.
   const visible = detalle ?? empleado;
+  // Regla SPEC-25: el servidor exige correo ACTUAL verificado para activar o
+  // reactivar; si el listado ya lo informa sin verificar, se bloquea el
+  // confirmar y se explica la razón (la decisión final vive en el backend).
+  const sinVerificar = !esRol && destino === 'ACTIVO' && visible?.email_verificado === false;
   return <AdminModal label={`Confirmar ${ETIQUETA_ACCION[accion]}`}
     title={`Confirmar ${ETIQUETA_ACCION[accion]}`} subtitle="Confirmación de cambio de cuenta"
     tone={restrictivo ? 'danger' : 'primary'} icon={<IconoAdvertencia />} onClose={onClose} footer={<>
@@ -116,7 +120,7 @@ function ModalAccion({
             Cancelar
           </button>
           <button className={`admin-button ${restrictivo ? 'admin-button--danger' : ''}`}
-            type="button" disabled={submitting} onClick={onConfirm}>
+            type="button" disabled={submitting || sinVerificar} onClick={onConfirm}>
             {submitting ? 'Procesando...' : `Confirmar ${ETIQUETA_ACCION[accion]}`}
           </button>
         </>}>
@@ -150,6 +154,11 @@ function ModalAccion({
 
       {!esRol && destino !== 'ACTIVO'
         ? <p className="admin-modal__lead">¿Confirmas el cambio? Se cerrarán todas las sesiones activas de la cuenta.</p> : <p className="admin-modal__lead">¿Confirmas la operación? Se auditará en el mismo registro de la operación.</p>}
+      {sinVerificar ? <p className="admin-modal__lead admin-modal__lead--error" role="alert">
+          Esta cuenta todavía no verificó su correo. La persona debe completar el envío de
+          verificación desde el enlace de su correo antes de que el directorio pueda activarla o reactivarla.
+        </p> : !esRol && destino === 'ACTIVO'
+          ? <p className="admin-modal__lead">La cuenta tiene su correo actual verificado.</p> : null}
     </AdminModal>;
 }
 
@@ -358,6 +367,16 @@ export function EmployeesPage() {
   }
 
   /**
+   * Detecta la falta de verificación de correo cuando el backend la informa,
+   * para deshabilitar la activación en la interfaz; la regla la aplica el servidor.
+   * @param {object} empleado Fila del directorio.
+   * @returns {boolean} True solo si el listado confirmó correo sin verificar.
+   */
+  function activacionBloqueada(empleado) {
+    return empleado.email_verificado === false;
+  }
+
+  /**
    * Confirma la acción pendiente contra la API y anima la recarga del directorio.
    * @returns {Promise<void>} Finaliza aplicando el nuevo estado o el aviso de rechazo.
    */
@@ -407,7 +426,8 @@ export function EmployeesPage() {
       case 'PENDIENTE':
         return [{
           accion: 'activar',
-          label: 'Activar'
+          label: activacionBloqueada(empleado) ? 'Activar (correo sin verificar)' : 'Activar',
+          bloqueada: activacionBloqueada(empleado)
         }];
       case 'ACTIVO':
         return [{
@@ -420,7 +440,8 @@ export function EmployeesPage() {
       case 'INACTIVO':
         return [{
           accion: 'reactivar',
-          label: 'Reactivar'
+          label: activacionBloqueada(empleado) ? 'Reactivar (correo sin verificar)' : 'Reactivar',
+          bloqueada: activacionBloqueada(empleado)
         }, {
           accion: 'darBaja',
           label: 'Dar baja'
@@ -513,11 +534,13 @@ export function EmployeesPage() {
               {visibles.map(empleado => <EmployeeCard key={empleado.legajo} empleado={empleado}
                 nombreMostrado={nombreCompleto(empleado)} acciones={accionesDe(empleado).map(({
           accion,
-          label
+          label,
+          bloqueada
         }) => ({
           accion,
           label,
-          icono: ICONOS_ACCION[accion]
+          icono: ICONOS_ACCION[accion],
+          bloqueada
         }))} accionRol={accionRolDe(empleado)} menuAbierto={menuRol === empleado.legajo}
           onMenuRol={() => setMenuRol(menuRol === empleado.legajo ? null : empleado.legajo)}
           onPedirAccion={pedirConfirmacion} onElegirRol={(accion, elegido) => {
@@ -581,9 +604,10 @@ export function EmployeesPage() {
                     <div className="admin-table__actions">
                       {accionesDe(empleado).map(({
                     accion,
-                    label
+                    label,
+                    bloqueada
                   }) => <button key={accion} className="admin-icon-button" type="button"
-                    aria-label={label} title={label} onClick={() => pedirConfirmacion(accion, empleado)}>
+                    aria-label={label} title={label} disabled={bloqueada} onClick={() => pedirConfirmacion(accion, empleado)}>
                           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"
                             aria-hidden="true">
@@ -659,6 +683,11 @@ export function EmployeesPage() {
             <div>
               <dt>Estado</dt>
               <dd>{detalle.estado}</dd>
+            </div>
+            <div>
+              <dt>Correo verificado</dt>
+              <dd>{detalle.email_verificado === true
+                ? 'Sí' : detalle.email_verificado === false ? 'No' : '—'}</dd>
             </div>
           </dl>
         </AdminModal> : null}

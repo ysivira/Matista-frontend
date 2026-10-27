@@ -111,6 +111,44 @@ describe('directorio de empleados (SL-1)', () => {
     expect(await screen.findByText('Estado actualizado')).toBeTruthy()
   })
 
+  it('deshabilita la activación mientras el correo del listado siga sin verificar (SPEC-25)', async () => {
+    adminApi.listEmployees.mockResolvedValue({
+      empleados: [empleado({ estado: 'PENDIENTE', email_verificado: false })],
+    })
+    renderDirectory()
+
+    const boton = await screen.findByRole('button', { name: 'Activar (correo sin verificar)' })
+    expect(boton.disabled).toBe(true)
+    expect(adminApi.getEmployee).not.toHaveBeenCalled()
+    expect(adminApi.changeEstado).not.toHaveBeenCalled()
+  })
+
+  it('mantiene habilitada la activación cuando el listado informa correo verificado', async () => {
+    adminApi.listEmployees.mockResolvedValue({
+      empleados: [empleado({ estado: 'PENDIENTE', email_verificado: true })],
+    })
+    renderDirectory()
+
+    expect((await screen.findByRole('button', { name: 'Activar' })).disabled).toBe(false)
+  })
+
+  it('reactiva una cuenta INACTIVO con correo verificado informado por el listado', async () => {
+    adminApi.listEmployees.mockResolvedValue({
+      empleados: [empleado({ estado: 'INACTIVO', email_verificado: true })],
+    })
+    adminApi.getEmployee.mockResolvedValue({
+      empleado: empleado({ estado: 'INACTIVO', email_verificado: true }),
+    })
+    adminApi.changeEstado.mockResolvedValue({ empleado: { estado: 'ACTIVO' } })
+    renderDirectory()
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Reactivar' }))
+    const dialogo = await screen.findByRole('dialog', { name: 'Confirmar reactivar' })
+    fireEvent.click(within(dialogo).getByRole('button', { name: /Confirmar reactivar/ }))
+
+    await waitFor(() => expect(adminApi.changeEstado).toHaveBeenCalledWith('0000000099', 'ACTIVO'))
+    expect(await screen.findByText('Estado actualizado')).toBeTruthy()
+  })
 
   it('promueve a ADMIN desde el menú contextual compacto', async () => {
     adminApi.listEmployees.mockResolvedValue({ empleados: [empleado()] })
