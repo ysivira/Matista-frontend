@@ -61,14 +61,14 @@ describe('ASESOR con cálculo autoritativo', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Buscar cliente' }))
     fireEvent.change(await screen.findByLabelText('Nombres'), { target: { value: 'maría josé' } })
     fireEvent.change(screen.getByLabelText('Apellidos'), { target: { value: 'pérez muñoz' } })
-    for (const [campo, valor] of [['Correo electrónico', 'Maria.Jose@example.test'], ['Teléfono', '+54 000'], ['Provincia', 'Córdoba'], ['Localidad', 'Villa María'], ['Edad', '25']]) {
+    for (const [campo, valor] of [['Correo electrónico', 'Maria.Jose@example.test'], ['Teléfono', '+54 11 5555-0000'], ['Provincia', 'Córdoba'], ['Localidad', 'Villa María'], ['Edad', '25']]) {
       fireEvent.change(screen.getByLabelText(campo), { target: { value: valor } })
     }
     expect(screen.getByLabelText('Nombres').value).toBe('MARÍA JOSÉ')
     expect(screen.getByLabelText('Apellidos').value).toBe('PÉREZ MUÑOZ')
     fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
     await waitFor(() => expect(seleccionar).toHaveBeenCalled())
-    expect(httpClient.request.mock.calls[1][1]).toMatchObject({ method: 'POST', body: { dni: '12345678', nombres: 'MARÍA JOSÉ', apellidos: 'PÉREZ MUÑOZ', email: 'Maria.Jose@example.test', telefono: '+54 000', provincia: 'Córdoba', localidad: 'Villa María' } })
+    expect(httpClient.request.mock.calls[1][1]).toMatchObject({ method: 'POST', body: { dni: '12345678', nombres: 'MARÍA JOSÉ', apellidos: 'PÉREZ MUÑOZ', email: 'Maria.Jose@example.test', telefono: '+54 11 5555-0000', provincia: 'Córdoba', localidad: 'Villa María' } })
     expect(seleccionar.mock.calls[0][0].nombres).toBe('MARÍA JOSÉ')
   })
 
@@ -612,5 +612,83 @@ describe('ASESOR con cálculo autoritativo', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Guardar contacto' }))
     await waitFor(() => expect(httpClient.request.mock.calls.at(-1)[1].method).toBe('PATCH'))
     expect(Object.keys(httpClient.request.mock.calls.at(-1)[1].body).sort()).toEqual(['contacto', 'revision'])
+  })
+})
+
+
+/** SPEC-28 · validación telefónica compartida por Nueva cotización y Recotizar. */
+describe('SPEC-28 validación del teléfono', () => {
+  /** Completa alta con el teléfono indicado; los demás datos quedan válidos. */
+  async function altaConTelefono(valor) {
+    const seleccionar = vi.fn()
+    httpClient.request.mockReset()
+    httpClient.request.mockImplementationOnce(async () => ({ encontrado: false }))
+      .mockImplementationOnce(async (_ruta, opciones) => ({ ...opciones.body, id: '4', revision: 0 }))
+    montar(<ClientSearch onSelect={seleccionar} />)
+    fireEvent.change(screen.getByLabelText('DNI'), { target: { value: '12345678' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Buscar cliente' }))
+    await screen.findByLabelText('Nombres')
+    for (const [campo, v] of [['Nombres', 'María'], ['Apellidos', 'Pérez'], ['Correo electrónico', 'Maria@example.test'], ['Edad', '25']]) {
+      fireEvent.change(screen.getByLabelText(campo), { target: { value: v } })
+    }
+    if (valor !== null) {
+      fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: valor } })
+      fireEvent.blur(screen.getByLabelText('Teléfono'))
+    }
+    return seleccionar
+  }
+
+  it('avanza con el teléfono vacío: sigue siendo opcional', async () => {
+    const seleccionar = await altaConTelefono(null)
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
+    await waitFor(() => expect(seleccionar).toHaveBeenCalled())
+    expect(screen.queryByText(/inválido: use dígitos/i)).toBeNull()
+  })
+
+  it('rechaza letras con el mensaje junto al campo y bloquea el avance', async () => {
+    const seleccionar = await altaConTelefono('aaaa')
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
+    expect(screen.getByText(/inválido: use dígitos/i)).toBeTruthy()
+    expect(seleccionar).not.toHaveBeenCalled()
+    // Con el valor corregido vuelve a habilitar el avance.
+    fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '+54 11 3334-4444' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }))
+    await waitFor(() => expect(seleccionar).toHaveBeenCalled())
+  })
+
+  it('rechaza combinaciones con letras intercaladas y dígitos insuficientes', async () => {
+    for (const invalido of ['11abc444', '12345']) {
+      cleanup()
+      await altaConTelefono(invalido)
+      expect(screen.getByRole('button', { name: 'Siguiente: Configurar Cotización' }).disabled).toBe(true)
+      expect(screen.getByText(/inválido: use dígitos/i)).toBeTruthy()
+    }
+  })
+
+  it('el contacto de una preparación/recotización aplica la misma validación en el detalle', async () => {
+    const preparacion = {
+      id: '1', revision: 0, estado: 'BORRADOR', numero: null, resultado: null,
+      recotizaciones: [], eventos: [], origen_id: null,
+      contacto: { email: 'titular@example.test', telefono: 'aaaa' },
+      solicitud: { cliente: { nombres: 'David', apellidos: 'Diaz' }, plan: { nombre: 'RUBÍ' }, referencias: {}, entrada: { plan_id: '1', modalidad: 'Voluntario', familia: { titular: { edad: 25, estado_civil: 'SOLTERO' }, miembros: [] }, aportes: {}, condiciones: { esquema: 'FIJO', tramos: [], tdc: false, beneficios: { solicita_afinidad: false } } } },
+    }
+    httpClient.request.mockReset()
+    httpClient.request.mockImplementation(async ruta => {
+      if (ruta.startsWith('/api/asesor/cotizaciones/')) return preparacion
+      throw new Error('Ruta no prevista')
+    })
+    montar(<QuoteDetail />, '/asesor/cotizaciones/1')
+    await screen.findByRole('heading', { name: 'Detalle de Cotización' })
+    fireEvent.click(screen.getByRole('button', { name: 'Editar correo y teléfono' }))
+    const telefono = screen.getByLabelText('Teléfono')
+    // El valor histórico se presenta tal cual; se corrige al guardar.
+    expect(telefono.value).toBe('aaaa')
+    fireEvent.change(telefono, { target: { value: '+54 000' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar contacto' }))
+    expect(screen.getByText(/inválido: use dígitos/i)).toBeTruthy()
+    expect(httpClient.request.mock.calls.some(([ruta, o]) => ruta.endsWith('/contacto') && o?.method === 'PATCH')).toBe(false)
+    fireEvent.change(telefono, { target: { value: '1133344444' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar contacto' }))
+    await waitFor(() => expect(httpClient.request).toHaveBeenCalledWith('/api/asesor/cotizaciones/1/contacto', expect.objectContaining({ method: 'PATCH' })))
   })
 })

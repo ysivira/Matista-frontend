@@ -26,6 +26,7 @@ import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js';
 import { QuoteReview } from '../components/QuoteReview.jsx';
 import { AsesorDialog } from '../components/AsesorDialog.jsx';
 import { QuoteConfirmation } from '../components/QuoteConfirmation.jsx';
+import { revisarCampo, revisarFormulario } from '../components/formValidation.js';
 import '../stitch.css';
 
 /** Relee el snapshot autorizado; tras emitir muestra confirmación sin repetir mutaciones al recargar la ruta. */
@@ -89,8 +90,11 @@ function QuoteDetailContent({
     className="ase-secondary" disabled={busy} onClick={cancelar}>Cancelar</button><button type="submit"
     form="ase-editar-contacto" disabled={busy}>Guardar contacto</button></>}>
     <p>Se actualizan el correo electrónico y el teléfono de esta cotización. Sus importes y número oficial se conservan.</p>
-    <form id="ase-editar-contacto" onSubmit={e => {
+    <form id="ase-editar-contacto" onBlurCapture={e => revisarCampo(e.target)} onSubmit={e => {
       e.preventDefault();
+      // SPEC-28: misma regla telefónica que el alta; el valor histórico se
+      // presenta tal cual y el backend aplica la validación equivalente.
+      if (!revisarFormulario(e.currentTarget)) return;
       void operar('contacto', {
         revision: q.revision,
         contacto
@@ -98,10 +102,14 @@ function QuoteDetailContent({
     }}><fieldset disabled={busy} className="ase-operation"><div className="ase-grid">{[['email',
       'Correo electrónico'], ['telefono', 'Teléfono']].map(([k,
       l]) => <label key={k}>{l}<input type={k === 'email' ? 'email' : 'tel'} maxLength={k === 'email'
-      ? 254 : 40} value={contacto[k] ?? ''} onChange={e => setContacto(c => ({
+      ? 254 : 40} data-telefono={k === 'telefono' || undefined} inputMode={k === 'telefono' ? 'tel' : undefined}
+      value={contacto[k] ?? ''} onChange={e => {
+        if (k === 'telefono') revisarCampo(e.target, true);
+        setContacto(c => ({
               ...c,
               [k]: e.target.value
-            }))} /></label>)}</div></fieldset></form>
+            }));
+      }} /></label>)}</div></fieldset></form>
     {aviso && <p role="alert" className="ase-notice">{aviso}</p>}
   </AsesorDialog>;
   if (accion === 'anulacion') return <AsesorDialog key="anulacion" title="Anular cotización"

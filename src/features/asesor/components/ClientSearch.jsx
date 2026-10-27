@@ -21,6 +21,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { consultarAsesor, guardarAsesor } from '../api/asesorApi.js';
 import { calcularEdad } from '../../../shared/lib/edad.js';
+import { esTelefonoValido } from '../../../shared/lib/telefono.js';
 import { AsesorDialog } from './AsesorDialog.jsx';
 import { revisarCampo } from './formValidation.js';
 const VACIO = {
@@ -41,7 +42,8 @@ function Campo({
   requerido = false,
   tipo = 'text',
   max = 100,
-  ayuda
+  ayuda,
+  telefono = false
 }) {
   const icono = {
     nombres: 'person',
@@ -64,9 +66,20 @@ function Campo({
         required={requerido}
         type={tipo}
         maxLength={max}
+        /* SPEC-28: validación telefónica compartida con el backend; el
+           mecanismo nativo (data-telefono + revisarCampo) muestra el error
+           junto al campo y bloquea el avance. */
+        data-telefono={telefono || undefined}
+        inputMode={telefono ? 'tel' : undefined}
         max={tipo === 'date' ? new Date().toISOString().slice(0, 10) : undefined}
         value={datos[nombre] ?? ''}
-        onChange={e => cambiar(nombre, e.target.value)}
+        onChange={e => {
+          // SPEC-28: al editar el teléfono se reevalúa la regla en modo
+          // editando (retira el error retenido por setCustomValidity); el
+          // blur/avance la reevalúa completa.
+          if (telefono) revisarCampo(e.target, true);
+          cambiar(nombre, e.target.value);
+        }}
       />
     </div>
     {ayuda && <small className="ase-client-help">{ayuda}</small>}
@@ -100,7 +113,10 @@ export function ClientSearch({
     && Object.keys(VACIO).some(k => (datos[k] ?? '') !== (registrado[k] ?? ''));
   const completo = Boolean(cliente && datos.nombres?.trim() && datos.apellidos?.trim()
     && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.email ?? '') && Number.isInteger(edadDeclarada)
-    && edadDeclarada >= 0 && edadDeclarada <= 120);
+    && edadDeclarada >= 0 && edadDeclarada <= 120
+    // SPEC-28: el teléfono sigue siendo opcional; con contenido inválido no
+    // se avanza de paso (misma regla que aplica el backend al guardar).
+    && esTelefonoValido(datos.telefono ?? ''));
   /** Descarta identidad previa y resuelve propiedad desde el servidor, sin guardar un prospecto. */
   async function buscar(e) {
     e.preventDefault();
@@ -280,7 +296,10 @@ export function ClientSearch({
       'Completá los datos para continuar con una nueva cotización.'}</p></div>}
     {!ajeno && <form onSubmit={guardar} onBlurCapture={e => revisarCampo(e.target)}
       onInputCapture={e => {
-        if (e.target.validity?.valid) revisarCampo(e.target);
+        // SPEC-28: el teléfono revisa en cada edición (modo editando retira el
+        // error retenido por setCustomValidity y reevalúa la regla compartida).
+        if (e.target.dataset.telefono) revisarCampo(e.target, true);
+        else if (e.target.validity?.valid) revisarCampo(e.target);
       }} id="ase-form-cliente">
       <fieldset disabled={!cliente || busy} className="ase-client-fields">
         <div className="ase-grid">
@@ -314,7 +333,7 @@ export function ClientSearch({
           <Campo nombre="email" titulo="Correo electrónico" datos={datos} cambiar={cambiar} requerido
             tipo="email" max={254} ayuda="Para enviar el PDF formal y cotización" />
           <Campo nombre="telefono" titulo="Teléfono" datos={datos} cambiar={cambiar} tipo="tel"
-            max={40} ayuda="Línea directa de contacto · opcional" />
+            telefono max={40} ayuda="Línea directa de contacto · opcional" />
           <Campo nombre="provincia" titulo="Provincia" datos={datos} cambiar={cambiar} max={80} />
           <Campo nombre="localidad" titulo="Localidad" datos={datos} cambiar={cambiar} max={80} />
         </div>

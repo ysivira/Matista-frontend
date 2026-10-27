@@ -12,6 +12,8 @@
  * - Función revisarFormulario.
  */
 /** Enfoca el primer control inválido, nunca un fieldset contenedor; incluye errores comerciales remotos. */
+import { esTelefonoValido, TELEFONO_MENSAJE } from '../../../shared/lib/telefono.js';
+
 export function enfocarPrimerError(form) {
   const control = form?.querySelector('input[aria-invalid="true"],select[aria-invalid="true"],textarea[aria-invalid="true"],input:invalid,select:invalid,textarea:invalid');
   if (control) {
@@ -37,6 +39,13 @@ export function revisarCampo(control, editando = false) {
     control.setCustomValidity(!editando && control.value !== '' && !entero
       ? 'Ingrese una cantidad entera mayor o igual que cero.' : '');
   }
+  // SPEC-28: teléfono opcional; con contenido se exige un valor telefónico
+  // válido (misma regla que el backend). Vacío no produce error.
+  if (control.dataset.telefono) {
+    const valido = esTelefonoValido(control.value);
+    control.setCustomValidity(!editando && control.value !== '' && !valido
+      ? TELEFONO_MENSAJE : '');
+  }
   let mensaje = '';
   const v = control.validity;
   if (v.valueMissing) mensaje = 'Complete este campo obligatorio.';
@@ -46,6 +55,7 @@ export function revisarCampo(control, editando = false) {
   else if (v.stepMismatch) mensaje = 'Ingrese un número entero.';
   else if (v.patternMismatch || v.customError) mensaje = control.dataset.enteroNoNegativo
     ? 'Ingrese una cantidad entera mayor o igual que cero.'
+    : control.dataset.telefono ? TELEFONO_MENSAJE
     : 'Ingrese un importe sin separadores de miles y con hasta dos decimales.';
   else if (!v.valid) mensaje = 'Revise el valor ingresado.';
   if (editando) mensaje = '';
