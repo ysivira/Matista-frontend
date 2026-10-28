@@ -27,6 +27,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authApi } from '../api/authApi.js';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
 import { TextField } from '../components/AuthFields.jsx';
@@ -101,6 +102,8 @@ export function ResendVerificationPage() {
       </AuthLayout>;
   }
   return <AuthLayout>
+      <MatistaLoadingModal abierto={submitting} titulo="Reenviando correo de verificación"
+        descripcion="Enviando el enlace de confirmación. Espera unos instantes." />
       <h1 className="auth-title">Reenviar verificación</h1>
       <p className="auth-lead">
         Solicita un nuevo correo de verificación para tu cuenta de MATISTA.

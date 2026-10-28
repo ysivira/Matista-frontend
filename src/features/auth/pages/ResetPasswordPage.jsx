@@ -27,6 +27,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi.js';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
 import { PasswordField } from '../components/AuthFields.jsx';
@@ -137,6 +138,8 @@ export function ResetPasswordPage() {
       </AuthLayout>;
   }
   return <AuthLayout>
+      <MatistaLoadingModal abierto={submitting} titulo="Restableciendo tu contraseña"
+        descripcion="Aplicando la nueva contraseña. Espera unos instantes." />
       <h1 className="auth-title">Restablecer Contraseña</h1>
       <p className="auth-lead">
         Ingresa y confirma tu nueva contraseña para recuperar el acceso a tu cuenta.

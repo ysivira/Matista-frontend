@@ -27,9 +27,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi.js';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
-import { LoadingState } from '../../../shared/ui/LoadingState.jsx';
 import { extractAuthToken } from '../auth.tokens.js';
 import { NetworkError } from '../../../shared/lib/httpClient.js';
 const VIEW_STATUS = {
@@ -122,7 +122,8 @@ export function VerifyEmailPage() {
   if (status === VIEW_STATUS.PROCESSING) {
     return <AuthLayout>
         <span className="auth-badge">Confirmación de correo</span>
-        <LoadingState message="Confirmando tu correo electrónico..." />
+        <MatistaLoadingModal abierto={true} titulo="Confirmando tu correo electrónico"
+          descripcion="Verificando el enlace de confirmación. Espera unos instantes." />
       </AuthLayout>;
   }
   if (status === VIEW_STATUS.INVALID) {

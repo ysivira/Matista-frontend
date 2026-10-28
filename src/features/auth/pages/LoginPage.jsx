@@ -29,6 +29,7 @@
  */
 import { useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
@@ -136,6 +137,8 @@ export function LoginPage() {
     }
   }
   return <AuthLayout>
+      <MatistaLoadingModal abierto={submitting} titulo="Ingresando a tu cuenta"
+        descripcion="Verificando tus credenciales. Espera unos instantes." />
       <div className="auth-title-block">
         <h1 className="auth-title">Iniciar Sesión</h1>
       </div>

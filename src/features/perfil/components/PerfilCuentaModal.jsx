@@ -24,6 +24,7 @@
  * ============================================================
  */
 import { useState } from 'react';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { Modal } from '../../../shared/ui/Modal.jsx';
 import { inicialesDe } from '../../../shared/lib/iniciales.js';
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx';
@@ -165,6 +166,8 @@ export function PerfilCuentaModal({
     className={vista === 'inicio' ? '' : 'perfil-cuenta-modal'}
     icon={<span className="admin-avatar admin-avatar--small"
     aria-hidden="true">{inicialesDe(user).slice(0, 2).toUpperCase() || '—'}</span>} onClose={onClose}>
+      <MatistaLoadingModal abierto={perfil.submitting} titulo="Procesando tu solicitud"
+        descripcion="La operación está en curso. Espera unos instantes." />
       {vista === 'inicio' ? datosIniciales : null}
       {vista === 'password' ? formularioPassword : null}
       {vista === 'email' ? formularioEmail : null}

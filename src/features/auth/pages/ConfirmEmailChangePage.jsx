@@ -29,9 +29,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authApi } from '../api/authApi.js';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
-import { LoadingState } from '../../../shared/ui/LoadingState.jsx';
 import { useSession } from '../hooks/useSession.js';
 import { SESSION_STATUS } from '../context/SessionContext.js';
 import { extractAuthToken } from '../auth.tokens.js';
@@ -150,7 +150,8 @@ export function ConfirmEmailChangePage() {
   if (viewStatus === VIEW_STATUS.PROCESSING) {
     return <AuthLayout>
         <span className="auth-badge">Cambio de correo</span>
-        <LoadingState message="Confirmando tu nuevo correo..." />
+        <MatistaLoadingModal abierto={true} titulo="Confirmando cambio de correo"
+          descripcion="Verificando el enlace de actualización. Espera unos instantes." />
       </AuthLayout>;
   }
   if (viewStatus === VIEW_STATUS.SUCCESS) {

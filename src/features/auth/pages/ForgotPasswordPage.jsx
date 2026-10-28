@@ -30,6 +30,7 @@ import { authApi } from '../api/authApi.js';
 import { AuthLayout } from '../components/AuthLayout.jsx';
 import { AuthAlert } from '../components/AuthAlert.jsx';
 import { TextField } from '../components/AuthFields.jsx';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { fieldErrorsFromApiError, technicalNoticeFor } from '../auth.messages.js';
 import { INVALID_EMAIL_MESSAGE, REQUIRED_FIELD_MESSAGE, isValidEmail } from '../auth.validation.js';
 
@@ -105,6 +106,8 @@ export function ForgotPasswordPage() {
       </AuthLayout>;
   }
   return <AuthLayout>
+      <MatistaLoadingModal abierto={submitting} titulo="Estamos procesando tu solicitud"
+        descripcion="Estamos enviando el enlace de recuperación a tu correo. Por favor, esperá unos instantes." />
       <h1 className="auth-title">Recuperar Contraseña</h1>
       <p className="auth-lead">
         Ingresa tu email y te enviaremos un enlace seguro para restablecer tu clave de acceso a MATISTA.

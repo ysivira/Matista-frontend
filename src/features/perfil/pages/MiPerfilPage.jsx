@@ -20,6 +20,7 @@
  *
  * ============================================================
  */
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx';
 import { PasswordField, TextField } from '../../auth/components/AuthFields.jsx';
 import { useSession } from '../../auth/hooks/useSession.js';
@@ -39,9 +40,11 @@ export function MiPerfilPage() {
   const perfil = usePerfilAcciones();
   const nombreCompleto = [user?.nombre, user?.apellido].filter(Boolean).join(' ') || '—';
   return <div className="admin-profile">
-        {/* El título vive solo en el encabezado superior del shell (h1); la
-            vista mantiene su descripción breve sin repetir «Mi perfil». */}
-        <p className="admin-directory__lead">Se ven tus datos reales; la autorización y el estado los decide el servidor.</p>
+      <MatistaLoadingModal abierto={perfil.submitting} titulo="Procesando tu solicitud"
+        descripcion="La operación está en curso. Espera unos instantes." />
+      {/* El título vive solo en el encabezado superior del shell (h1); la
+          vista mantiene su descripción breve sin repetir «Mi perfil». */}
+      <p className="admin-directory__lead">Se ven tus datos reales; la autorización y el estado los decide el servidor.</p>
 
         <dl className="admin-facts admin-profile__identity">
           <div>

@@ -35,6 +35,7 @@ import { AuthAlert } from '../components/AuthAlert.jsx';
 import { PasswordField, TextField } from '../components/AuthFields.jsx';
 import { useSession } from '../hooks/useSession.js';
 import { SESSION_STATUS } from '../context/SessionContext.js';
+import { MatistaLoadingModal } from '../../../shared/ui/MatistaLoadingModal.jsx';
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx';
 import { authApi } from '../api/authApi.js';
 import { ApiError } from '../../../shared/lib/httpClient.js';
@@ -242,6 +243,8 @@ export function TemporaryAccountPage() {
     }
   }
   return <AuthLayout wide>
+      <MatistaLoadingModal abierto={submitting} titulo="Procesando tu solicitud"
+        descripcion="La operación está en curso. Espera unos instantes." />
       <div className="auth-title-block">
         <h1 className="auth-title">{`Cuenta ${user.rol}`}</h1>
         <span className="auth-badge">Interfaz temporal de AUTH</span>
