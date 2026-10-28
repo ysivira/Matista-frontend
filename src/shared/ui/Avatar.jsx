@@ -1,5 +1,16 @@
 /**
- * Avatar de identificación mediante las iniciales recibidas.
+ * ============================================================
+ * MATISTA | AVATAR DE INICIALES
+ * ============================================================
+ *
+ * Archivo: Avatar.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar hasta dos iniciales en variantes normal o pequeña,
+ * sin duplicar la identidad accesible que acompaña al avatar.
+ *
+ * ============================================================
  */
 /**
  * Avatar de iniciales del diseño Stitch (Amethyst Prism Enterprise).

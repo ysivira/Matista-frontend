@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: AuthLayout.jsx
+ * ============================================================
+ * MATISTA | CONTENEDOR PÚBLICO AUTH
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AuthLayout del módulo Autenticación; unidad de interfaz reutilizable de la feature.
+ * Archivo: AuthLayout.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Componer logotipo y tarjeta de contenido para las pantallas públicas de cuenta.
  *
  * CONTENIDO:
  * - Función AuthLayout.
@@ -11,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/ui/BrandLogo.jsx
  * - ./auth.css
+ *
+ * ============================================================
  */
 import { BrandLogo } from '../../../shared/ui/BrandLogo.jsx';
 import './auth.css';

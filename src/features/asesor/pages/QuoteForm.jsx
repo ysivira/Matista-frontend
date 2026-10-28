@@ -1,10 +1,14 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteForm.jsx
+ * ============================================================
+ * MATISTA | ASISTENTE DE COTIZACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página QuoteForm del módulo Asesor comercial; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: QuoteForm.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Coordinar cliente, familia, condiciones, vista previa y revisión
+ * antes de solicitar una emisión autoritativa mediante huella.
  *
  * CONTENIDO:
  * - Función QuoteForm.
@@ -25,6 +29,8 @@
  * - ../hooks/useCommercialValidation.js
  * - ../components/formValidation.js
  * - ../stitch.css
+ *
+ * ============================================================
  */
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -43,7 +49,20 @@ import { revisarCampo, revisarFormulario,
   enfocarPrimerError } from '../components/formValidation.js';
 import '../stitch.css';
 
-/** Carga catálogo, condiciones y cliente actual antes de montar la preparación, sin alterar snapshots. */
+/**
+ * ============================================================
+ * QUOTE FORM
+ * ============================================================
+ *
+ * Carga catálogo, condiciones y cliente antes de montar la preparación,
+ * sin alterar snapshots existentes.
+ *
+ * @param {object} props - Opciones de la preparación.
+ * @param {boolean} [props.recotizar=false] - Indica una recotización vinculada.
+ * @returns {import('react').ReactElement} Carga, error o asistente comercial.
+ *
+ * ============================================================
+ */
 export function QuoteForm({
   recotizar = false
 }) {
@@ -79,9 +98,9 @@ function QuoteWizard({
   const form = useRef(null);
   const emisionEnCurso = useRef(false);
   const enfocarPendiente = useRef(false);
-  // SPEC-28 — reposicionamiento entre pasos: el indicador de progreso es el
-  // ancla del desplazamiento y del foco; scrollIntoView resuelve el
-  // contenedor real (documento en móvil, .admin-content en escritorio).
+  // Reposicionamiento entre pasos: el indicador de progreso es el ancla del
+  // desplazamiento y del foco; scrollIntoView resuelve el contenedor real
+  // (documento en móvil, .admin-content en escritorio).
   const referenciaPasos = useRef(null);
   const pasoAnterior = useRef(null);
   const [cliente, setCliente] = useState(clienteInicial);
@@ -122,9 +141,9 @@ function QuoteWizard({
   const [vista, setVista] = useState(null);
   const validacion = useCommercialValidation(entrada.familia);
   const [errorServidor, setErrorServidor] = useState(null);
-  // SPEC-28 — al cambiar de paso (avanzar o retroceder, nunca al montar ni
-  // ante cambios ordinarios de campos) la vista queda al inicio del paso:
-  // indicador de progreso visible y comienzo del contenido a la vista. El
+  // Al cambiar de paso (avanzar o retroceder, nunca al montar ni ante
+  // cambios ordinarios de campos) la vista queda al inicio del paso: indicador
+  // de progreso visible y comienzo del contenido a la vista. El
   // desplazamiento es instantáneo (sin animación que retrase el cambio; esto
   // satisface también prefers-reduced-motion) y se ejecuta tras el render de
   // React sobre el contenedor real (documento en móvil, lienzo en escritorio).
@@ -367,9 +386,9 @@ function QuoteWizard({
         </div>
       </header>
       <fieldset disabled={busy} className="ase-operation">
-        {/* SPEC-28 — sin contenedor lateral rígido: en escritorio (≥1024 px) la
-            grilla con áreas ubica la vista previa a la derecha y las demás
-            secciones a ancho completo; en móvil/tablet (≤1023 px) el orden
+        {/* Sin contenedor lateral rígido: en escritorio (≥1024 px) la grilla
+            con áreas ubica la vista previa a la derecha y las demás secciones
+            a ancho completo; en móvil/tablet (≤1023 px) el orden
             visual es Plan → Modalidad → Grupo familiar → Descuentos → Vista
             previa → Acciones, con CSS `order` (una única instancia montada,
             sin remontados ni llamadas nuevas por cambios de disposición). */}

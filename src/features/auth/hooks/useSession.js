@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: useSession.js
+ * ============================================================
+ * MATISTA | CONSUMO DEL CONTEXTO DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Hook reutilizable de la interfaz.
+ * Archivo: useSession.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Exponer el contexto de sesión y rechazar su consumo fuera del proveedor.
  *
  * CONTENIDO:
  * - Función useSession.
@@ -11,6 +15,8 @@
  * DEPENDENCIAS:
  * - react
  * - ../context/SessionContext.js
+ *
+ * ============================================================
  */
 import { useContext } from 'react';
 import { SessionContext } from '../context/SessionContext.js';

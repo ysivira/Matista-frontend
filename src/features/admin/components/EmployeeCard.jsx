@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: EmployeeCard.jsx
+ * ============================================================
+ * MATISTA | TARJETAS DEL DIRECTORIO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente EmployeeCard del módulo Administración; unidad de interfaz reutilizable de la feature.
+ * Archivo: EmployeeCard.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Presentar empleados y acciones de estado o rol en tarjetas y menús.
  *
  * CONTENIDO:
  * - Función MenuRolEmpleados.
@@ -13,6 +17,8 @@
  * - ./AdminAvatar.jsx
  * - ./iniciales.js
  * - ./ChipEstado.jsx
+ *
+ * ============================================================
  */
 import { AdminAvatar } from './AdminAvatar.jsx';
 import { inicialesDe } from './iniciales.js';

@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE LÍMITES DE MÓDULOS
+ * ============================================================
+ *
+ * Archivo: arquitecturaCompartida.test.js
+ * Módulo: Pruebas de arquitectura
+ *
+ * Responsabilidad:
+ * Inspeccionar imports locales y verificar límites entre módulos,
+ * destinos existentes y ausencia de ciclos estáticos de archivos.
+ *
+ * ============================================================
+ */
 import { describe, expect, it } from 'vitest'
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { dirname, resolve, relative } from 'node:path'

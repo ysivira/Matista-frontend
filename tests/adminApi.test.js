@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL CLIENTE ADMIN
+ * ============================================================
+ *
+ * Archivo: adminApi.test.js
+ * Módulo: Pruebas administrativas
+ *
+ * Responsabilidad:
+ * Capturar rutas, métodos, filtros y DTO del directorio y
+ * tarifario mediante un cliente HTTP simulado.
+ *
+ * ============================================================
+ */
 import { describe, expect, it, vi } from 'vitest'
 import { createAdminApi } from '../src/features/admin/api/adminApi.js'
 

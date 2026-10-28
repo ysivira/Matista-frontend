@@ -1,5 +1,16 @@
 /**
- * Iniciales de identificación para avatares de la interfaz.
+ * ============================================================
+ * MATISTA | INICIALES DE IDENTIDAD
+ * ============================================================
+ *
+ * Archivo: iniciales.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Obtener las iniciales de nombre y apellido de la identidad
+ * pública para su presentación en avatares.
+ *
+ * ============================================================
  */
 /**
  * Obtiene las iniciales visibles de una identidad pública para el avatar compartido.

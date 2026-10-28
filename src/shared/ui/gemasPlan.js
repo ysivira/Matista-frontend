@@ -1,5 +1,16 @@
 /**
- * Claves y colores de la paleta comercial según el nombre del plan.
+ * ============================================================
+ * MATISTA | PALETA DE PLANES
+ * ============================================================
+ *
+ * Archivo: gemasPlan.js
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Resolver la clave y el color de acento de cada plan desde
+ * su nombre, con una representación neutra para otros nombres.
+ *
+ * ============================================================
  */
 /**
  * Paleta de gemas del catálogo de planes aprobado en el módulo ASESOR

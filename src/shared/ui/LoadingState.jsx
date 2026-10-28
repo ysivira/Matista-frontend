@@ -1,5 +1,16 @@
 /**
- * Estado de carga accesible con el mensaje recibido.
+ * ============================================================
+ * MATISTA | INDICADOR DE CARGA
+ * ============================================================
+ *
+ * Archivo: LoadingState.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Anunciar una operación pendiente con el mensaje recibido,
+ * sin imponer la disposición de un módulo concreto.
+ *
+ * ============================================================
  */
 /**
  * Anuncia de forma accesible una operación pendiente sin imponer un layout de módulo.

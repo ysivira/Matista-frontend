@@ -1,5 +1,16 @@
 /**
- * Consultas de catálogo y enlaces documentales compartidos por los módulos.
+ * ============================================================
+ * MATISTA | API COMPARTIDA DEL CATÁLOGO
+ * ============================================================
+ *
+ * Archivo: catalogoApi.js
+ * Módulo: Catálogo compartido
+ *
+ * Responsabilidad:
+ * Consultar planes y tarifas y construir enlaces documentales
+ * autorizados sin trasladar cálculos económicos al navegador.
+ *
+ * ============================================================
  */
 import { httpClient } from '../lib/httpClient.js';
 

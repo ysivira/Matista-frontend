@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: TarifarioPage.jsx
+ * ============================================================
+ * MATISTA | CONSULTA ADMIN DE TARIFAS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página TarifarioPage del módulo Administración; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: TarifarioPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Componer la matriz compartida de tarifas con el contexto administrativo.
  *
  * CONTENIDO:
  * - Función TarifarioPage.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../api/adminApi.js
  * - ../../../shared/catalogo/ConsultaTarifario.jsx
+ *
+ * ============================================================
  */
 import { adminApi } from '../api/adminApi.js';
 import { ConsultaTarifario } from '../../../shared/catalogo/ConsultaTarifario.jsx';

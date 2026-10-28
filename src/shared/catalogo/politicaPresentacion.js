@@ -1,5 +1,16 @@
 /**
- * Campos y formatos de presentación de la política comercial.
+ * ============================================================
+ * MATISTA | FORMATOS DE POLÍTICA COMERCIAL
+ * ============================================================
+ *
+ * Archivo: politicaPresentacion.js
+ * Módulo: Catálogo compartido
+ *
+ * Responsabilidad:
+ * Definir campos y grupos de presentación y formatear valores
+ * de políticas con porcentajes, moneda y unidades declaradas.
+ *
+ * ============================================================
  */
 export const CAMPOS_POLITICA = Object.freeze([{
   grupo: 'Aportes y topes',

@@ -1,10 +1,14 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: ClientSearch.jsx
+ * ============================================================
+ * MATISTA | BÚSQUEDA E IDENTIDAD DE CLIENTES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente ClientSearch del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: ClientSearch.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Buscar por DNI, registrar o editar identidad y contacto y entregar
+ * el cliente seleccionado con la edad declarada para cotizar.
  *
  * CONTENIDO:
  * - Función ClientSearch.
@@ -16,6 +20,8 @@
  * - ../../../shared/lib/edad.js
  * - ./AsesorDialog.jsx
  * - ./formValidation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -66,16 +72,16 @@ function Campo({
         required={requerido}
         type={tipo}
         maxLength={max}
-        /* SPEC-28: validación telefónica compartida con el backend; el
-           mecanismo nativo (data-telefono + revisarCampo) muestra el error
-           junto al campo y bloquea el avance. */
+        /* Validación telefónica compartida con el backend: el mecanismo
+           nativo (data-telefono + revisarCampo) muestra el error junto al
+           campo y bloquea el avance. */
         data-telefono={telefono || undefined}
         inputMode={telefono ? 'tel' : undefined}
         max={tipo === 'date' ? new Date().toISOString().slice(0, 10) : undefined}
         value={datos[nombre] ?? ''}
         onChange={e => {
-          // SPEC-28: al editar el teléfono se reevalúa la regla en modo
-          // editando (retira el error retenido por setCustomValidity); el
+          // Al editar el teléfono se reevalúa la regla en modo editando
+          // (retira el error retenido por setCustomValidity); el
           // blur/avance la reevalúa completa.
           if (telefono) revisarCampo(e.target, true);
           cambiar(nombre, e.target.value);
@@ -114,8 +120,8 @@ export function ClientSearch({
   const completo = Boolean(cliente && datos.nombres?.trim() && datos.apellidos?.trim()
     && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(datos.email ?? '') && Number.isInteger(edadDeclarada)
     && edadDeclarada >= 0 && edadDeclarada <= 120
-    // SPEC-28: el teléfono sigue siendo opcional; con contenido inválido no
-    // se avanza de paso (misma regla que aplica el backend al guardar).
+    // El teléfono sigue siendo opcional; con contenido inválido no se
+    // avanza de paso (misma regla que aplica el backend al guardar).
     && esTelefonoValido(datos.telefono ?? ''));
   /** Descarta identidad previa y resuelve propiedad desde el servidor, sin guardar un prospecto. */
   async function buscar(e) {
@@ -296,8 +302,8 @@ export function ClientSearch({
       'Completá los datos para continuar con una nueva cotización.'}</p></div>}
     {!ajeno && <form onSubmit={guardar} onBlurCapture={e => revisarCampo(e.target)}
       onInputCapture={e => {
-        // SPEC-28: el teléfono revisa en cada edición (modo editando retira el
-        // error retenido por setCustomValidity y reevalúa la regla compartida).
+        // El teléfono revisa en cada edición: modo editando retira el error
+        // retenido por setCustomValidity y reevalúa la regla compartida.
         if (e.target.dataset.telefono) revisarCampo(e.target, true);
         else if (e.target.validity?.valid) revisarCampo(e.target);
       }} id="ase-form-cliente">

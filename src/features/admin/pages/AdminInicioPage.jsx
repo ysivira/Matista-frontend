@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: AdminInicioPage.jsx
+ * ============================================================
+ * MATISTA | INICIO ADMINISTRATIVO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página AdminInicioPage del módulo Administración; compone componentes de la feature para su caso
- * de uso.
+ * Archivo: AdminInicioPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Presentar los accesos del inicio ADMIN sobre el lienzo compartido.
  *
  * CONTENIDO:
  * - Función AdminInicioPage.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/ui/InicioModulo.jsx
  * - ../../../shared/ui/navegacionModulos.js
+ *
+ * ============================================================
  */
 import { InicioModulo } from '../../../shared/ui/InicioModulo.jsx';
 import { NAVEGACION_ADMIN } from '../../../shared/ui/navegacionModulos.js';

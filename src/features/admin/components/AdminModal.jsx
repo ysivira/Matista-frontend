@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: AdminModal.jsx
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DEL MODAL ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AdminModal del módulo Administración; unidad de interfaz reutilizable de la feature.
+ * Archivo: AdminModal.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar el modal compartido y sus iconos con los nombres ADMIN.
  *
  * CONTENIDO:
  * - Exporta AdminModal.
@@ -16,6 +20,8 @@
  *
  * OBSERVACIONES:
  * El diálogo y sus iconos son primitivas compartidas, sin operaciones administrativas.
+ *
+ * ============================================================
  */
 export { Modal as AdminModal, IconoAdvertencia, IconoCheck,
   IconoLupa } from '../../../shared/ui/Modal.jsx';

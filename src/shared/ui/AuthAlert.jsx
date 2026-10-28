@@ -1,5 +1,16 @@
 /**
- * Avisos accesibles con tono, título y contenido para los módulos.
+ * ============================================================
+ * MATISTA | AVISOS ACCESIBLES
+ * ============================================================
+ *
+ * Archivo: AuthAlert.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar avisos públicos con tono semántico, icono, título
+ * y contenido usando regiones accesibles de estado o alerta.
+ *
+ * ============================================================
  */
 /**
  * Selecciona el ícono declarativo del aviso según su tono semántico.

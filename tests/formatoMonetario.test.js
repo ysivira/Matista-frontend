@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE FORMATO MONETARIO
+ * ============================================================
+ *
+ * Archivo: formatoMonetario.test.js
+ * Módulo: Pruebas de utilidades
+ *
+ * Responsabilidad:
+ * Verificar separadores, decimales, valores ausentes y conservación
+ * de cadenas recibidas sin introducir redondeo económico.
+ *
+ * ============================================================
+ */
 import { describe, expect, it } from 'vitest'
 import { formatearPrecioARS } from '../src/features/admin/components/formatoMonetario.js'
 

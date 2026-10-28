@@ -1,5 +1,16 @@
 /**
- * Avisos técnicos de API y límites de solicitudes para la interfaz.
+ * ============================================================
+ * MATISTA | AVISOS TÉCNICOS DE API
+ * ============================================================
+ *
+ * Archivo: avisosApi.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Presentar límites de solicitudes y fallos de transporte o API
+ * con mensajes públicos, sin inventar tiempos de reintento.
+ *
+ * ============================================================
  */
 import { ApiError, NetworkError } from './httpClient.js';
 

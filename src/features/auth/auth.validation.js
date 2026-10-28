@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: auth.validation.js
+ * ============================================================
+ * MATISTA | VALIDACIÓN LOCAL DE CUENTA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Valida y normaliza las entradas del módulo.
+ * Archivo: auth.validation.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Definir mensajes de formulario y verificar formato básico de correo y legajo.
  *
  * CONTENIDO:
  * - Constante REQUIRED_FIELD_MESSAGE.
@@ -13,6 +17,8 @@
  * - Constante EMAIL_PATTERN.
  * - Función isValidEmail.
  * - Función isValidLegajo.
+ *
+ * ============================================================
  */
 export const REQUIRED_FIELD_MESSAGE = 'Este campo es obligatorio.';
 export const INVALID_EMAIL_MESSAGE = 'Ingresa un correo electrónico válido.';

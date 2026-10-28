@@ -1,5 +1,16 @@
 /**
- * Marca oficial con variantes de superficie y tamaño.
+ * ============================================================
+ * MATISTA | LOGOTIPO OFICIAL
+ * ============================================================
+ *
+ * Archivo: BrandLogo.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Seleccionar el recurso oficial según el contraste de la
+ * superficie y aplicar la variante de tamaño solicitada.
+ *
+ * ============================================================
  */
 import darkTextLogo from '../../assets/brand/logo1.png';
 import lightTextLogo from '../../assets/brand/logo.png';

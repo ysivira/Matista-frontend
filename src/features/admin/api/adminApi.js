@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: adminApi.js
+ * ============================================================
+ * MATISTA | CLIENTE HTTP ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Cliente HTTP del módulo Administración; centraliza las llamadas a los endpoints del backend.
+ * Archivo: adminApi.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Centralizar consultas y operaciones del directorio, tarifario y políticas.
  *
  * CONTENIDO:
  * - Función createAdminApi.
@@ -11,6 +15,8 @@
  *
  * DEPENDENCIAS:
  * - ../../../shared/lib/httpClient.js
+ *
+ * ============================================================
  */
 import { httpClient } from '../../../shared/lib/httpClient.js';
 const ADMIN_BASE_PATH = '/api/admin';

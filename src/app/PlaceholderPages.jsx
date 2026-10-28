@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Composición de la aplicación
- * Archivo: PlaceholderPages.jsx
+ * ============================================================
+ * MATISTA | PÁGINAS PROVISIONALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Compone la aplicación: proveedores, enrutado y disposición general de la sesión.
+ * Archivo: PlaceholderPages.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Presentar tarjetas y enlaces de infraestructura para rutas provisionales.
  *
  * CONTENIDO:
  * - Función RoutePlaceholder.
@@ -12,6 +16,8 @@
  * DEPENDENCIAS:
  * - react-router-dom
  * - ../shared/ui/BrandLogo.jsx
+ *
+ * ============================================================
  */
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '../shared/ui/BrandLogo.jsx';

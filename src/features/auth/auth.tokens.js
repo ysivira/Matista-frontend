@@ -1,12 +1,18 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: auth.tokens.js
+ * ============================================================
+ * MATISTA | EXTRACCIÓN DE TOKENS DE ENLACE
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Recurso de interfaz del módulo Autenticación.
+ * Archivo: auth.tokens.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Extraer el token temporal del fragmento URL para su uso en memoria.
  *
  * CONTENIDO:
  * - Función extractAuthToken.
+ *
+ * ============================================================
  */
 /**
  * Extrae el token de seguridad desde el fragmento de la URL sin tocar otra query adicional.

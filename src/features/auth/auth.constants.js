@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: auth.constants.js
+ * ============================================================
+ * MATISTA | ROLES Y DESTINOS DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Define constantes y políticas compartidas.
+ * Archivo: auth.constants.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Definir roles, destinos y rutas privadas permitidas para el retorno del login.
  *
  * CONTENIDO:
  * - Constante AUTH_ROLES.
@@ -12,6 +16,8 @@
  * - Constante PRIVATE_PATHS_BY_ROLE.
  * - Función isRolePrivatePath.
  * - Función destinationPathForRole.
+ *
+ * ============================================================
  */
 export const AUTH_ROLES = Object.freeze({
   ADMIN: 'ADMIN',

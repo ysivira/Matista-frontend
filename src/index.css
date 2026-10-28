@@ -13,7 +13,6 @@
   --radius-card: 1rem;
   --radius-control: 0.75rem;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
   color: var(--color-text);
   background: var(--color-shell);
   font-family: var(--font-sans);

@@ -1,5 +1,16 @@
 /**
- * Shell compartido con navegación por módulo y acceso a la cuenta.
+ * ============================================================
+ * MATISTA | SHELL DE MÓDULOS
+ * ============================================================
+ *
+ * Archivo: AppLayout.jsx
+ * Módulo: Disposición compartida
+ *
+ * Responsabilidad:
+ * Componer navegación, encabezado y contenido con identidad y
+ * acciones recibidas, sin conocer APIs ni implementar sesión AUTH.
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
@@ -30,14 +41,14 @@ export function AppLayout({
   section = 'Módulo ADMIN'
 }) {
   const location = useLocation();
-  // Menú lateral móvil (SPEC-27): por debajo de 900 px el sidebar pasa a
-  // drawer; en escritorio el estado no altera la composición (el overlay solo
-  // se renderiza en móvil y el reajuste cruza el breakpoint lo cierra).
+  // Menú lateral móvil: por debajo de 900 px el sidebar pasa a drawer; en
+  // escritorio el estado no altera la composición (el overlay solo se
+  // renderiza en móvil y el reajuste cruza el breakpoint lo cierra).
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [ubicacionMenu, setUbicacionMenu] = useState(location);
   const sidebar = useRef(null);
-  // SPEC-29: toda transición del router (incluidos Atrás/Adelante, query y
-  // hash) invalida la apertura anterior, sin esperar a un efecto ni permitir
+  // Toda transición del router (incluidos Atrás/Adelante, query y hash)
+  // invalida la apertura anterior, sin esperar a un efecto ni permitir
   // que se reactive al volver a una entrada del historial.
   if (ubicacionMenu !== location) {
     setUbicacionMenu(location);

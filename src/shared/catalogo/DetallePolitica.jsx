@@ -1,5 +1,16 @@
 /**
- * Presenta condiciones comerciales agrupadas sin editar sus valores.
+ * ============================================================
+ * MATISTA | DETALLE DE POLÍTICA COMERCIAL
+ * ============================================================
+ *
+ * Archivo: DetallePolitica.jsx
+ * Módulo: Catálogo compartido
+ *
+ * Responsabilidad:
+ * Presentar parámetros comerciales agrupados con sus unidades,
+ * sin editar valores ni calcular importes.
+ *
+ * ============================================================
  */
 import { CAMPOS_POLITICA, GRUPOS, presentarValor,
   formatearPorcentaje } from './politicaPresentacion.js';

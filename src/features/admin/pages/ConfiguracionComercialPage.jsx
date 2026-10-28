@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: ConfiguracionComercialPage.jsx
+ * ============================================================
+ * MATISTA | GESTIÓN DE CONDICIONES COMERCIALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ConfiguracionComercialPage del módulo Administración; compone componentes de la feature
- * para su caso de uso.
+ * Archivo: ConfiguracionComercialPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Consultar, editar, programar y recuperar políticas y mostrar su auditoría.
  *
  * CONTENIDO:
  * - Función ConfiguracionComercialPage.
@@ -18,6 +21,8 @@
  * - ../../../shared/ui/LoadingState.jsx
  * - ../../auth/components/AuthAlert.jsx
  * - ../../../shared/ui/EncabezadoContextual.jsx
+ *
+ * ============================================================
  */
 import { CAMPOS_POLITICA, formatearPorcentaje } from '../components/politicaPresentacion.js';
 import { DetallePolitica } from '../components/DetallePolitica.jsx';

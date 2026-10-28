@@ -1,5 +1,16 @@
 /**
- * Cliente HTTP del frontend: cookies de sesión, cancelaciones y errores tipificados.
+ * ============================================================
+ * MATISTA | CLIENTE HTTP COMPARTIDO
+ * ============================================================
+ *
+ * Archivo: httpClient.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Ejecutar peticiones JSON con cookies, señales de cancelación
+ * y errores tipificados de API o transporte.
+ *
+ * ============================================================
  */
 const DEFAULT_API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
@@ -79,6 +90,10 @@ async function readResponseBody(response) {
 }
 
 /**
+ * ============================================================
+ * CREATE HTTP CLIENT
+ * ============================================================
+ *
  * Construye un cliente HTTP pequeño con fetch inyectable para pruebas aisladas.
  * @param {object} [options] Configuración del cliente.
  * @param {string} [options.baseUrl] URL pública del backend; vacío usa el mismo origen.

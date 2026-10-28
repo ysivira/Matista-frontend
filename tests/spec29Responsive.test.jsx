@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | REGRESIONES DE NAVEGACIÓN MÓVIL
+ * ============================================================
+ *
+ * Archivo: spec29Responsive.test.jsx
+ * Módulo: Pruebas de navegación
+ *
+ * Responsabilidad:
+ * Probar cierre del drawer, historial y foco con viewport
+ * simulado, preservando selección comercial y textos extensos.
+ *
+ * ============================================================
+ */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { createMemoryRouter, MemoryRouter, RouterProvider } from 'react-router-dom'
@@ -11,10 +25,17 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+/**
+ * Sustituye matchMedia sin depender del tamaño real del navegador.
+ * @param {boolean} [movil=true] - Coincidencia de las consultas de pantalla.
+ * @returns {void}
+ */
 function viewportMovil(movil = true) {
   vi.stubGlobal('matchMedia', vi.fn(consulta => ({
-    matches: movil, media: consulta,
-    addEventListener: vi.fn(), removeEventListener: vi.fn(),
+    matches: movil,
+    media: consulta,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
   })))
 }
 
@@ -115,7 +136,11 @@ describe.each(['ADMIN', 'ASESOR'])('SPEC-29 drawer compartido %s', rol => {
 describe('SPEC-29 presentación sin cambios de datos', () => {
   it('conserva los handlers de selección comercial y sus estados pressed', () => {
     function Esquema() {
-      const [value, onChange] = useState({ esquema: 'TRAMOS', tramos: [{ porcentaje_id: '8', meses: 3 }], beneficios: {} })
+      const [value, onChange] = useState({
+        esquema: 'TRAMOS',
+        tramos: [{ porcentaje_id: '8', meses: 3 }],
+        beneficios: {}
+      })
       return <DiscountSelector value={value} onChange={onChange} politica={{ porcentajes_comerciales: [{ id: '8', porcentaje: '30.00' }], comercial_fijo_meses_max: 12 }} />
     }
     render(<Esquema />)

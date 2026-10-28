@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: TemporaryAccountPage.jsx
+ * ============================================================
+ * MATISTA | CUENTA PROVISIONAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página TemporaryAccountPage del módulo Autenticación; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: TemporaryAccountPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Presentar identidad y operaciones personales AUTH en la pantalla provisional.
  *
  * CONTENIDO:
  * - Función TemporaryAccountPage.
@@ -22,6 +25,8 @@
  * - ../../../shared/lib/httpClient.js
  * - ../auth.messages.js
  * - ../auth.validation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';

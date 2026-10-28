@@ -1,15 +1,21 @@
 /**
- * MATISTA - Frontend · Composición de la aplicación
- * Archivo: AppProviders.jsx
+ * ============================================================
+ * MATISTA | PROVEEDORES DE APLICACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Compone la aplicación: proveedores, enrutado y disposición general de la sesión.
+ * Archivo: AppProviders.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Envolver el árbol recibido con el proveedor global de sesión.
  *
  * CONTENIDO:
  * - Función AppProviders.
  *
  * DEPENDENCIAS:
  * - ../features/auth/context/SessionProvider.jsx
+ *
+ * ============================================================
  */
 import { SessionProvider } from '../features/auth/context/SessionProvider.jsx';
 

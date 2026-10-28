@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | ENTRADA DEL FRONTEND
+ * ============================================================
+ *
+ * Archivo: main.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Montar React en el nodo raíz con StrictMode, estilos globales
+ * y proveedores de aplicación.
+ *
+ * ============================================================
+ */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

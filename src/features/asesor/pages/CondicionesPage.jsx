@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: CondicionesPage.jsx
+ * ============================================================
+ * MATISTA | CONSULTA DE CONDICIONES COMERCIALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página CondicionesPage del módulo Asesor comercial; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: CondicionesPage.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Consultar y presentar parámetros publicados de ADMIN sin editarlos.
  *
  * CONTENIDO:
  * - Función CondicionesPage.
@@ -13,6 +16,8 @@
  * - ../hooks/useAsesorConsulta.js
  * - ../../../shared/ui/EncabezadoContextual.jsx
  * - ../../../shared/catalogo/DetallePolitica.jsx
+ *
+ * ============================================================
  */
 import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js';
 import { EncabezadoContextual } from '../../../shared/ui/EncabezadoContextual.jsx';

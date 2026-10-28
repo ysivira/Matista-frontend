@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: ResendVerificationPage.jsx
+ * ============================================================
+ * MATISTA | REENVÍO DE VERIFICACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ResendVerificationPage del módulo Autenticación; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: ResendVerificationPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Solicitar otro enlace de verificación sin revelar elegibilidad o existencia de cuentas.
  *
  * CONTENIDO:
  * - Función ResendVerificationPage.
@@ -18,6 +21,8 @@
  * - ../components/AuthFields.jsx
  * - ../auth.messages.js
  * - ../auth.validation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

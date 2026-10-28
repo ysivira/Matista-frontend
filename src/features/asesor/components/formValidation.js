@@ -1,15 +1,20 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: formValidation.js
+ * ============================================================
+ * MATISTA | VALIDACIÓN DE FORMULARIOS COMERCIALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente formValidation del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: formValidation.js
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Revisar controles y enfocar el primer error sin duplicar reglas económicas.
  *
  * CONTENIDO:
  * - Función enfocarPrimerError.
  * - Función revisarCampo.
  * - Función revisarFormulario.
+ *
+ * ============================================================
  */
 /** Enfoca el primer control inválido, nunca un fieldset contenedor; incluye errores comerciales remotos. */
 import { esTelefonoValido, TELEFONO_MENSAJE } from '../../../shared/lib/telefono.js';
@@ -39,8 +44,8 @@ export function revisarCampo(control, editando = false) {
     control.setCustomValidity(!editando && control.value !== '' && !entero
       ? 'Ingrese una cantidad entera mayor o igual que cero.' : '');
   }
-  // SPEC-28: teléfono opcional; con contenido se exige un valor telefónico
-  // válido (misma regla que el backend). Vacío no produce error.
+  // Teléfono opcional: si hay contenido se exige un valor telefónico válido
+  // (misma regla que el backend). Vacío no produce error.
   if (control.dataset.telefono) {
     const valido = esTelefonoValido(control.value);
     control.setCustomValidity(!editando && control.value !== '' && !valido

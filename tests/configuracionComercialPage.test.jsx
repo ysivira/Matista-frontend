@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE GUARDADO COMERCIAL
+ * ============================================================
+ *
+ * Archivo: configuracionComercialPage.test.jsx
+ * Módulo: Pruebas administrativas
+ *
+ * Responsabilidad:
+ * Probar guardado inmediato o programado, errores y bloqueo
+ * de doble confirmación con respuestas controladas de la API.
+ *
+ * ============================================================
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ConfiguracionComercialPage } from '../src/features/admin/pages/ConfiguracionComercialPage.jsx'

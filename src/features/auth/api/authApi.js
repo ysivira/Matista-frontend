@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: authApi.js
+ * ============================================================
+ * MATISTA | CLIENTE HTTP DE CUENTA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Cliente HTTP del módulo Autenticación; centraliza las llamadas a los endpoints del backend.
+ * Archivo: authApi.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Exponer operaciones AUTH sobre un cliente HTTP inyectable con cookies de sesión.
  *
  * CONTENIDO:
  * - Función createAuthApi.
@@ -11,6 +15,8 @@
  *
  * DEPENDENCIAS:
  * - ../../../shared/lib/httpClient.js
+ *
+ * ============================================================
  */
 import { httpClient } from '../../../shared/lib/httpClient.js';
 const AUTH_BASE_PATH = '/api/auth';

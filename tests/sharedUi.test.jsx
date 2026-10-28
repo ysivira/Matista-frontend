@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE INTERFAZ COMPARTIDA
+ * ============================================================
+ *
+ * Archivo: sharedUi.test.jsx
+ * Módulo: Pruebas de presentación
+ *
+ * Responsabilidad:
+ * Verificar encabezados, acciones recibidas y paleta de gemas,
+ * sin fabricar identidad ni comportamiento de los módulos.
+ *
+ * ============================================================
+ */
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { EncabezadoContextual } from '../src/shared/ui/EncabezadoContextual.jsx'

@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Perfil de usuario
- * Archivo: usePerfilAcciones.js
+ * ============================================================
+ * MATISTA | OPERACIONES PERSONALES DE CUENTA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Hook reutilizable de la interfaz.
+ * Archivo: usePerfilAcciones.js
+ * Módulo: Perfil
+ *
+ * Responsabilidad:
+ * Compartir estado, validación y envíos de cambios de contraseña y correo.
  *
  * CONTENIDO:
  * - Función usePerfilAcciones.
@@ -14,6 +18,8 @@
  * - ../../../shared/lib/httpClient.js
  * - ../../auth/auth.messages.js
  * - ../../auth/auth.validation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { authApi } from '../../auth/api/authApi.js';

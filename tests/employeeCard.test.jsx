@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE TARJETAS DEL DIRECTORIO
+ * ============================================================
+ *
+ * Archivo: employeeCard.test.jsx
+ * Módulo: Pruebas administrativas
+ *
+ * Responsabilidad:
+ * Simular matchMedia y comprobar tarjetas, filtros y acciones
+ * compartidas al alternar entre móvil y escritorio.
+ *
+ * ============================================================
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

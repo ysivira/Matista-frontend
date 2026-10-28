@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: ResetPasswordPage.jsx
+ * ============================================================
+ * MATISTA | RESTABLECIMIENTO DE CONTRASEÑA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ResetPasswordPage del módulo Autenticación; compone componentes de la feature para su caso
- * de uso.
+ * Archivo: ResetPasswordPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Solicitar nueva contraseña con el token temporal conservado solo en memoria.
  *
  * CONTENIDO:
  * - Función ResetPasswordPage.
@@ -18,6 +21,8 @@
  * - ../components/AuthFields.jsx
  * - ../auth.tokens.js
  * - ../auth.validation.js
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';

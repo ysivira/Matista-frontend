@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE INGRESO
+ * ============================================================
+ *
+ * Archivo: loginPage.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Probar validación, avisos, doble envío y destinos por rol con
+ * cliente AUTH simulado y guards de navegación reales.
+ *
+ * ============================================================
+ */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'

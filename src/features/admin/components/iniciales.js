@@ -1,14 +1,20 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: iniciales.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DE INICIALES ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente iniciales del módulo Administración; unidad de interfaz reutilizable de la feature.
+ * Archivo: iniciales.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar las iniciales de identidad utilizadas por los avatares.
  *
  * CONTENIDO:
  * - Exporta inicialesDe.
  *
  * DEPENDENCIAS:
  * - ../../../shared/lib/iniciales.js
+ *
+ * ============================================================
  */
 export { inicialesDe } from '../../../shared/lib/iniciales.js';

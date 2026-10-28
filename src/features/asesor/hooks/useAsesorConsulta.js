@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: useAsesorConsulta.js
+ * ============================================================
+ * MATISTA | CONSULTAS COMERCIALES REACT
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Hook reutilizable de la interfaz.
+ * Archivo: useAsesorConsulta.js
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Cargar y recargar una ruta comercial descartando respuestas tras el desmontaje.
  *
  * CONTENIDO:
  * - Función useAsesorConsulta.
@@ -11,6 +15,8 @@
  * DEPENDENCIAS:
  * - react
  * - ../api/asesorApi.js
+ *
+ * ============================================================
  */
 import { useEffect, useState } from 'react';
 import { consultarAsesor } from '../api/asesorApi.js';

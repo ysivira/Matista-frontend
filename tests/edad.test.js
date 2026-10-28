@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE EDAD CIVIL
+ * ============================================================
+ *
+ * Archivo: edad.test.js
+ * Módulo: Pruebas de utilidades
+ *
+ * Responsabilidad:
+ * Verificar cumpleaños, calendario y fechas imposibles o futuras
+ * con referencias UTC explícitas compatibles con el backend.
+ *
+ * ============================================================
+ */
 import { describe, expect, it } from 'vitest'
 import { calcularEdad } from '../src/shared/lib/edad.js'
 

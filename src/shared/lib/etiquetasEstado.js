@@ -1,5 +1,16 @@
 /**
- * Etiquetas públicas para los estados de versiones administrativas.
+ * ============================================================
+ * MATISTA | ETIQUETAS DE ESTADO
+ * ============================================================
+ *
+ * Archivo: etiquetasEstado.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Traducir estados de versiones a etiquetas amigables y
+ * conservar el valor original de estados no catalogados.
+ *
+ * ============================================================
  */
 /** Etiquetas compartidas de los estados del DTO del tarifario. */
 const ETIQUETAS_ESTADO = Object.freeze({

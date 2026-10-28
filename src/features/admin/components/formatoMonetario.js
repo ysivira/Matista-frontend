@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: formatoMonetario.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DEL FORMATO MONETARIO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente formatoMonetario del módulo Administración; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: formatoMonetario.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar el formato de pesos argentinos sin recalcular importes.
  *
  * CONTENIDO:
  * - Exporta formatearPrecioARS.
@@ -14,5 +17,7 @@
  *
  * OBSERVACIONES:
  * Se conserva el contrato de presentación; no se traslada ni modifica aritmética.
+ *
+ * ============================================================
  */
 export { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js';

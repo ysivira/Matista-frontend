@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: ConfirmEmailChangePage.jsx
+ * ============================================================
+ * MATISTA | CONFIRMACIÓN DE CAMBIO DE CORREO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ConfirmEmailChangePage del módulo Autenticación; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: ConfirmEmailChangePage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Confirmar el token del enlace y descartar la sesión local revocada por el servidor.
  *
  * CONTENIDO:
  * - Función ConfirmEmailChangePage.
@@ -20,6 +23,8 @@
  * - ../context/SessionContext.js
  * - ../auth.tokens.js
  * - ../../../shared/lib/httpClient.js
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';

@@ -1,5 +1,16 @@
 /**
- * Encabezado de sección con identidad del usuario y cierre de sesión.
+ * ============================================================
+ * MATISTA | ENCABEZADO SUPERIOR
+ * ============================================================
+ *
+ * Archivo: EncabezadoSuperior.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar sección, identidad y cierre de sesión junto al
+ * control opcional del menú lateral en pantallas angostas.
+ *
+ * ============================================================
  */
 import { BrandLogo } from './BrandLogo.jsx';
 import './uiCompartidos.css';
@@ -22,8 +33,8 @@ const ICONO_SALIDA = 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14 5-5-5-5m5 5H9
  *   menuControl?: ?{abierto: boolean, alternar: () => void, destino: string}}} props
  *   seccion: título de la pantalla activa; usuario: sesión vigente con
  *   nombre, apellido y rol; onCerrarSesion: acción de cierre de sesión.
- *   menuControl: control opcional del menú lateral móvil (SPEC-27); cuando
- *   llega, se presenta el botón hamburguesa antes del título. Solo tiene
+ *   menuControl: control opcional del menú lateral móvil; cuando llega, se
+ *   presenta el botón hamburguesa antes del título. Solo tiene
  *   efecto en pantallas angostas (el botón se oculta por CSS en escritorio).
  * @returns {import('react').ReactElement} Encabezado superior del shell.
  */

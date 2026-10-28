@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: asesorApi.js
+ * ============================================================
+ * MATISTA | CLIENTE HTTP COMERCIAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Cliente HTTP del módulo Asesor comercial; centraliza las llamadas a los endpoints del backend.
+ * Archivo: asesorApi.js
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Consultar y guardar operaciones ASESOR y reutilizar el catálogo compartido.
  *
  * CONTENIDO:
  * - Función listarPlanes.
@@ -15,6 +19,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/lib/httpClient.js
  * - ../../../shared/api/catalogoApi.js
+ *
+ * ============================================================
  */
 import { httpClient } from '../../../shared/lib/httpClient.js';
 import { catalogoApi, consultarCatalogo } from '../../../shared/api/catalogoApi.js';

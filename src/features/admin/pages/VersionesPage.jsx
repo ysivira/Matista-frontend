@@ -1,10 +1,14 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: VersionesPage.jsx
+ * ============================================================
+ * MATISTA | GESTIÓN DE VERSIONES TARIFARIAS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página VersionesPage del módulo Administración; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: VersionesPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Consultar historial, conducir la edición y activación de versiones y
+ * presentar auditoría y deshacer con las revisiones del servidor.
  *
  * CONTENIDO:
  * - Función VersionesPage.
@@ -21,6 +25,8 @@
  * - ../../auth/hooks/useSession.js
  * - ../../../shared/ui/LoadingState.jsx
  * - ../../auth/components/AuthAlert.jsx
+ *
+ * ============================================================
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -119,7 +125,11 @@ function actorDeEvento(evento) {
 }
 
 /**
- * Pantalla de Versiones del tarifario (RF ciclo de vida, SL-3/SL-4/SL-5):
+ * ============================================================
+ * VERSIONES PAGE
+ * ============================================================
+ *
+ * Pantalla del ciclo de vida de versiones del tarifario:
  * lista el historial completo, muestra el snapshot de la versión elegida y
  * conduce el ciclo de edición completo (copiar borrador, aumento masivo,
  * precios individuales, finalización y activación manual). El backend

@@ -1,16 +1,21 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteSummary.jsx
+ * ============================================================
+ * MATISTA | RESUMEN ECONÓMICO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente QuoteSummary del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: QuoteSummary.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Mostrar conceptos, aportes, beneficios y tramos del resultado recibido.
  *
  * CONTENIDO:
  * - Función QuoteSummary.
  *
  * DEPENDENCIAS:
  * - ../../../shared/lib/formatoMonetario.js
+ *
+ * ============================================================
  */
 import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js';
 

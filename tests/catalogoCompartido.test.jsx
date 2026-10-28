@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL CATÁLOGO POR ROL
+ * ============================================================
+ *
+ * Archivo: catalogoCompartido.test.jsx
+ * Módulo: Pruebas de catálogo
+ *
+ * Responsabilidad:
+ * Probar lectura, navegación y documentos compartidos sin
+ * habilitar gestión ADMIN a ASESOR, con API y sesión simuladas.
+ *
+ * ============================================================
+ */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { RouterProvider } from 'react-router-dom'

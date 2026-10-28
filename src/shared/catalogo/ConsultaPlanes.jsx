@@ -1,5 +1,16 @@
 /**
- * Consulta compartida de planes y presentación de su detalle documental.
+ * ============================================================
+ * MATISTA | CATÁLOGO COMPARTIDO DE PLANES
+ * ============================================================
+ *
+ * Archivo: ConsultaPlanes.jsx
+ * Módulo: Catálogo compartido
+ *
+ * Responsabilidad:
+ * Consultar planes, desplegar prestaciones y condiciones y
+ * ofrecer documentos y acceso a tarifas con contexto por módulo.
+ *
+ * ============================================================
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -79,8 +90,8 @@ function descomponerCobertura(linea) {
  * reformular coberturas, porque el separador `|` de la fuente no es consistente
  * entre planes y cualquier recorte podría alterar el significado contractual.
  *
- * SPEC-27: en pantallas angostas (≤767 px) la ficha técnica del plan abierto
- * se presenta como acordeón contextual, inmediatamente después de la tarjeta
+ * En pantallas angostas (≤767 px) la ficha técnica del plan abierto se
+ * presenta como acordeón contextual, inmediatamente después de la tarjeta
  * seleccionada (antes quedaba después de toda la rejilla y obligaba a
  * desplazarse hasta el final); en escritorio se conserva el panel ancho bajo
  * la rejilla. La ficha se renderiza con una única función, así que ambos
@@ -263,9 +274,9 @@ export function ConsultaPlanes({
         </div> : <>
           {/* Rejilla de tarjetas compactas del catálogo aprobado: gema, nombre
               y acciones de ADMIN por plan; el plan abierto recibe el anillo
-              violeta de selección. En pantallas angostas (SPEC-27) la ficha
-              técnica del plan abierto se presenta inmediatamente debajo,
-              como acordeón contextual. */}
+              violeta de selección. En pantallas angostas la ficha técnica
+              del plan abierto se presenta inmediatamente debajo, como
+              acordeón contextual. */}
           <div className="admin-plan-lista">
             {planes.map(plan => {
           const abierto = planAbierto === plan.id;
@@ -299,7 +310,7 @@ export function ConsultaPlanes({
               tarjeta que los abre. El grupo se separa de la rejilla con aire
               suficiente para leer la ficha como bloque propio. En móvil el
               acordeón contextual de la tarjeta seleccionada evita este
-              bloque final (SPEC-27). */}
+              bloque final. */}
           {!esPantallaAngosta
             ? <div className="admin-plan-fichas">{planes.map(plan => renderFicha(plan))}</div> : null}
         </>}

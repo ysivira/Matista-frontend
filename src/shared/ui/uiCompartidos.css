@@ -1,11 +1,12 @@
-/* Componentes compartidos ADMIN / ASESOR (paleta «Amethyst Prism Enterprise»
+/*Componentes compartidos ADMIN / ASESOR (paleta «Amethyst Prism Enterprise»
    aprobada en Stitch). Valores tomados del catálogo ASESOR aprobado:
    superficie de trabajo #F5F2FF, tbla #DCD6E9, violeta interactivo
-   #8B5CF6/#A78BFA, texto claro #202236 y secundario #5D607E. */
+   #8B5CF6/#A78BFA, texto claro #202236 y secundario #5D607E.*/
 
-/* Encabezado superior compartido (ADMIN y ASESOR): sección a la izquierda,
+/*Encabezado superior compartido (ADMIN y ASESOR): sección a la izquierda,
    identidad de la sesión y salida a la derecha, sobre la banda oscura del
-   shell. Los datos de usuario nunca son fijos: llegan de la sesión. */
+   shell. Los datos de usuario nunca son fijos: llegan de la sesión.*/
+
 .ui-cabecera {
   display: flex;
   align-items: center;
@@ -24,14 +25,17 @@
   color: #f4f2fb;
 }
 
-/* Isotipo de MATISTA del encabezado derecho: se apoya directamente sobre el
-   fondo oscuro de la banda, sin baldosa, marco ni sombra. */
+/*Isotipo de MATISTA del encabezado derecho: se apoya directamente sobre el
+   fondo oscuro de la banda, sin baldosa, marco ni sombra.*/
+
 .ui-cabecera__marca {
   display: inline-flex;
   align-items: center;
 }
 
-.ui-cabecera__marca .brand-logo { width: 6.5rem; }
+.ui-cabecera__marca .brand-logo {
+  width: 6.5rem;
+}
 
 .ui-cabecera__identidad {
   display: flex;
@@ -61,8 +65,9 @@
   color: #a78bfa;
 }
 
-/* Botón de salida con el icono del diseño aprobado: discreto en reposo y
-   resaltado al pasar el cursor. */
+/*Botón de salida con el icono del diseño aprobado: discreto en reposo y
+   resaltado al pasar el cursor.*/
+
 .ui-cabecera__salir {
   display: inline-flex;
   align-items: center;
@@ -77,7 +82,10 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.ui-cabecera__salir:hover { background: rgba(255, 255, 255, 0.06); color: #ffffff; }
+.ui-cabecera__salir:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
 
 .ui-cabecera__salir svg {
   width: 1.15rem;
@@ -90,13 +98,22 @@
 }
 
 @media (max-width: 720px) {
-  .ui-cabecera { padding: 0.75rem 1rem; }
-  .ui-cabecera__marca .brand-logo { width: 4.75rem; }
-  .ui-cabecera__salir span { display: none; }
+  .ui-cabecera {
+    padding: 0.75rem 1rem;
+  }
+
+  .ui-cabecera__marca .brand-logo {
+    width: 4.75rem;
+  }
+
+  .ui-cabecera__salir span {
+    display: none;
+  }
 }
 
-/* Encabezado contextual: etiqueta con punto pulsante, título y descripción
-   sobre el lienzo oscuro del shell; las acciones quedan a la derecha. */
+/*Encabezado contextual: etiqueta con punto pulsante, título y descripción
+   sobre el lienzo oscuro del shell; las acciones quedan a la derecha.*/
+
 .ui-encabezado {
   display: flex;
   flex-wrap: wrap;
@@ -134,25 +151,56 @@
 }
 
 @keyframes ui-pulso {
-  50% { opacity: 0.35; }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ui-encabezado__punto { animation: none; }
+  .ui-encabezado__punto {
+    animation: none;
+  }
 }
 
-/* SPEC-27 — topbar compacta en móviles angostos (≤479 px): sin isotipo (ya
+/*SPEC-27 — topbar compacta en móviles angostos (≤479 px): sin isotipo (ya
    vive en el drawer) y con «Cerrar sesión» como icono accesible (el texto
    queda oculto con el patrón sr-only, pero continúa en el árbol accesible).
    Nombre y rol se conservan con corte elíptico para que la fila entre en
-   320 px sin desplazamiento horizontal. */
+   320 px sin desplazamiento horizontal.*/
+
 @media (max-width: 479.98px) {
-  .ui-cabecera { gap: 0.6rem; padding-inline: 1rem; }
-  .ui-cabecera__marca { display: none; }
-  .ui-cabecera__seccion { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ui-cabecera__identidad { margin-left: auto; gap: 0.5rem; }
-  .ui-cabecera__datos { min-width: 0; }
-  .ui-cabecera__nombre { max-width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ui-cabecera {
+    gap: 0.6rem;
+    padding-inline: 1rem;
+  }
+
+  .ui-cabecera__marca {
+    display: none;
+  }
+
+  .ui-cabecera__seccion {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ui-cabecera__identidad {
+    margin-left: auto;
+    gap: 0.5rem;
+  }
+
+  .ui-cabecera__datos {
+    min-width: 0;
+  }
+
+  .ui-cabecera__nombre {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .ui-cabecera__salir span {
     position: absolute;
     width: 1px;
@@ -161,7 +209,10 @@
     clip: rect(0 0 0 0);
     white-space: nowrap;
   }
-  .ui-cabecera__salir { padding: 0.4rem 0.55rem; }
+
+  .ui-cabecera__salir {
+    padding: 0.4rem 0.55rem;
+  }
 }
 
 .ui-encabezado__titulo {
@@ -187,7 +238,8 @@
   gap: 0.5rem;
 }
 
-/* Gema del plan: superficie de color por plan con el ícono delineado. */
+/*Gema del plan: superficie de color por plan con el ícono delineado.*/
+
 .ui-gema {
   display: inline-flex;
   align-items: center;
@@ -198,19 +250,44 @@
   border-radius: 0.75rem;
 }
 
-.ui-gema svg { width: 1.5rem; height: 1.5rem; }
+.ui-gema svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
 
 .ui-gema--ficha {
   width: 3rem;
   height: 3rem;
 }
 
-.ui-gema--ficha svg { width: 1.75rem; height: 1.75rem; }
+.ui-gema--ficha svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
 
-.ui-gema--rubi { color: #dc2626; background: #fff1f2; }
-.ui-gema--esmeralda { color: #059669; background: #ecfdf5; }
-.ui-gema--zafiro { color: #2563eb; background: #eff6ff; }
-.ui-gema--diamante { color: #64748b; background: #f1f5f9; }
+.ui-gema--rubi {
+  color: #dc2626;
+  background: #fff1f2;
+}
 
-/* Gema neutra: planes fuera de la paleta aprobada conservan el tono slate. */
-.ui-gema--neutra { color: #64748b; background: #f1f5f9; }
+.ui-gema--esmeralda {
+  color: #059669;
+  background: #ecfdf5;
+}
+
+.ui-gema--zafiro {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.ui-gema--diamante {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+/*Gema neutra: planes fuera de la paleta aprobada conservan el tono slate.*/
+
+.ui-gema--neutra {
+  color: #64748b;
+  background: #f1f5f9;
+}

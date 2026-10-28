@@ -1,5 +1,16 @@
 /**
- * Icono decorativo de navegación a partir del trazo recibido.
+ * ============================================================
+ * MATISTA | ICONO DE NAVEGACIÓN
+ * ============================================================
+ *
+ * Archivo: IconoNavegacion.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar un trazo SVG decorativo recibido por los menús y
+ * accesos, sin conceder permisos ni definir destinos.
+ *
+ * ============================================================
  */
 /**
  * Presenta un trazo SVG MATISTA decorativo con el estilo común de menús y tarjetas.

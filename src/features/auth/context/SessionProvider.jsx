@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: SessionProvider.jsx
+ * ============================================================
+ * MATISTA | COORDINACIÓN DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Contexto SessionProvider del módulo Autenticación; comparte estado de sesión entre componentes.
+ * Archivo: SessionProvider.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Restaurar la sesión y coordinar login, logout y cancelaciones sin leer cookies.
  *
  * CONTENIDO:
  * - Función SessionProvider.
@@ -13,6 +17,8 @@
  * - ../../../shared/lib/httpClient.js
  * - ../api/authApi.js
  * - ./SessionContext.js
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { ApiError } from '../../../shared/lib/httpClient.js';
@@ -80,6 +86,10 @@ function statusForSessionResult(result) {
 }
 
 /**
+ * ============================================================
+ * SESSION PROVIDER
+ * ============================================================
+ *
  * Mantiene en memoria el usuario público y coordina restauración, login y logout sin leer cookies.
  * @param {object} props Propiedades del proveedor.
  * @param {import('react').ReactNode} props.children Árbol de aplicación.

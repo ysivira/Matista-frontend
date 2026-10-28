@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: PlanTariffPreview.jsx
+ * ============================================================
+ * MATISTA | REFERENCIA DE TARIFAS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente PlanTariffPreview del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: PlanTariffPreview.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Mostrar segmentos publicados del plan y modalidad sin calcular la tarifa familiar.
  *
  * CONTENIDO:
  * - Función PlanTariffPreview.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/lib/formatoMonetario.js
  * - ../hooks/useAsesorConsulta.js
+ *
+ * ============================================================
  */
 import { formatearPrecioARS } from '../../../shared/lib/formatoMonetario.js';
 import { useAsesorConsulta } from '../hooks/useAsesorConsulta.js';

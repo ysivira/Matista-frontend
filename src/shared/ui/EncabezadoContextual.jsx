@@ -1,5 +1,16 @@
 /**
- * Título, descripción y acciones del contexto de una página.
+ * ============================================================
+ * MATISTA | ENCABEZADO CONTEXTUAL
+ * ============================================================
+ *
+ * Archivo: EncabezadoContextual.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar etiqueta, título, descripción y acciones opcionales
+ * del contexto de una página sobre el lienzo de trabajo.
+ *
+ * ============================================================
  */
 import './uiCompartidos.css';
 

@@ -1,5 +1,16 @@
 /**
- * Validación compartida de teléfono opcional (SPEC-28).
+ * ============================================================
+ * MATISTA | VALIDACIÓN DE TELÉFONO
+ * ============================================================
+ *
+ * Archivo: telefono.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Validar teléfonos opcionales y compartir el mensaje público
+ * de formato sin imponer una numeración nacional única.
+ *
+ * ============================================================
  */
 /** Mensaje público estable para el feedback junto al campo y para el backend. */
 export const TELEFONO_MENSAJE =

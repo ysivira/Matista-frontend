@@ -1,15 +1,21 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: useVistaTarjetas.js
+ * ============================================================
+ * MATISTA | VISTA RESPONSIVE DEL DIRECTORIO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Hook reutilizable de la interfaz.
+ * Archivo: useVistaTarjetas.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Suscribir el viewport y elegir tarjetas por debajo de 1024 px.
  *
  * CONTENIDO:
  * - Función useVistaTarjetas.
  *
  * DEPENDENCIAS:
  * - react
+ *
+ * ============================================================
  */
 import { useSyncExternalStore } from 'react';
 

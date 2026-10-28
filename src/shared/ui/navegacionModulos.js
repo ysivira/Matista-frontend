@@ -1,5 +1,16 @@
 /**
- * Rutas, etiquetas e iconos de acceso a los módulos ADMIN y ASESOR.
+ * ============================================================
+ * MATISTA | CATÁLOGO DE NAVEGACIÓN
+ * ============================================================
+ *
+ * Archivo: navegacionModulos.js
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Definir rutas, etiquetas, iconos y descripciones de los
+ * accesos ADMIN y ASESOR sin decidir autorizaciones.
+ *
+ * ============================================================
  */
 /** Trazos SVG existentes de MATISTA, compartidos por menús y accesos; no conceden permisos. */
 const ICONOS = {

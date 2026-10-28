@@ -1,15 +1,20 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: etiquetasEstado.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DE ETIQUETAS ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente etiquetasEstado del módulo Administración; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: etiquetasEstado.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar la traducción compartida de estados a etiquetas públicas.
  *
  * CONTENIDO:
  * - Exporta etiquetaEstado.
  *
  * DEPENDENCIAS:
  * - ../../../shared/lib/etiquetasEstado.js
+ *
+ * ============================================================
  */
 export { etiquetaEstado } from '../../../shared/lib/etiquetasEstado.js';

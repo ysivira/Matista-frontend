@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: ComercialDashboard.jsx
+ * ============================================================
+ * MATISTA | INICIO COMERCIAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ComercialDashboard del módulo Asesor comercial; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: ComercialDashboard.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar los accesos comerciales del inicio ASESOR sin operaciones ADMIN.
  *
  * CONTENIDO:
  * - Función ComercialDashboard.
@@ -13,6 +16,8 @@
  * - ../../../shared/ui/InicioModulo.jsx
  * - ../../../shared/ui/navegacionModulos.js
  * - ../asesor.css
+ *
+ * ============================================================
  */
 import { InicioModulo } from '../../../shared/ui/InicioModulo.jsx';
 import { NAVEGACION_ASESOR } from '../../../shared/ui/navegacionModulos.js';

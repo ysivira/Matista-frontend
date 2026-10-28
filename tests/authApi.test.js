@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | CONTRATOS DEL CLIENTE AUTH
+ * ============================================================
+ *
+ * Archivo: authApi.test.js
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Verificar el mapeo de operaciones AUTH a rutas, métodos y
+ * cuerpos del contrato mediante un cliente capturador.
+ *
+ * ============================================================
+ */
 import { describe, expect, it, vi } from 'vitest'
 import { createAuthApi } from '../src/features/auth/api/authApi.js'
 

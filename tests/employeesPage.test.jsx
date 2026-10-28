@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL DIRECTORIO
+ * ============================================================
+ *
+ * Archivo: employeesPage.test.jsx
+ * Módulo: Pruebas administrativas
+ *
+ * Responsabilidad:
+ * Probar filtros, paginación y confirmaciones, preservando
+ * resultados montados y descartando respuestas obsoletas de API.
+ *
+ * ============================================================
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

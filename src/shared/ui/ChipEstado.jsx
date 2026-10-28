@@ -1,5 +1,16 @@
 /**
- * Etiqueta visual del estado administrativo recibido.
+ * ============================================================
+ * MATISTA | INDICADOR DE ESTADO
+ * ============================================================
+ *
+ * Archivo: ChipEstado.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar el estado recibido con su etiqueta pública y
+ * derivar la clase visual correspondiente al DTO.
+ *
+ * ============================================================
  */
 import { etiquetaEstado } from '../lib/etiquetasEstado.js';
 

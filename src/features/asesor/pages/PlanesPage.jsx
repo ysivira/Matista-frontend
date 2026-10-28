@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: PlanesPage.jsx
+ * ============================================================
+ * MATISTA | CONSULTA COMERCIAL DE PLANES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página PlanesPage del módulo Asesor comercial; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: PlanesPage.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar el catálogo común de planes con destinos de consulta ASESOR.
  *
  * CONTENIDO:
  * - Función PlanesAsesorPage.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/catalogo/ConsultaPlanes.jsx
  * - ../../../shared/api/catalogoApi.js
+ *
+ * ============================================================
  */
 import { ConsultaPlanes } from '../../../shared/catalogo/ConsultaPlanes.jsx';
 import { catalogoApi } from '../../../shared/api/catalogoApi.js';

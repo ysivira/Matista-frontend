@@ -1,5 +1,16 @@
 /**
- * Cálculo de edad civil y validación de fechas declaradas.
+ * ============================================================
+ * MATISTA | EDAD CIVIL EN LA INTERFAZ
+ * ============================================================
+ *
+ * Archivo: edad.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Calcular años cumplidos desde fechas civiles con referencia
+ * UTC, rechazando fechas imposibles o futuras.
+ *
+ * ============================================================
  */
 /**
  * Calcula años cumplidos desde AAAA-MM-DD con fecha de referencia UTC.

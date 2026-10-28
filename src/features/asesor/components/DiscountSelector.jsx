@@ -1,16 +1,21 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: DiscountSelector.jsx
+ * ============================================================
+ * MATISTA | SELECCIÓN DE DESCUENTOS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente DiscountSelector del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: DiscountSelector.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Editar campaña y beneficios con opciones y errores comerciales del servidor.
  *
  * CONTENIDO:
  * - Función DiscountSelector.
  *
  * DEPENDENCIAS:
  * - ../../../shared/catalogo/politicaPresentacion.js
+ *
+ * ============================================================
  */
 import { formatearPorcentaje } from '../../../shared/catalogo/politicaPresentacion.js';
 

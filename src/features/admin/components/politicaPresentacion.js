@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: politicaPresentacion.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DE FORMATOS COMERCIALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente politicaPresentacion del módulo Administración; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: politicaPresentacion.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar campos, grupos y formatos de la política comercial compartida.
  *
  * CONTENIDO:
  * - Exporta CAMPOS_POLITICA.
@@ -14,6 +17,8 @@
  *
  * DEPENDENCIAS:
  * - ../../../shared/catalogo/politicaPresentacion.js
+ *
+ * ============================================================
  */
 export { CAMPOS_POLITICA, GRUPOS, presentarValor,
   formatearPorcentaje } from '../../../shared/catalogo/politicaPresentacion.js';

@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Composición de la aplicación
- * Archivo: SessionLayout.jsx
+ * ============================================================
+ * MATISTA | DISPOSICIÓN DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Compone la aplicación: proveedores, enrutado y disposición general de la sesión.
+ * Archivo: SessionLayout.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Componer el shell autenticado, el cierre de sesión y el modal de cuenta.
  *
  * CONTENIDO:
  * - Función SessionLayout.
@@ -18,6 +22,8 @@
  * - ../shared/ui/LoadingState.jsx
  * - ../features/admin/admin.css
  * - ../features/auth/components/auth.css
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

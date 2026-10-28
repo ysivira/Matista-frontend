@@ -1,5 +1,16 @@
 /**
- * Enlaces compartidos de impresión y PDF de documentos autorizados.
+ * ============================================================
+ * MATISTA | ACCIONES DOCUMENTALES
+ * ============================================================
+ *
+ * Archivo: AccionesDocumento.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar enlaces autenticados de impresión y descarga PDF
+ * para el recurso documental recibido.
+ *
+ * ============================================================
  */
 import { documentoCatalogo } from '../api/catalogoApi.js';
 import './documentos.css';

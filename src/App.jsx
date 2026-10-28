@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Aplicación
- * Archivo: App.jsx
+ * ============================================================
+ * MATISTA | APLICACIÓN REACT
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Compone la aplicación: proveedores, enrutado y disposición general de la sesión.
+ * Archivo: App.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Crear el router de navegador y presentarlo mediante RouterProvider.
  *
  * CONTENIDO:
  * - Valor por defecto (Identifier).
@@ -12,6 +16,8 @@
  * - react-router-dom
  * - ./App.css
  * - ./app/router.jsx
+ *
+ * ============================================================
  */
 import { RouterProvider } from 'react-router-dom';
 import './App.css';

@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | CONFIGURACIÓN DE ANÁLISIS ESTÁTICO
+ * ============================================================
+ *
+ * Archivo: eslint.config.js
+ * Módulo: Herramientas del frontend
+ *
+ * Responsabilidad:
+ * Componer reglas JavaScript, JSX, hooks y React Refresh y
+ * excluir directorios de cobertura y compilación.
+ *
+ * ============================================================
+ */
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

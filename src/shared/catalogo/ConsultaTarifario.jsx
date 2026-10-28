@@ -1,5 +1,16 @@
 /**
- * Consulta compartida de tarifas publicadas, versiones y filtros de presentación.
+ * ============================================================
+ * MATISTA | CONSULTA COMPARTIDA DE TARIFAS
+ * ============================================================
+ *
+ * Archivo: ConsultaTarifario.jsx
+ * Módulo: Catálogo compartido
+ *
+ * Responsabilidad:
+ * Consultar la matriz publicada por plan y modalidad, filtrar
+ * segmentos y mostrar vigencia y enlaces documentales.
+ *
+ * ============================================================
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -92,9 +103,9 @@ export function ConsultaTarifario({
   const referenciaScroll = useRef(null); // Contenedor de la tabla para el aviso de desplazamiento
   const [desplazable, setDesplazable] = useState(false); // true: la tabla excede el ancho
 
-  // Indicador discreto de desplazamiento horizontal (SPEC-27): se reevalúa
-  // al cambiar la matriz, al desplazar la tabla y al redimensionar; el aviso
-  // desaparece cuando el contenido entra por completo en el ancho visible.
+  // Indicador discreto de desplazamiento horizontal: se reevalúa al cambiar
+  // la matriz, al desplazar la tabla y al redimensionar; el aviso desaparece
+  // cuando el contenido entra por completo en el ancho visible.
   useEffect(() => {
     const nodo = referenciaScroll.current;
     if (!nodo) return undefined;

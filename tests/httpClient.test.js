@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL TRANSPORTE HTTP
+ * ============================================================
+ *
+ * Archivo: httpClient.test.js
+ * Módulo: Pruebas de infraestructura
+ *
+ * Responsabilidad:
+ * Probar cookies, JSON, respuestas vacías y errores de API o
+ * transporte mediante fetch y respuestas controladas.
+ *
+ * ============================================================
+ */
 import { describe, expect, it, vi } from 'vitest'
 import {
   ApiError,

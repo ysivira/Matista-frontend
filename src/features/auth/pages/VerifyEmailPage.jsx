@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: VerifyEmailPage.jsx
+ * ============================================================
+ * MATISTA | VERIFICACIÓN DE CORREO INICIAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página VerifyEmailPage del módulo Autenticación; compone componentes de la feature para su caso
- * de uso.
+ * Archivo: VerifyEmailPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Confirmar el correo mediante el token del fragmento y presentar el estado del enlace.
  *
  * CONTENIDO:
  * - Función VerifyEmailPage.
@@ -18,6 +21,8 @@
  * - ../../../shared/ui/LoadingState.jsx
  * - ../auth.tokens.js
  * - ../../../shared/lib/httpClient.js
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';

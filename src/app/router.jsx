@@ -1,5 +1,16 @@
 /**
- * Rutas públicas y protegidas de MATISTA, con composición por rol y sesión.
+ * ============================================================
+ * MATISTA | ENRUTADO DE APLICACIÓN
+ * ============================================================
+ *
+ * Archivo: router.jsx
+ * Módulo: Composición de la aplicación
+ *
+ * Responsabilidad:
+ * Definir rutas públicas y protegidas por rol y sesión, y crear
+ * routers de navegador o memoria con el mismo árbol de rutas.
+ *
+ * ============================================================
  */
 import { createBrowserRouter, createMemoryRouter, Navigate } from 'react-router-dom';
 import { AUTH_ROLES } from '../features/auth/auth.constants.js';

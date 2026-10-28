@@ -1,12 +1,23 @@
 /**
- * Modal institucional de procesamiento con el logo oficial de MATISTA.
+ * ============================================================
+ * MATISTA | MODAL DE PROCESAMIENTO
+ * ============================================================
+ *
+ * Archivo: MatistaLoadingModal.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar el estado de procesamiento con marca institucional,
+ * foco accesible y textos recibidos, sin simular progreso.
+ *
+ * ============================================================
  */
 import { useEffect, useRef } from 'react';
 import { BrandLogo } from './BrandLogo.jsx';
 import './matistaLoadingModal.css';
 
 /**
- * Modal compartido de procesamiento (SPEC-26): superposición semitransparente,
+ * Modal compartido de procesamiento: superposición semitransparente,
  * tarjeta oscura con borde violeta, logo oficial MATISTA con latido suave,
  * anillo orbital luminoso, tres puntos animados y aviso inferior. Solo
  * presenta: no anuncia etapas, porcentajes ni envíos confirmados; el estado

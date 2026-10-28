@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: catalogoApi.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DEL CLIENTE DE CATÁLOGO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Cliente HTTP del módulo Administración; centraliza las llamadas a los endpoints del backend.
+ * Archivo: catalogoApi.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar el cliente compartido de catálogo desde su ruta ADMIN anterior.
  *
  * CONTENIDO:
  * - Exporta catalogoApi.
@@ -15,6 +19,8 @@
  *
  * OBSERVACIONES:
  * Ruta anterior compatible; el catálogo de consulta no pertenece a la gestión ADMIN.
+ *
+ * ============================================================
  */
 export { catalogoApi, consultarCatalogo,
   documentoCatalogo } from '../../../shared/api/catalogoApi.js';

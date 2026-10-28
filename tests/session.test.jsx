@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL PROVEEDOR DE SESIÓN
+ * ============================================================
+ *
+ * Archivo: session.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Controlar promesas de bootstrap y mutación para verificar
+ * carreras, cancelaciones y estado de sesión solo en memoria.
+ *
+ * ============================================================
+ */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { SessionProvider } from '../src/features/auth/context/SessionProvider.jsx'

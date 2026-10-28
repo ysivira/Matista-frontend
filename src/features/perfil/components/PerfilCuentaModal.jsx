@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Perfil de usuario
- * Archivo: PerfilCuentaModal.jsx
+ * ============================================================
+ * MATISTA | MODAL DE CUENTA PERSONAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente PerfilCuentaModal del módulo Perfil; unidad de interfaz reutilizable de la feature.
+ * Archivo: PerfilCuentaModal.jsx
+ * Módulo: Perfil
+ *
+ * Responsabilidad:
+ * Presentar identidad y alternar formularios de contraseña o correo de la cuenta operante.
  *
  * CONTENIDO:
  * - Función PerfilCuentaModal.
@@ -16,6 +20,8 @@
  * - ../../auth/components/AuthFields.jsx
  * - ../../auth/hooks/useSession.js
  * - ../hooks/usePerfilAcciones.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Modal } from '../../../shared/ui/Modal.jsx';

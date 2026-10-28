@@ -1,5 +1,16 @@
 /**
- * Presentación de importes decimales en pesos argentinos sin recalcularlos.
+ * ============================================================
+ * MATISTA | PRESENTACIÓN MONETARIA
+ * ============================================================
+ *
+ * Archivo: formatoMonetario.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Presentar cadenas DECIMAL en pesos argentinos mediante texto,
+ * sin aritmética, conversión a Number ni redondeo económico.
+ *
+ * ============================================================
  */
 /** Formato compartido de importes: `$ 1.234.567,89` (punto de miles y coma decimal). */
 const PATRON_PRECIO = /^-?\d+(\.\d+)?$/;

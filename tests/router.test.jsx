@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE RUTAS Y GUARDS
+ * ============================================================
+ *
+ * Archivo: router.test.jsx
+ * Módulo: Pruebas de navegación
+ *
+ * Responsabilidad:
+ * Verificar rutas públicas, destinos por rol y denegaciones de
+ * acceso usando el router real con sesión y APIs simuladas.
+ *
+ * ============================================================
+ */
 import { cleanup, render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { RouterProvider } from 'react-router-dom'

@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE CONFIRMACIÓN DE CORREO
+ * ============================================================
+ *
+ * Archivo: confirmEmailChangePage.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Probar consumo del enlace, reintentos y descarte de respuestas
+ * tras desmontaje, incluido el ciclo de efectos de StrictMode.
+ *
+ * ============================================================
+ */
 import { StrictMode } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

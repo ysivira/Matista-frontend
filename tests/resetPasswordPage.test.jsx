@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE RESTABLECIMIENTO
+ * ============================================================
+ *
+ * Archivo: resetPasswordPage.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Probar enlace sin token, confirmación de contraseña, envío
+ * correcto y rechazo del enlace con servicio AUTH simulado.
+ *
+ * ============================================================
+ */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'

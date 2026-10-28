@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: ProtectedRoute.jsx
+ * ============================================================
+ * MATISTA | PROTECCIÓN DE NAVEGACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente ProtectedRoute del módulo Autenticación; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: ProtectedRoute.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Resolver carga, error o acceso a rutas según sesión, cuenta activa y rol.
  *
  * CONTENIDO:
  * - Función ProtectedRoute.
@@ -15,6 +18,8 @@
  * - ../auth.constants.js
  * - ../context/SessionContext.js
  * - ../hooks/useSession.js
+ *
+ * ============================================================
  */
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { LoadingState } from '../../../shared/ui/LoadingState.jsx';

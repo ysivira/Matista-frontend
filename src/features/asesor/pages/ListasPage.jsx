@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: ListasPage.jsx
+ * ============================================================
+ * MATISTA | CONSULTA COMERCIAL DE PRECIOS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ListasPage del módulo Asesor comercial; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: ListasPage.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Componer la consulta de tarifas mediante componentes y API compartidos.
  *
  * CONTENIDO:
  * - Función ListasPage.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../../../shared/catalogo/ConsultaTarifario.jsx
  * - ../../../shared/api/catalogoApi.js
+ *
+ * ============================================================
  */
 import { ConsultaTarifario } from '../../../shared/catalogo/ConsultaTarifario.jsx';
 import { catalogoApi } from '../../../shared/api/catalogoApi.js';

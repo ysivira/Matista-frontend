@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteReview.jsx
+ * ============================================================
+ * MATISTA | REVISIÓN DE COTIZACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente QuoteReview del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: QuoteReview.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar identidad, familia y economía del snapshot sin recalcularlo.
  *
  * CONTENIDO:
  * - Función QuoteReview.
@@ -14,6 +17,8 @@
  * - ../../auth/context/SessionContext.js
  * - ./QuoteSummary.jsx
  * - ../../../shared/lib/formatoMonetario.js
+ *
+ * ============================================================
  */
 import { useContext } from 'react';
 import { SessionContext } from '../../auth/context/SessionContext.js';

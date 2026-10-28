@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteHistory.jsx
+ * ============================================================
+ * MATISTA | HISTORIAL DE COTIZACIONES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página QuoteHistory del módulo Asesor comercial; compone componentes de la feature para su caso
- * de uso.
+ * Archivo: QuoteHistory.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar historial propio con filtros, paginación e importes persistidos.
  *
  * CONTENIDO:
  * - Función QuoteHistory.
@@ -15,6 +18,8 @@
  * - ../hooks/useAsesorConsulta.js
  * - ../../../shared/lib/formatoMonetario.js
  * - ../stitch.css
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

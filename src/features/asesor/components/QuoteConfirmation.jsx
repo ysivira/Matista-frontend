@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteConfirmation.jsx
+ * ============================================================
+ * MATISTA | CONFIRMACIÓN DE EMISIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente QuoteConfirmation del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: QuoteConfirmation.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar exclusivamente una emisión confirmada y releída desde el backend.
  *
  * CONTENIDO:
  * - Función QuoteConfirmation.
@@ -13,6 +16,8 @@
  * - react-router-dom
  * - ./AsesorDialog.jsx
  * - ../../../shared/lib/formatoMonetario.js
+ *
+ * ============================================================
  */
 import { Link, useNavigate } from 'react-router-dom';
 import { AsesorDialog } from './AsesorDialog.jsx';

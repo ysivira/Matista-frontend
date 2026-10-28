@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE PERFIL PERSONAL
+ * ============================================================
+ *
+ * Archivo: miPerfilPage.test.jsx
+ * Módulo: Pruebas de perfil
+ *
+ * Responsabilidad:
+ * Verificar identidad pública, DTO de credenciales y avisos de
+ * operaciones sensibles mediante sesión y API simuladas.
+ *
+ * ============================================================
+ */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: ForgotPasswordPage.jsx
+ * ============================================================
+ * MATISTA | SOLICITUD DE RECUPERACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ForgotPasswordPage del módulo Autenticación; compone componentes de la feature para su
- * caso de uso.
+ * Archivo: ForgotPasswordPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Solicitar recuperación por correo y mostrar una confirmación neutra.
  *
  * CONTENIDO:
  * - Función ForgotPasswordPage.
@@ -18,6 +21,8 @@
  * - ../components/AuthFields.jsx
  * - ../auth.messages.js
  * - ../auth.validation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: EmployeesPage.jsx
+ * ============================================================
+ * MATISTA | GESTIÓN DEL DIRECTORIO
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página EmployeesPage del módulo Administración; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: EmployeesPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Coordinar filtros, paginación y confirmaciones de estado o rol del directorio.
  *
  * CONTENIDO:
  * - Función EmployeesPage.
@@ -23,6 +26,8 @@
  * - ../components/ChipEstado.jsx
  * - ../components/EmployeeCard.jsx
  * - ../hooks/useVistaTarjetas.js
+ *
+ * ============================================================
  */
 import { useEffect, useRef, useState } from 'react';
 import { adminApi } from '../api/adminApi.js';
@@ -108,9 +113,10 @@ function ModalAccion({
   const restrictivo = accion === 'desactivar' || accion === 'darBaja';
   // El detalle llega por la petición getEmployee; hasta que llegue se usa la fila.
   const visible = detalle ?? empleado;
-  // Regla SPEC-25: el servidor exige correo ACTUAL verificado para activar o
-  // reactivar; si el listado ya lo informa sin verificar, se bloquea el
-  // confirmar y se explica la razón (la decisión final vive en el backend).
+  // Regla de negocio: el servidor exige correo ACTUAL verificado para
+  // activar o reactivar; si el listado ya lo informa sin verificar, se
+  // bloquea el confirmar y se explica la razón (la decisión final vive en
+  // el backend).
   const sinVerificar = !esRol && destino === 'ACTIVO' && visible?.email_verificado === false;
   return <AdminModal label={`Confirmar ${ETIQUETA_ACCION[accion]}`}
     title={`Confirmar ${ETIQUETA_ACCION[accion]}`} subtitle="Confirmación de cambio de cuenta"

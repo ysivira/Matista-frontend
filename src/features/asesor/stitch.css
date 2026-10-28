@@ -1,315 +1,1968 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Material+Symbols+Outlined&display=swap');
 
-/* SPEC-UI-03: únicamente superficies del flujo Asesor; no cambia el shell ni los estilos ADMIN. */
-.ase-ui { font-family:'Manrope',sans-serif; font-size:14px; line-height:1.5; max-width:1200px; margin-inline:auto; }
-.ase-ui *, .ase-ui *::before, .ase-ui *::after { box-sizing:border-box; }
-.ase-ui h1,.ase-ui h2,.ase-ui h3 { font-family:'Space Grotesk',sans-serif; letter-spacing:-.02em; }
-.ase-ui h1 { font-size:36px; line-height:1.2; margin:4px 0 10px; }
-.ase-ui h2 { font-size:24px; margin:0 0 8px; }
-.ase-ui h3 { font-size:18px; margin:0 0 16px; }
-.ase-ui p { line-height:1.6; }
-.ase-ui small { display:block; color:#5d607e; font-size:12px; line-height:1.5; }
-.ase-ui button,.ase-ui .ase-primary-link { background:linear-gradient(100deg,#5b2cbf,#8b5cf6); color:#fff; border:1px solid transparent; border-radius:8px; padding:12px 20px; font:600 14px 'Manrope',sans-serif; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
-.ase-ui button:disabled { opacity:.5; cursor:not-allowed; }
-.ase-ui button:focus-visible,.ase-ui a:focus-visible { outline:3px solid #a78bfa; outline-offset:3px; }
-.ase-ui .ase-secondary,.ase-ui .ase-secondary-link { background:#fff; color:#202236; border:1px solid #dcd6e9; border-radius:8px; padding:12px 20px; text-decoration:none; }
-.ase-ui .ase-text-button { background:transparent; color:#6d28d9; border:0; padding:8px 0; }
-.ase-ui label { display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:600; margin:12px 0; }
-.ase-ui input,.ase-ui select { width:100%; min-width:0; min-height:44px; padding:10px 12px; color:#202236; background:#fff; border:1px solid #dcd6e9; border-radius:8px; font:inherit; }
-.ase-ui input:focus,.ase-ui select:focus { outline:2px solid #8b5cf6; outline-offset:1px; }
-.ase-ui input[readonly] { background:#f3f1f8; color:#5d607e; }
-.ase-ui input[type=checkbox],.ase-ui input[type=radio] { width:18px; height:18px; min-height:18px; flex-shrink:0; accent-color:#8b5cf6; }
-.ase-ui .ase-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
-.ase-ui .ase-muted { color:#5d607e; }
-.ase-ui .ase-symbol { font-family:'Material Symbols Outlined'; font-size:20px; font-weight:normal; line-height:1; font-feature-settings:'liga'; }
-.ase-ui .ase-local-heading { display:flex; justify-content:space-between; gap:24px; align-items:center; margin:32px 0; color:#f3f4f6; }
-.ase-ui .ase-local-heading>div>p:first-child { letter-spacing:.13em; color:#cfbcff; font-size:12px; font-weight:700; }
-.ase-ui .ase-local-heading p { margin:4px 0; color:#cbc3d7; }
-.ase-ui .ase-local-heading>span { white-space:nowrap; color:#cbc3d7; }
-.ase-ui .ase-stitch-stepper { list-style:none; display:flex; justify-content:center; align-items:center; gap:32px; padding:0; margin:28px 0 40px; color:#858398; }
-.ase-ui .ase-stitch-stepper li { display:flex; gap:14px; align-items:center; flex:0 1 280px; }
-.ase-ui .ase-stitch-stepper li:not(:last-child)::after { content:''; height:2px; background:#494454; flex:1; min-width:18px; margin-left:10px; }
-.ase-ui .ase-stitch-stepper li>span { display:grid; place-items:center; width:44px; height:44px; flex-shrink:0; border-radius:50%; border:1px solid #494454; font-size:18px; }
-.ase-ui .ase-stitch-stepper strong { display:block; font-size:15px; white-space:nowrap; }
-.ase-ui .ase-stitch-stepper small { color:inherit; letter-spacing:.06em; }
-.ase-ui .ase-stitch-stepper [aria-current=step] { color:#f3f4f6; }
-.ase-ui .ase-stitch-stepper [aria-current=step]>span { border-color:#8b5cf6; background:#8b5cf6; box-shadow:0 0 20px #8b5cf660; color:#fff; }
-.ase-ui .ase-stitch-stepper .is-done { color:#10b981; }
-.ase-ui .ase-stitch-stepper .is-done>span { background:#10b98120; border-color:#10b981; }
-.ase-ui .ase-workspace,.ase-ui.ase-client-step,.ase-ui .ase-client-step { color:#202236; background:#f8f9fc; border:1px solid #dcd6e9; border-radius:20px; overflow:hidden; box-shadow:0 4px 20px -2px #0b0d1740; }
-.ase-ui.ase-client-step,.ase-ui .ase-client-step { background:#faf8ff; padding:40px; }
-.ase-ui .ase-client-fields { padding:0; margin:12px 0 24px; border:0; background:transparent; }
-.ase-ui .ase-client-fields:disabled { opacity:.65; }
-.ase-ui .ase-client-section-title { margin:30px 0 18px; padding-bottom:12px; border-bottom:1px solid #dcd6e9; color:#4f319c; font-size:16px; text-transform:none; }
-.ase-ui .ase-client-section-title::before { display:none; }
-.ase-ui .ase-client-fields .ase-client-section-title { margin-top:32px; }
-.ase-ui .ase-input-shell { display:flex; align-items:center; min-width:0; }
-.ase-ui .ase-input-shell>svg { flex-shrink:0; }
-.ase-ui .ase-input-shell>.ase-symbol { position:absolute; left:12px; color:#797a91; pointer-events:none; }
-.ase-ui .ase-step-header .ase-section-heading { flex:1; }
-.ase-ui .ase-step-header h3 { font:600 24px 'Space Grotesk',sans-serif; }
-.ase-ui .ase-section-heading>span>.ase-symbol { font-size:32px; }
-.ase-ui .ase-client-status { display:block; }
-.ase-ui .ase-client-fields .ase-grid { align-items:start; }
-.ase-ui .ase-field-row label { margin:0; }
-.ase-ui .ase-input-shell input { min-width:0; }
-.ase-ui .ase-client-status { margin:18px 0; padding:16px; border:1px solid #a7f3d0; background:#ecfdf5; color:#065f46; border-radius:10px; }
-.ase-ui .ase-client-status p { margin:4px 0 0; }
-.ase-ui .ase-client-status--nuevo { background:#f5f2ff; border-color:#ddd6fe; color:#5b2cbf; }
-.ase-ui .ase-info-panel { margin:24px 0; background:#f1edfb; border:1px solid #e5dcfa; border-radius:8px; padding:16px; }
-.ase-ui .ase-actions { border-top:1px solid #dcd6e9; justify-content:space-between; padding-top:24px; }
-.ase-ui .ase-actions>div { text-align:right; }
-.ase-ui .ase-actions small { margin-top:8px; }
-.ase-ui .ase-client-context { display:flex; align-items:center; gap:18px; padding:24px; border-bottom:1px solid #dcd6e9; background:linear-gradient(90deg,#f8f5ff,#fafbff); }
-.ase-ui .ase-client-context h2 { font-size:20px; }
-.ase-ui .ase-client-context p { margin:0; }
-.ase-ui .ase-client-context>div:last-child { margin-left:auto; text-align:right; }
-.ase-ui .ase-avatar { width:50px; height:50px; border-radius:14px; display:grid; place-items:center; color:#fff; background:#8b5cf6; font-size:20px; font-weight:700; }
-.ase-ui .ase-operation { min-width:0; margin:0; padding:32px 40px 8px; border:0; }
-/* SPEC-28 — composición del paso 2 con una sola instancia de la vista previa.
+/*SPEC-UI-03: únicamente superficies del flujo Asesor; no cambia el shell ni los estilos ADMIN.*/
+
+.ase-ui {
+  font-family: 'Manrope',sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+.ase-ui *, .ase-ui *::before, .ase-ui *::after {
+  box-sizing: border-box;
+}
+
+.ase-ui h1,.ase-ui h2,.ase-ui h3 {
+  font-family: 'Space Grotesk',sans-serif;
+  letter-spacing: -.02em;
+}
+
+.ase-ui h1 {
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 4px 0 10px;
+}
+
+.ase-ui h2 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+
+.ase-ui h3 {
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+
+.ase-ui p {
+  line-height: 1.6;
+}
+
+.ase-ui small {
+  display: block;
+  color: #5d607e;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ase-ui button,.ase-ui .ase-primary-link {
+  background: linear-gradient(100deg,#5b2cbf,#8b5cf6);
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font: 600 14px 'Manrope',sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ase-ui button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.ase-ui button:focus-visible,.ase-ui a:focus-visible {
+  outline: 3px solid #a78bfa;
+  outline-offset: 3px;
+}
+
+.ase-ui .ase-secondary,.ase-ui .ase-secondary-link {
+  background: #fff;
+  color: #202236;
+  border: 1px solid #dcd6e9;
+  border-radius: 8px;
+  padding: 12px 20px;
+  text-decoration: none;
+}
+
+.ase-ui .ase-text-button {
+  background: transparent;
+  color: #6d28d9;
+  border: 0;
+  padding: 8px 0;
+}
+
+.ase-ui label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 12px 0;
+}
+
+.ase-ui input,.ase-ui select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  color: #202236;
+  background: #fff;
+  border: 1px solid #dcd6e9;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.ase-ui input:focus,.ase-ui select:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 1px;
+}
+
+.ase-ui input[readonly] {
+  background: #f3f1f8;
+  color: #5d607e;
+}
+
+.ase-ui input[type=checkbox],.ase-ui input[type=radio] {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  flex-shrink: 0;
+  accent-color: #8b5cf6;
+}
+
+.ase-ui .ase-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+.ase-ui .ase-muted {
+  color: #5d607e;
+}
+
+.ase-ui .ase-symbol {
+  font-family: 'Material Symbols Outlined';
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 1;
+  font-feature-settings: 'liga';
+}
+
+.ase-ui .ase-local-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  margin: 32px 0;
+  color: #f3f4f6;
+}
+
+.ase-ui .ase-local-heading>div>p:first-child {
+  letter-spacing: .13em;
+  color: #cfbcff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ase-ui .ase-local-heading p {
+  margin: 4px 0;
+  color: #cbc3d7;
+}
+
+.ase-ui .ase-local-heading>span {
+  white-space: nowrap;
+  color: #cbc3d7;
+}
+
+.ase-ui .ase-stitch-stepper {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  padding: 0;
+  margin: 28px 0 40px;
+  color: #858398;
+}
+
+.ase-ui .ase-stitch-stepper li {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex: 0 1 280px;
+}
+
+.ase-ui .ase-stitch-stepper li:not(:last-child)::after {
+  content: '';
+  height: 2px;
+  background: #494454;
+  flex: 1;
+  min-width: 18px;
+  margin-left: 10px;
+}
+
+.ase-ui .ase-stitch-stepper li>span {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid #494454;
+  font-size: 18px;
+}
+
+.ase-ui .ase-stitch-stepper strong {
+  display: block;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-stitch-stepper small {
+  color: inherit;
+  letter-spacing: .06em;
+}
+
+.ase-ui .ase-stitch-stepper [aria-current=step] {
+  color: #f3f4f6;
+}
+
+.ase-ui .ase-stitch-stepper [aria-current=step]>span {
+  border-color: #8b5cf6;
+  background: #8b5cf6;
+  box-shadow: 0 0 20px #8b5cf660;
+  color: #fff;
+}
+
+.ase-ui .ase-stitch-stepper .is-done {
+  color: #10b981;
+}
+
+.ase-ui .ase-stitch-stepper .is-done>span {
+  background: #10b98120;
+  border-color: #10b981;
+}
+
+.ase-ui .ase-workspace,.ase-ui.ase-client-step,.ase-ui .ase-client-step {
+  color: #202236;
+  background: #f8f9fc;
+  border: 1px solid #dcd6e9;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px -2px #0b0d1740;
+}
+
+.ase-ui.ase-client-step,.ase-ui .ase-client-step {
+  background: #faf8ff;
+  padding: 40px;
+}
+
+.ase-ui .ase-client-fields {
+  padding: 0;
+  margin: 12px 0 24px;
+  border: 0;
+  background: transparent;
+}
+
+.ase-ui .ase-client-fields:disabled {
+  opacity: .65;
+}
+
+.ase-ui .ase-client-section-title {
+  margin: 30px 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #dcd6e9;
+  color: #4f319c;
+  font-size: 16px;
+  text-transform: none;
+}
+
+.ase-ui .ase-client-section-title::before {
+  display: none;
+}
+
+.ase-ui .ase-client-fields .ase-client-section-title {
+  margin-top: 32px;
+}
+
+.ase-ui .ase-input-shell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.ase-ui .ase-input-shell>svg {
+  flex-shrink: 0;
+}
+
+.ase-ui .ase-input-shell>.ase-symbol {
+  position: absolute;
+  left: 12px;
+  color: #797a91;
+  pointer-events: none;
+}
+
+.ase-ui .ase-step-header .ase-section-heading {
+  flex: 1;
+}
+
+.ase-ui .ase-step-header h3 {
+  font: 600 24px 'Space Grotesk',sans-serif;
+}
+
+.ase-ui .ase-section-heading>span>.ase-symbol {
+  font-size: 32px;
+}
+
+.ase-ui .ase-client-status {
+  display: block;
+}
+
+.ase-ui .ase-client-fields .ase-grid {
+  align-items: start;
+}
+
+.ase-ui .ase-field-row label {
+  margin: 0;
+}
+
+.ase-ui .ase-input-shell input {
+  min-width: 0;
+}
+
+.ase-ui .ase-client-status {
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  color: #065f46;
+  border-radius: 10px;
+}
+
+.ase-ui .ase-client-status p {
+  margin: 4px 0 0;
+}
+
+.ase-ui .ase-client-status--nuevo {
+  background: #f5f2ff;
+  border-color: #ddd6fe;
+  color: #5b2cbf;
+}
+
+.ase-ui .ase-info-panel {
+  margin: 24px 0;
+  background: #f1edfb;
+  border: 1px solid #e5dcfa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.ase-ui .ase-actions {
+  border-top: 1px solid #dcd6e9;
+  justify-content: space-between;
+  padding-top: 24px;
+}
+
+.ase-ui .ase-actions>div {
+  text-align: right;
+}
+
+.ase-ui .ase-actions small {
+  margin-top: 8px;
+}
+
+.ase-ui .ase-client-context {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 24px;
+  border-bottom: 1px solid #dcd6e9;
+  background: linear-gradient(90deg,#f8f5ff,#fafbff);
+}
+
+.ase-ui .ase-client-context h2 {
+  font-size: 20px;
+}
+
+.ase-ui .ase-client-context p {
+  margin: 0;
+}
+
+.ase-ui .ase-client-context>div:last-child {
+  margin-left: auto;
+  text-align: right;
+}
+
+.ase-ui .ase-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #8b5cf6;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.ase-ui .ase-operation {
+  min-width: 0;
+  margin: 0;
+  padding: 32px 40px 8px;
+  border: 0;
+}
+
+/*SPEC-28 — composición del paso 2 con una sola instancia de la vista previa.
    Escritorio (≥1024 px): grilla con áreas — Plan y Modalidad en la columna
    principal, vista previa lateral en su columna, grupo familiar y descuentos
-   a ancho completo (igual disposición visual que la anterior config-top). */
-.ase-ui .ase-operation { position:relative; isolation:isolate; }
-@media(min-width:1024px) {
-  .ase-ui .ase-operation { display:grid; grid-template-columns:minmax(0,2.1fr) minmax(290px,1fr); grid-template-areas:'primary preview' 'familia familia' 'descuentos descuentos'; gap:30px; align-items:start; }
-  .ase-ui .ase-config-primary { grid-area:primary; }
-  .ase-ui .ase-operation>[data-section='familia'] { grid-area:familia; }
-  .ase-ui .ase-config-descuentos { grid-area:descuentos; }
-  .ase-ui .ase-preview { grid-area:preview; }
+   a ancho completo (igual disposición visual que la anterior config-top).*/
+
+.ase-ui .ase-operation {
+  position: relative;
+  isolation: isolate;
 }
-/* Móvil y tablet (≤1023.98 px): distribución vertical con el orden exigido:
-   Plan → Modalidad → Grupo familiar → Descuentos → Vista previa → Acciones. */
-@media(max-width:1023.98px) {
-  .ase-ui .ase-operation { display:flex; flex-direction:column; }
-  .ase-ui .ase-config-primary { order:1; }
-  .ase-ui .ase-operation>[data-section='familia'] { order:2; }
-  .ase-ui .ase-config-descuentos { order:3; }
-  .ase-ui .ase-preview { order:4; }
+
+@media (min-width:1024px) {
+  .ase-ui .ase-operation {
+    display: grid;
+    grid-template-columns: minmax(0,2.1fr) minmax(290px,1fr);
+    grid-template-areas: 'primary preview' 'familia familia' 'descuentos descuentos';
+    gap: 30px;
+    align-items: start;
+  }
+
+  .ase-ui .ase-config-primary {
+    grid-area: primary;
+  }
+
+  .ase-ui .ase-operation>[data-section='familia'] {
+    grid-area: familia;
+  }
+
+  .ase-ui .ase-config-descuentos {
+    grid-area: descuentos;
+  }
+
+  .ase-ui .ase-preview {
+    grid-area: preview;
+  }
 }
-.ase-ui .ase-config-primary { display:grid; gap:30px; min-width:0; align-content:start; }
-.ase-ui .ase-config-primary>.ase-config-card { margin:0; }
-/* La grilla/flex del fieldset reemplaza el espaciado por margen de las
-   tarjetas; el envoltorio de descuentos también apila sin duplicar gaps. */
-.ase-ui .ase-operation>.ase-config-card { margin:0; }
-.ase-ui .ase-config-descuentos { display:grid; gap:30px; min-width:0; }
-.ase-ui .ase-config-descuentos>.ase-config-card { margin:0; }
-.ase-ui .ase-config-card { background:#fff; border:1px solid #dcd6e9; padding:24px; border-radius:16px; margin:0 0 30px; min-width:0; }
-.ase-ui .ase-card-title { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:16px; }
-.ase-ui .ase-card-title h3 { font:600 17px 'Manrope',sans-serif; margin:0; display:flex; align-items:center; gap:12px; }
-.ase-ui .ase-config-card .ase-card-title h3 { text-transform:uppercase; }
-.ase-ui .ase-origin { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
-.ase-ui .ase-origin label { flex-direction:row; align-items:center; margin:0; font-weight:500; }
-.ase-ui .ase-card-title b { background:#f3e8ff; color:#7c3aed; padding:5px 10px; border-radius:8px; font-size:14px; }
-.ase-ui .ase-small-button { padding:7px 12px; font-size:13px; background:#f5f2ff; color:#7c3aed; border:1px solid #ddd6fe; box-shadow:none; }
-.ase-ui .ase-icon-button { background:transparent; color:#5d607e; border:0; padding:4px 8px; min-width:32px; font-size:24px; line-height:1; }
-.ase-ui .ase-danger { color:#ef4444; }
-.ase-ui .ase-danger-button { background:#dc2626; }
-.ase-ui .ase-segments { display:flex; gap:4px; padding:5px; border-radius:14px; background:#f0f3f8; margin:16px 0 20px; }
-.ase-ui .ase-segments>button,.ase-ui .ase-segments>label { flex:1; margin:0; padding:12px; display:flex; justify-content:center; align-items:center; gap:6px; color:#475569; font-size:12px; text-transform:uppercase; font-weight:600; background:transparent; border:0; border-radius:9px; cursor:pointer; }
-.ase-ui .ase-segments input { position:absolute; opacity:0; width:1px; }
-.ase-ui .ase-segments label:focus-within { outline:2px solid #8b5cf6; }
-.ase-ui .ase-segments .is-active,.ase-ui .ase-segments button[aria-pressed=true] { color:white; background:#8b5cf6; box-shadow:0 2px 4px #0b0d1715; }
-/* SPEC-29: el esquema comercial tiene DOS opciones, no las tres modalidades
+
+/*Móvil y tablet (≤1023.98 px): distribución vertical con el orden exigido:
+   Plan → Modalidad → Grupo familiar → Descuentos → Vista previa → Acciones.*/
+
+@media (max-width:1023.98px) {
+  .ase-ui .ase-operation {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ase-ui .ase-config-primary {
+    order: 1;
+  }
+
+  .ase-ui .ase-operation>[data-section='familia'] {
+    order: 2;
+  }
+
+  .ase-ui .ase-config-descuentos {
+    order: 3;
+  }
+
+  .ase-ui .ase-preview {
+    order: 4;
+  }
+}
+
+.ase-ui .ase-config-primary {
+  display: grid;
+  gap: 30px;
+  min-width: 0;
+  align-content: start;
+}
+
+.ase-ui .ase-config-primary>.ase-config-card {
+  margin: 0;
+}
+
+/*La grilla/flex del fieldset reemplaza el espaciado por margen de las
+   tarjetas; el envoltorio de descuentos también apila sin duplicar gaps.*/
+
+.ase-ui .ase-operation>.ase-config-card {
+  margin: 0;
+}
+
+.ase-ui .ase-config-descuentos {
+  display: grid;
+  gap: 30px;
+  min-width: 0;
+}
+
+.ase-ui .ase-config-descuentos>.ase-config-card {
+  margin: 0;
+}
+
+.ase-ui .ase-config-card {
+  background: #fff;
+  border: 1px solid #dcd6e9;
+  padding: 24px;
+  border-radius: 16px;
+  margin: 0 0 30px;
+  min-width: 0;
+}
+
+.ase-ui .ase-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ase-ui .ase-card-title h3 {
+  font: 600 17px 'Manrope',sans-serif;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ase-ui .ase-config-card .ase-card-title h3 {
+  text-transform: uppercase;
+}
+
+.ase-ui .ase-origin {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ase-ui .ase-origin label {
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  font-weight: 500;
+}
+
+.ase-ui .ase-card-title b {
+  background: #f3e8ff;
+  color: #7c3aed;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.ase-ui .ase-small-button {
+  padding: 7px 12px;
+  font-size: 13px;
+  background: #f5f2ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+  box-shadow: none;
+}
+
+.ase-ui .ase-icon-button {
+  background: transparent;
+  color: #5d607e;
+  border: 0;
+  padding: 4px 8px;
+  min-width: 32px;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.ase-ui .ase-danger {
+  color: #ef4444;
+}
+
+.ase-ui .ase-danger-button {
+  background: #dc2626;
+}
+
+.ase-ui .ase-segments {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 14px;
+  background: #f0f3f8;
+  margin: 16px 0 20px;
+}
+
+.ase-ui .ase-segments>button,.ase-ui .ase-segments>label {
+  flex: 1;
+  margin: 0;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.ase-ui .ase-segments input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+}
+
+.ase-ui .ase-segments label:focus-within {
+  outline: 2px solid #8b5cf6;
+}
+
+.ase-ui .ase-segments .is-active,.ase-ui .ase-segments button[aria-pressed=true] {
+  color: white;
+  background: #8b5cf6;
+  box-shadow: 0 2px 4px #0b0d1715;
+}
+
+/*SPEC-29: el esquema comercial tiene DOS opciones, no las tres modalidades
    de afiliación. Apila según su ancho real, sin la excepción del último
-   botón a fila completa; ambas opciones conservan igual ancho y altura. */
-.ase-ui .ase-discounts .ase-segments { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); grid-auto-rows:1fr; gap:6px; }
-.ase-ui .ase-discounts .ase-segments>button { grid-column:auto; width:100%; min-width:0; min-height:44px; padding:12px; text-align:center; white-space:normal; word-break:normal; }
-/* SPEC-28 — modalidades a 320 px: en pantallas angostas dos opciones por
+   botón a fila completa; ambas opciones conservan igual ancho y altura.*/
+
+.ase-ui .ase-discounts .ase-segments {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,15rem),1fr));
+  grid-auto-rows: 1fr;
+  gap: 6px;
+}
+
+.ase-ui .ase-discounts .ase-segments>button {
+  grid-column: auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 12px;
+  text-align: center;
+  white-space: normal;
+  word-break: normal;
+}
+
+/*SPEC-28 — modalidades a 320 px: en pantallas angostas dos opciones por
    fila y Monotributo (la más ancha) ocupando la segunda fila completa; sin
    compresión ni desborde, con el estado activo intacto y áreas táctiles de
-   ~44 px. A partir de 480 px se conserva la fila horizontal. */
-@media(max-width:479.98px) {
-  .ase-ui .ase-segments { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
-  .ase-ui .ase-segments>label,.ase-ui .ase-segments>button { padding:12px 6px; }
-  .ase-ui .ase-segments>label:last-child,.ase-ui .ase-segments>button:last-child { grid-column:1/-1; }
+   ~44 px. A partir de 480 px se conserva la fila horizontal.*/
+
+@media (max-width:479.98px) {
+  .ase-ui .ase-segments {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+
+  .ase-ui .ase-segments>label,.ase-ui .ase-segments>button {
+    padding: 12px 6px;
+  }
+
+  .ase-ui .ase-segments>label:last-child,.ase-ui .ase-segments>button:last-child {
+    grid-column: 1/-1;
+  }
 }
-.ase-ui .ase-inset { display:block; padding:18px; background:#f7f8fc; border:1px solid #dcd6e9; border-radius:12px; color:#475569; margin:0; font-size:13px; }
-.ase-ui .ase-preview { padding:20px; background:#fff; border:1px solid #e9ddff; border-radius:16px; box-shadow:0 14px 28px #14152222; min-width:0; max-width:100%; align-self:start; position:static; margin:0; }
-.ase-ui .ase-preview>h3 { margin-top:0; }
-.ase-ui [aria-invalid="true"] { border-color:#dc2626; background:#fff7f7; }
-.ase-ui .ase-section-invalid,.ase-ui .ase-native-invalid-section { border-color:#e2a0a0; box-shadow:0 0 0 1px #dc262610; }
-.ase-ui .ase-field-error { display:block; color:#b91c1c; font-size:12px; font-weight:500; margin:6px 0 0; }
-.ase-ui .ase-field-error:empty { display:none; }
-.ase-ui .ase-technical-error { padding:12px; color:#92400e; background:#fffbeb; border:1px solid #fde68a; border-radius:8px; }
-.ase-ui .ase-preview h3 { font:700 17px 'Manrope',sans-serif; text-transform:uppercase; }
-/* Tarjetas de tramo (SPEC-25): cuatro por fila en escritorio, dos en
+
+.ase-ui .ase-inset {
+  display: block;
+  padding: 18px;
+  background: #f7f8fc;
+  border: 1px solid #dcd6e9;
+  border-radius: 12px;
+  color: #475569;
+  margin: 0;
+  font-size: 13px;
+}
+
+.ase-ui .ase-preview {
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e9ddff;
+  border-radius: 16px;
+  box-shadow: 0 14px 28px #14152222;
+  min-width: 0;
+  max-width: 100%;
+  align-self: start;
+  position: static;
+  margin: 0;
+}
+
+.ase-ui .ase-preview>h3 {
+  margin-top: 0;
+}
+
+.ase-ui [aria-invalid="true"] {
+  border-color: #dc2626;
+  background: #fff7f7;
+}
+
+.ase-ui .ase-section-invalid,.ase-ui .ase-native-invalid-section {
+  border-color: #e2a0a0;
+  box-shadow: 0 0 0 1px #dc262610;
+}
+
+.ase-ui .ase-field-error {
+  display: block;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 6px 0 0;
+}
+
+.ase-ui .ase-field-error:empty {
+  display: none;
+}
+
+.ase-ui .ase-technical-error {
+  padding: 12px;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+}
+
+.ase-ui .ase-preview h3 {
+  font: 700 17px 'Manrope',sans-serif;
+  text-transform: uppercase;
+}
+
+/*Tarjetas de tramo (SPEC-25): cuatro por fila en escritorio, dos en
    pantallas intermedias y una en moviles; dentro de cada tarjeta los
    campos Descuento y Meses apilan a ancho completo para eliminar el
-   espacio vacio que dejaba la grilla de dos columnas. */
-.ase-ui .ase-discount-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:16px; }
-@media (min-width:641px) { .ase-ui .ase-discount-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (min-width:1100px) { .ase-ui .ase-discount-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
-.ase-ui .ase-tramo { border:1px solid #e9ddff; border-radius:14px; background:#faf8ff; padding:16px; }
-.ase-ui .ase-tramo>div:first-child { display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.ase-ui .ase-tramo .ase-grid { grid-template-columns:1fr; gap:8px; align-items:start; }
-.ase-ui .ase-tramo .ase-field-error { display:block; line-height:1.5; }
-.ase-ui .ase-tramo input,.ase-ui .ase-tramo select { padding:8px; font-size:12px; width:100%; }
-.ase-ui .ase-benefit-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-.ase-ui .ase-benefit { display:flex; flex-direction:row; align-items:flex-start; gap:12px; border:1px solid #dcd6e9; border-radius:14px; padding:18px; font-weight:600; margin:0; }
-.ase-ui .ase-benefit small { margin-top:5px; font-weight:400; }
-.ase-ui .ase-benefit.ase-muted { flex-direction:column; background:#fafbfc; }
-.ase-ui table { width:100%; border-collapse:separate; border-spacing:0; font-size:13px; }
-.ase-ui th { padding:14px 18px; background:#f5f6fb; color:#5d607e; font-size:12px; text-transform:uppercase; text-align:left; font-weight:600; white-space:nowrap; border-bottom:1px solid #dcd6e9; }
-.ase-ui td { padding:16px 18px; border-bottom:1px solid #edf0f5; vertical-align:middle; }
-.ase-ui .ase-family input { width:80px; }
-.ase-ui .ase-family select { min-width:110px; }
-.ase-ui .ase-family table { min-width:640px; }
-.ase-ui .ase-family small { margin-top:12px; }
-.ase-ui .ase-workspace-actions { display:flex; justify-content:space-between; gap:16px; align-items:center; background:#fff; border-top:1px solid #dcd6e9; padding:28px 40px; }
-.ase-ui .ase-workspace-actions>div { display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:flex-end; }
-.ase-ui .ase-workspace-actions>a { color:#5d607e; text-decoration:none; }
-.ase-ui .ase-workspace-actions>a.ase-primary-link { color:#fff; background:#5b2cbf; }
-.ase-ui .ase-workspace-actions>a.ase-primary-link:hover { background:#482093; }
-.ase-ui .ase-workspace-actions>a.ase-primary-link:focus-visible { outline:3px solid #a78bfa; outline-offset:3px; }
-.ase-ui .ase-workspace-actions>a.ase-primary-link[aria-disabled="true"] { color:#fff; background:#625478; cursor:not-allowed; }
-.ase-ui .ase-review { background:white; }
-.ase-ui .ase-review-header { display:flex; justify-content:space-between; gap:24px; padding:32px 40px; border-bottom:1px solid #dcd6e9; }
-.ase-ui .ase-review-header p { margin:0; color:#5d607e; }
-.ase-ui .ase-review-body { padding:32px 40px; }
-.ase-ui .ase-review-body>section { margin-bottom:32px; }
-.ase-ui .ase-identity-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; padding:24px; background:#faf8ff; border-radius:16px; }
-.ase-ui dt { color:#5d607e; font-weight:500; font-size:12px; }
-.ase-ui dd { margin:6px 0 0; overflow-wrap:anywhere; }
-.ase-ui .ase-plan-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); padding:24px; gap:24px; background:#f7f5fd; border-radius:16px; }
-.ase-ui .ase-plan-summary>div { background:white; border-radius:14px; padding:20px; }
-.ase-ui .ase-plan-summary strong { display:block; font:700 24px 'Space Grotesk',sans-serif; color:#6d28d9; margin-top:12px; }
-.ase-ui .ase-money-list { margin:20px 0; }
-.ase-ui .ase-money-list>div { display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid #edf0f5; }
-.ase-ui .ase-money-list dt { font-size:14px; color:inherit; }
-.ase-ui .ase-money-list dd { margin:0; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
-.ase-ui .ase-discount-line { color:#7c3aed; }
-.ase-ui .ase-aporte-line { color:#047857; }
-.ase-ui .ase-total { display:flex; justify-content:space-between; align-items:center; gap:24px; background:linear-gradient(100deg,#6d3bd7,#9360f7); padding:24px; border-radius:12px; color:white; margin:20px 0 40px; }
-.ase-ui .ase-total small { color:#e9ddff; margin-top:8px; }
-.ase-ui .ase-total>strong { font:700 36px 'Space Grotesk',sans-serif; white-space:nowrap; }
-.ase-ui .ase-period-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; }
-.ase-ui .ase-period { background:#faf8ff; border:1px solid #e9ddff; border-radius:12px; padding:16px; }
-.ase-ui .ase-period strong { display:block; font-size:20px; color:#6d28d9; margin:6px 0; }
-.ase-ui .ase-economics--compact .ase-card-title { align-items:flex-start; }
-.ase-ui .ase-economics--compact .ase-total { flex-direction:column; text-align:center; gap:12px; padding:20px 12px; background:#faf8ff; border:1px solid #e9ddff; color:#5b2cbf; margin-bottom:40px; }
-.ase-ui .ase-economics--compact .ase-total>strong { font-size:28px; }
-.ase-ui .ase-economics--compact .ase-total small { color:#5d607e; }
-.ase-ui .ase-economics--compact .ase-money-list>div { gap:8px; padding:9px 0; }
-.ase-ui .ase-economics--compact .ase-money-list dt,.ase-ui .ase-economics--compact .ase-money-list dd { font-size:12px; }
-.ase-ui .ase-economics--compact .ase-period { padding:10px; }
-.ase-ui .ase-economics--compact .ase-period strong { font-size:16px; }
-.ase-ui .ase-filter-bar { display:flex; align-items:end; gap:12px; padding:16px; border:1px solid #494454; border-radius:16px; background:#ffffff05; margin-bottom:24px; color:#cbc3d7; }
-.ase-ui .ase-filter-bar label { margin:0; font-size:11px; flex:1; min-width:0; }
-.ase-ui .ase-filter-bar .ase-search-filter { flex:2; }
-.ase-ui .ase-filter-bar input,.ase-ui .ase-filter-bar select { background:#ffffff06; border-color:#494454; color:#e1e1f5; font-size:13px; color-scheme:dark; }
-.ase-ui .ase-history-surface { background:#fff; color:#202236; border-radius:20px; overflow:hidden; }
-.ase-ui .ase-history-surface table { min-width:1050px; }
-.ase-ui .ase-number { font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
-.ase-ui .ase-mono-aporte { display:block; white-space:normal; font-size:11px; font-weight:400; color:#047857; margin-top:4px; }
-.ase-ui .ase-detail-actions>div { display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; }
-.ase-ui .ase-confirm-action { display:flex; flex-direction:row; align-items:center; gap:10px; margin-top:20px; }
-.ase-ui .ase-confirm-action input { width:auto; }
-.ase-ui.ase-dialog textarea { width:100%; min-height:100px; padding:12px; border:1px solid #dcd6e9; border-radius:8px; font:inherit; color:#202236; resize:vertical; }
-.ase-ui .ase-row-actions { display:flex; gap:10px; background:#f1f4f9; padding:8px; border-radius:10px; white-space:nowrap; }
-.ase-ui .ase-row-actions a { color:#7a8ba5; }
-.ase-ui .ase-reference { color:#8b5cf6; font-weight:700; text-decoration:none; white-space:nowrap; }
-.ase-ui .ase-annulled { opacity:.65; }
-.ase-ui .ase-history-footer { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; gap:18px; background:#f8faff; color:#5d607e; }
-.ase-ui .ase-history-footer label { flex-direction:row; align-items:center; margin:0; }
-.ase-ui .ase-history-footer select { width:70px; }
-.ase-ui .ase-history-footer>div { display:flex; gap:12px; align-items:center; }
-.ase-ui .ase-empty { padding:32px; text-align:center; }
-.ase-dialog.ase-ui:has(.ase-success) { width:min(720px,95vw); background:#fff; border-top:6px solid #a78bfa; }
-.ase-dialog.ase-ui:has(.ase-client-confirm) { width:min(560px,95vw); }
-.ase-dialog.ase-ui:has(.ase-restricted) { width:min(640px,95vw); background:#fff; }
-.ase-ui .ase-success { text-align:center; }
-.ase-ui .ase-success-icon { display:grid; place-items:center; margin:0 auto 24px; width:90px; height:90px; border-radius:50%; background:linear-gradient(100deg,#7c3aed,#b794ff); color:white; font-size:42px; box-shadow:0 10px 24px #8b5cf650; }
-.ase-ui .ase-success-number { border-radius:16px; background:#f7f2ff; padding:24px; margin:28px 0; color:#5b2cbf; }
-.ase-ui .ase-success-number strong { display:block; font:700 30px 'Space Grotesk',sans-serif; margin-top:8px; }
-.ase-ui .ase-success>a { display:block; margin:12px 0; }
-.ase-dialog.ase-ui { border:1px solid #dcd6e9; border-radius:24px; background:#f5f2ff; color:#202236; padding:0; width:min(1280px,95vw); max-width:95vw; max-height:92vh; overflow:auto; box-shadow:0 25px 50px #0a0b1299; }
-.ase-dialog::backdrop { background:#0f111ac0; backdrop-filter:blur(4px); }
-.ase-ui .ase-dialog-header { display:flex; justify-content:space-between; align-items:center; padding:28px 40px; background:linear-gradient(90deg,#ede7fc,#faf8ff); border-bottom:1px solid #dcd6e9; }
-.ase-ui .ase-dialog-body { padding:24px 40px; }
-.ase-ui .ase-detail-meta { padding:8px 0 24px; }
-.ase-ui .ase-dialog-body .ase-review-body { padding:0; }
-.ase-ui .ase-dialog-body .ase-review-body>section { background:#fff; border:1px solid #e6e0f2; padding:24px; border-radius:16px; }
-.ase-ui details.ase-config-card { margin:20px 0; }
-.ase-ui details summary { cursor:pointer; color:#6d28d9; font-weight:600; }
+   espacio vacio que dejaba la grilla de dos columnas.*/
 
-/* SPEC-UI-06: composición compacta del detalle Stitch; los datos ampliados quedan accesibles en segundo nivel. */
-.ase-dialog.ase-quote-detail { width:min(1120px,calc(100vw - 40px)); max-height:94dvh; overflow:hidden; }
-.ase-quote-detail[open] { display:flex; flex-direction:column; }
-.ase-quote-detail .ase-dialog-header { padding:18px 24px; gap:16px; flex-shrink:0; }
-.ase-quote-detail .ase-dialog-header>.ase-icon-button { background:#fff; border-radius:50%; width:38px; height:38px; flex-shrink:0; }
-.ase-quote-detail .ase-detail-heading>div { display:flex; align-items:center; flex-wrap:wrap; gap:12px; }
-.ase-quote-detail .ase-detail-heading h2 { font-size:24px; margin:0; }
-.ase-quote-detail .ase-detail-heading .ase-detail-number { font-size:13px; letter-spacing:.03em; margin:0; padding:5px 12px; background:#5320b7; border-radius:20px; color:#fff; }
-.ase-quote-detail .ase-detail-heading p { font-size:12px; color:#5d607e; margin:6px 0 0; }
-.ase-quote-detail .ase-dialog-body { padding:20px 24px; overflow-y:auto; min-height:0; }
-.ase-quote-detail .ase-detail-review { padding:0; display:flex; flex-direction:column; gap:16px; }
-.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>section { margin:0; padding:18px; border-radius:12px; }
-.ase-quote-detail .ase-holder-card>h3 { font:700 12px 'Manrope',sans-serif; text-transform:uppercase; color:#7c3aed; letter-spacing:.03em; margin:0 0 14px; }
-.ase-quote-detail .ase-identity-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px 20px; padding:0; background:transparent; margin:0; }
-.ase-quote-detail dt { text-transform:uppercase; font-size:10px; }
-.ase-quote-detail dd { font-size:14px; font-weight:600; margin:3px 0 0; }
-.ase-quote-detail dd small { font-size:11px; font-weight:500; }
-.ase-quote-detail .ase-advisor-card { padding:8px 12px; background:#f5f2ff; border:1px solid #e6e0f2; border-radius:9px; }
-.ase-quote-detail .ase-advisor-card dt { color:#6d28d9; }
-.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-plan-cards { padding:0; border:0; background:transparent; }
-.ase-quote-detail .ase-plan-summary { padding:0; gap:16px; background:transparent; }
-.ase-quote-detail .ase-plan-summary>div { padding:16px 18px; border:1px solid #e6e0f2; border-radius:12px; box-shadow:0 2px 3px #20223608; min-width:0; }
-.ase-quote-detail .ase-plan-summary>div>small { font-weight:700; font-size:11px; text-transform:uppercase; color:#7c3aed; }
-.ase-quote-detail .ase-plan-summary strong { font-size:23px; margin-top:10px; color:#202236; }
-.ase-quote-detail .ase-plan-summary p { font-size:12px; margin:6px 0 0; }
-.ase-quote-detail .ase-plan-summary .ase-captured-contribution strong { font:700 17px 'Space Grotesk',sans-serif; color:#5516be; display:inline; }
-.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-economics--detail { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.85fr); gap:18px; padding:0; border:0; background:transparent; align-items:start; }
-.ase-economics--detail .ase-economic-breakdown { background:#fff; border:1px solid #e6e0f2; border-radius:12px; padding:18px; min-width:0; }
-.ase-economics--detail .ase-card-title { align-items:flex-start; gap:10px; margin-bottom:8px; }
-.ase-economics--detail .ase-card-title h3 { text-transform:uppercase; color:#7c3aed; font:700 12px 'Manrope',sans-serif; letter-spacing:.03em; }
-.ase-economics--detail .ase-card-title .ase-pill { font-size:10px; }
-.ase-economics--detail .ase-economic-breakdown>.ase-muted { display:none; }
-.ase-economics--detail .ase-money-list { margin:12px 0 0; }
-.ase-economics--detail .ase-money-list>div { padding:9px 0; gap:10px; }
-.ase-economics--detail .ase-money-list dt { font-size:12px; text-transform:none; }
-.ase-economics--detail .ase-money-list dd { font-size:13px; }
-.ase-economics--detail .ase-economic-feature { background:linear-gradient(120deg,#3c0091,#5320b7 70%,#713dd1); border-radius:12px; padding:20px; color:#fff; min-width:0; }
-.ase-economics--detail .ase-total { margin:0 0 18px; padding:0; background:transparent; display:block; }
-.ase-economics--detail .ase-total>div>strong { display:block; font-size:17px; text-transform:uppercase; }
-.ase-economics--detail .ase-total>strong { display:block; font-size:clamp(24px,2.5vw,36px); margin-top:16px; white-space:normal; overflow-wrap:anywhere; }
-.ase-economics--detail .ase-economic-feature h3 { color:#e9ddff; font:700 11px 'Manrope',sans-serif; margin:0 0 10px; }
-.ase-economics--detail .ase-economic-feature .ase-period-grid { grid-template-columns:repeat(auto-fit,minmax(86px,1fr)); gap:8px; }
-.ase-economics--detail .ase-economic-feature .ase-period { padding:8px; background:#ffffff12; border-color:#ffffff30; }
-.ase-economics--detail .ase-economic-feature .ase-period strong { color:#fff; font-size:17px; margin:2px 0; }
-.ase-economics--detail .ase-economic-feature small,.ase-economics--detail .ase-economic-feature .ase-summary-muted,.ase-economics--detail .ase-economic-feature .ase-muted { color:#e9ddff; font-size:10px; }
-.ase-economics--detail .ase-economic-feature .ase-summary-muted { margin:12px 0 0; line-height:1.5; }
-.ase-quote-detail .ase-detail-extra { margin:0; padding:10px 0; border-top:1px solid #e6e0f2; font-size:12px; }
-.ase-quote-detail .ase-dialog-body>.ase-detail-extra { margin-top:8px; }
-.ase-quote-detail .ase-detail-extra summary { color:#6d28d9; font-weight:600; cursor:pointer; }
-.ase-quote-detail .ase-detail-extra[open] section { padding-top:12px; }
-.ase-quote-detail .ase-detail-extra h3 { font-size:15px; }
-.ase-economics--detail>.ase-detail-extra { grid-column:1/-1; }
-.ase-quote-detail .ase-workspace-actions { flex-shrink:0; padding:14px 24px; gap:10px; background:#faf8ff; }
-.ase-quote-detail .ase-workspace-actions>div { gap:8px; }
-.ase-quote-detail .ase-workspace-actions button,.ase-quote-detail .ase-workspace-actions a { padding:9px 12px; font-size:12px; }
+.ase-ui .ase-discount-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
 
-/* Confirmación Stitch: una sola tarjeta luminosa y sin el encabezado adicional del diálogo genérico. */
-.ase-dialog.ase-ui.ase-quote-confirmation { width:min(720px,calc(100vw - 32px)); max-height:94dvh; background:#fff; border-radius:18px; border:0; border-top:6px solid #a078ff; }
-.ase-quote-confirmation .ase-dialog-body { padding:32px 40px; }
-.ase-quote-confirmation .ase-success h1 { font-size:28px; margin:0 0 10px; }
-.ase-quote-confirmation .ase-success>p { color:#5d607e; font-size:15px; margin:0 auto 24px; max-width:550px; }
-.ase-quote-confirmation .ase-success-icon { width:80px; height:80px; font-size:40px; margin-bottom:20px; }
-.ase-quote-confirmation .ase-success-number { padding:16px; margin:0 0 24px; border-radius:12px; }
-.ase-quote-confirmation .ase-success-number small { color:#5320b7; font-size:11px; font-weight:700; }
-.ase-quote-confirmation .ase-success-number strong { font-size:28px; margin-top:4px; }
-.ase-quote-confirmation .ase-success-summary { background:#f8f9fc; border-radius:12px; padding:12px 20px; margin:0 0 26px; }
-.ase-quote-confirmation .ase-success-summary>div { display:flex; justify-content:space-between; gap:16px; padding:9px 0; text-align:left; }
-.ase-quote-confirmation .ase-success-summary>div+div { border-top:1px solid #e5e7eb; }
-.ase-quote-confirmation .ase-success-summary dt { display:flex; align-items:center; gap:7px; font-size:12px; flex-shrink:0; }
-.ase-quote-confirmation .ase-success-summary dt .ase-symbol { color:#94a3b8; font-size:18px; }
-.ase-quote-confirmation .ase-success-summary dd { margin:0; font-size:13px; font-weight:700; text-align:right; }
-.ase-quote-confirmation .ase-success-summary>div:last-child dd { color:#5320b7; font-size:17px; }
-.ase-quote-confirmation .ase-success>a { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; margin:10px 0 0; padding:12px; border-radius:8px; text-decoration:none; font-weight:700; }
-.ase-quote-confirmation .ase-success-history { color:#5320b7; background:#fff; box-shadow:0 1px 2px #20223610; }
-.ase-quote-confirmation .ase-success .ase-text-button { color:#5d607e; font-size:13px; }
-@media(max-width:800px) { .ase-quote-detail .ase-plan-summary { grid-template-columns:repeat(3,minmax(0,1fr)); } .ase-quote-detail .ase-plan-summary strong { font-size:18px; } .ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-economics--detail { grid-template-columns:1fr; } }
-@media(max-width:600px) { .ase-dialog.ase-quote-detail { width:calc(100vw - 16px); } .ase-quote-detail .ase-dialog-header,.ase-quote-detail .ase-dialog-body,.ase-quote-detail .ase-workspace-actions { padding:14px; } .ase-quote-detail .ase-detail-heading h2 { font-size:20px; } .ase-quote-detail .ase-identity-grid { grid-template-columns:1fr 1fr; } .ase-quote-detail .ase-plan-summary { grid-template-columns:1fr; gap:10px; } .ase-quote-detail .ase-workspace-actions>div { width:100%; } .ase-quote-detail .ase-workspace-actions button,.ase-quote-detail .ase-workspace-actions a { flex:1; } .ase-quote-confirmation .ase-dialog-body { padding:24px 20px; } .ase-quote-confirmation .ase-success h1 { font-size:23px; } .ase-quote-confirmation .ase-success-summary { padding:10px 12px; } .ase-quote-confirmation .ase-success-summary>div { flex-direction:column; gap:5px; } .ase-quote-confirmation .ase-success-summary dd { text-align:left; } }
-@media(max-width:1100px) { .ase-ui .ase-operation { padding:24px; } .ase-ui .ase-benefit-grid { grid-template-columns:1fr; } .ase-ui .ase-filter-bar { flex-wrap:wrap; } .ase-ui .ase-filter-bar .ase-search-filter { flex-basis:100%; } }
-@media(max-width:800px) { .ase-ui .ase-identity-grid { grid-template-columns:1fr 1fr; } .ase-ui .ase-plan-summary { grid-template-columns:1fr; } .ase-ui .ase-stitch-stepper { gap:12px; } .ase-ui .ase-stitch-stepper li { flex-direction:column; text-align:center; gap:8px; } .ase-ui .ase-stitch-stepper li::after { display:none; } .ase-ui .ase-stitch-stepper strong { white-space:normal; font-size:12px; } }
-@media(max-width:600px) { .ase-ui h1 { font-size:28px; } .ase-ui .ase-local-heading { align-items:flex-start; flex-direction:column; } .ase-ui .ase-client-context { flex-wrap:wrap; } .ase-ui .ase-client-context>div:last-child { width:100%; text-align:left; margin:0; } .ase-ui.ase-client-step,.ase-ui .ase-client-step { padding:20px; } .ase-ui .ase-operation,.ase-ui .ase-review-body,.ase-ui .ase-dialog-body { padding:16px; } .ase-ui .ase-config-card { padding:16px; } .ase-ui .ase-segments>label,.ase-ui .ase-segments>button { padding:12px 4px; font-size:10px; } .ase-ui .ase-card-title { flex-wrap:wrap; } .ase-ui .ase-workspace-actions,.ase-ui .ase-history-footer { padding:20px; flex-wrap:wrap; } .ase-ui .ase-workspace-actions>div { width:100%; justify-content:stretch; } .ase-ui .ase-workspace-actions button { flex:1; } .ase-ui .ase-review-header { padding:24px 20px; flex-direction:column; } .ase-ui .ase-identity-grid { gap:16px; padding:16px; } .ase-ui .ase-total { flex-direction:column; align-items:flex-start; } .ase-ui .ase-total>strong { font-size:28px; } .ase-ui .ase-dialog-header { padding:20px; } .ase-ui .ase-dialog-header h2 { font-size:22px; } }
+@media (min-width:641px) {
+  .ase-ui .ase-discount-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (min-width:1100px) {
+  .ase-ui .ase-discount-grid {
+    grid-template-columns: repeat(4,minmax(0,1fr));
+  }
+}
+
+.ase-ui .ase-tramo {
+  border: 1px solid #e9ddff;
+  border-radius: 14px;
+  background: #faf8ff;
+  padding: 16px;
+}
+
+.ase-ui .ase-tramo>div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ase-ui .ase-tramo .ase-grid {
+  grid-template-columns: 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+.ase-ui .ase-tramo .ase-field-error {
+  display: block;
+  line-height: 1.5;
+}
+
+.ase-ui .ase-tramo input,.ase-ui .ase-tramo select {
+  padding: 8px;
+  font-size: 12px;
+  width: 100%;
+}
+
+.ase-ui .ase-benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 16px;
+}
+
+.ase-ui .ase-benefit {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #dcd6e9;
+  border-radius: 14px;
+  padding: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.ase-ui .ase-benefit small {
+  margin-top: 5px;
+  font-weight: 400;
+}
+
+.ase-ui .ase-benefit.ase-muted {
+  flex-direction: column;
+  background: #fafbfc;
+}
+
+.ase-ui table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.ase-ui th {
+  padding: 14px 18px;
+  background: #f5f6fb;
+  color: #5d607e;
+  font-size: 12px;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid #dcd6e9;
+}
+
+.ase-ui td {
+  padding: 16px 18px;
+  border-bottom: 1px solid #edf0f5;
+  vertical-align: middle;
+}
+
+.ase-ui .ase-family input {
+  width: 80px;
+}
+
+.ase-ui .ase-family select {
+  min-width: 110px;
+}
+
+.ase-ui .ase-family table {
+  min-width: 640px;
+}
+
+.ase-ui .ase-family small {
+  margin-top: 12px;
+}
+
+.ase-ui .ase-workspace-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid #dcd6e9;
+  padding: 28px 40px;
+}
+
+.ase-ui .ase-workspace-actions>div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ase-ui .ase-workspace-actions>a {
+  color: #5d607e;
+  text-decoration: none;
+}
+
+.ase-ui .ase-workspace-actions>a.ase-primary-link {
+  color: #fff;
+  background: #5b2cbf;
+}
+
+.ase-ui .ase-workspace-actions>a.ase-primary-link:hover {
+  background: #482093;
+}
+
+.ase-ui .ase-workspace-actions>a.ase-primary-link:focus-visible {
+  outline: 3px solid #a78bfa;
+  outline-offset: 3px;
+}
+
+.ase-ui .ase-workspace-actions>a.ase-primary-link[aria-disabled="true"] {
+  color: #fff;
+  background: #625478;
+  cursor: not-allowed;
+}
+
+.ase-ui .ase-review {
+  background: white;
+}
+
+.ase-ui .ase-review-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px 40px;
+  border-bottom: 1px solid #dcd6e9;
+}
+
+.ase-ui .ase-review-header p {
+  margin: 0;
+  color: #5d607e;
+}
+
+.ase-ui .ase-review-body {
+  padding: 32px 40px;
+}
+
+.ase-ui .ase-review-body>section {
+  margin-bottom: 32px;
+}
+
+.ase-ui .ase-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 24px;
+  padding: 24px;
+  background: #faf8ff;
+  border-radius: 16px;
+}
+
+.ase-ui dt {
+  color: #5d607e;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.ase-ui dd {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.ase-ui .ase-plan-summary {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  padding: 24px;
+  gap: 24px;
+  background: #f7f5fd;
+  border-radius: 16px;
+}
+
+.ase-ui .ase-plan-summary>div {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.ase-ui .ase-plan-summary strong {
+  display: block;
+  font: 700 24px 'Space Grotesk',sans-serif;
+  color: #6d28d9;
+  margin-top: 12px;
+}
+
+.ase-ui .ase-money-list {
+  margin: 20px 0;
+}
+
+.ase-ui .ase-money-list>div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.ase-ui .ase-money-list dt {
+  font-size: 14px;
+  color: inherit;
+}
+
+.ase-ui .ase-money-list dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-discount-line {
+  color: #7c3aed;
+}
+
+.ase-ui .ase-aporte-line {
+  color: #047857;
+}
+
+.ase-ui .ase-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background: linear-gradient(100deg,#6d3bd7,#9360f7);
+  padding: 24px;
+  border-radius: 12px;
+  color: white;
+  margin: 20px 0 40px;
+}
+
+.ase-ui .ase-total small {
+  color: #e9ddff;
+  margin-top: 8px;
+}
+
+.ase-ui .ase-total>strong {
+  font: 700 36px 'Space Grotesk',sans-serif;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-period-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(110px,1fr));
+  gap: 12px;
+}
+
+.ase-ui .ase-period {
+  background: #faf8ff;
+  border: 1px solid #e9ddff;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ase-ui .ase-period strong {
+  display: block;
+  font-size: 20px;
+  color: #6d28d9;
+  margin: 6px 0;
+}
+
+.ase-ui .ase-economics--compact .ase-card-title {
+  align-items: flex-start;
+}
+
+.ase-ui .ase-economics--compact .ase-total {
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
+  padding: 20px 12px;
+  background: #faf8ff;
+  border: 1px solid #e9ddff;
+  color: #5b2cbf;
+  margin-bottom: 40px;
+}
+
+.ase-ui .ase-economics--compact .ase-total>strong {
+  font-size: 28px;
+}
+
+.ase-ui .ase-economics--compact .ase-total small {
+  color: #5d607e;
+}
+
+.ase-ui .ase-economics--compact .ase-money-list>div {
+  gap: 8px;
+  padding: 9px 0;
+}
+
+.ase-ui .ase-economics--compact .ase-money-list dt,.ase-ui .ase-economics--compact .ase-money-list dd {
+  font-size: 12px;
+}
+
+.ase-ui .ase-economics--compact .ase-period {
+  padding: 10px;
+}
+
+.ase-ui .ase-economics--compact .ase-period strong {
+  font-size: 16px;
+}
+
+.ase-ui .ase-filter-bar {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #494454;
+  border-radius: 16px;
+  background: #ffffff05;
+  margin-bottom: 24px;
+  color: #cbc3d7;
+}
+
+.ase-ui .ase-filter-bar label {
+  margin: 0;
+  font-size: 11px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ase-ui .ase-filter-bar .ase-search-filter {
+  flex: 2;
+}
+
+.ase-ui .ase-filter-bar input,.ase-ui .ase-filter-bar select {
+  background: #ffffff06;
+  border-color: #494454;
+  color: #e1e1f5;
+  font-size: 13px;
+  color-scheme: dark;
+}
+
+.ase-ui .ase-history-surface {
+  background: #fff;
+  color: #202236;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.ase-ui .ase-history-surface table {
+  min-width: 1050px;
+}
+
+.ase-ui .ase-number {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-mono-aporte {
+  display: block;
+  white-space: normal;
+  font-size: 11px;
+  font-weight: 400;
+  color: #047857;
+  margin-top: 4px;
+}
+
+.ase-ui .ase-detail-actions>div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.ase-ui .ase-confirm-action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ase-ui .ase-confirm-action input {
+  width: auto;
+}
+
+.ase-ui.ase-dialog textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 1px solid #dcd6e9;
+  border-radius: 8px;
+  font: inherit;
+  color: #202236;
+  resize: vertical;
+}
+
+.ase-ui .ase-row-actions {
+  display: flex;
+  gap: 10px;
+  background: #f1f4f9;
+  padding: 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-row-actions a {
+  color: #7a8ba5;
+}
+
+.ase-ui .ase-reference {
+  color: #8b5cf6;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ase-ui .ase-annulled {
+  opacity: .65;
+}
+
+.ase-ui .ase-history-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  gap: 18px;
+  background: #f8faff;
+  color: #5d607e;
+}
+
+.ase-ui .ase-history-footer label {
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+}
+
+.ase-ui .ase-history-footer select {
+  width: 70px;
+}
+
+.ase-ui .ase-history-footer>div {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ase-ui .ase-empty {
+  padding: 32px;
+  text-align: center;
+}
+
+.ase-dialog.ase-ui:has(.ase-success) {
+  width: min(720px,95vw);
+  background: #fff;
+  border-top: 6px solid #a78bfa;
+}
+
+.ase-dialog.ase-ui:has(.ase-client-confirm) {
+  width: min(560px,95vw);
+}
+
+.ase-dialog.ase-ui:has(.ase-restricted) {
+  width: min(640px,95vw);
+  background: #fff;
+}
+
+.ase-ui .ase-success {
+  text-align: center;
+}
+
+.ase-ui .ase-success-icon {
+  display: grid;
+  place-items: center;
+  margin: 0 auto 24px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(100deg,#7c3aed,#b794ff);
+  color: white;
+  font-size: 42px;
+  box-shadow: 0 10px 24px #8b5cf650;
+}
+
+.ase-ui .ase-success-number {
+  border-radius: 16px;
+  background: #f7f2ff;
+  padding: 24px;
+  margin: 28px 0;
+  color: #5b2cbf;
+}
+
+.ase-ui .ase-success-number strong {
+  display: block;
+  font: 700 30px 'Space Grotesk',sans-serif;
+  margin-top: 8px;
+}
+
+.ase-ui .ase-success>a {
+  display: block;
+  margin: 12px 0;
+}
+
+.ase-dialog.ase-ui {
+  border: 1px solid #dcd6e9;
+  border-radius: 24px;
+  background: #f5f2ff;
+  color: #202236;
+  padding: 0;
+  width: min(1280px,95vw);
+  max-width: 95vw;
+  max-height: 92vh;
+  overflow: auto;
+  box-shadow: 0 25px 50px #0a0b1299;
+}
+
+.ase-dialog::backdrop {
+  background: #0f111ac0;
+  backdrop-filter: blur(4px);
+}
+
+.ase-ui .ase-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 40px;
+  background: linear-gradient(90deg,#ede7fc,#faf8ff);
+  border-bottom: 1px solid #dcd6e9;
+}
+
+.ase-ui .ase-dialog-body {
+  padding: 24px 40px;
+}
+
+.ase-ui .ase-detail-meta {
+  padding: 8px 0 24px;
+}
+
+.ase-ui .ase-dialog-body .ase-review-body {
+  padding: 0;
+}
+
+.ase-ui .ase-dialog-body .ase-review-body>section {
+  background: #fff;
+  border: 1px solid #e6e0f2;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.ase-ui details.ase-config-card {
+  margin: 20px 0;
+}
+
+.ase-ui details summary {
+  cursor: pointer;
+  color: #6d28d9;
+  font-weight: 600;
+}
+
+/*SPEC-UI-06: composición compacta del detalle Stitch; los datos ampliados quedan accesibles en segundo nivel.*/
+
+.ase-dialog.ase-quote-detail {
+  width: min(1120px,calc(100vw - 40px));
+  max-height: 94dvh;
+  overflow: hidden;
+}
+
+.ase-quote-detail[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.ase-quote-detail .ase-dialog-header {
+  padding: 18px 24px;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.ase-quote-detail .ase-dialog-header>.ase-icon-button {
+  background: #fff;
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.ase-quote-detail .ase-detail-heading>div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ase-quote-detail .ase-detail-heading h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.ase-quote-detail .ase-detail-heading .ase-detail-number {
+  font-size: 13px;
+  letter-spacing: .03em;
+  margin: 0;
+  padding: 5px 12px;
+  background: #5320b7;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.ase-quote-detail .ase-detail-heading p {
+  font-size: 12px;
+  color: #5d607e;
+  margin: 6px 0 0;
+}
+
+.ase-quote-detail .ase-dialog-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.ase-quote-detail .ase-detail-review {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>section {
+  margin: 0;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.ase-quote-detail .ase-holder-card>h3 {
+  font: 700 12px 'Manrope',sans-serif;
+  text-transform: uppercase;
+  color: #7c3aed;
+  letter-spacing: .03em;
+  margin: 0 0 14px;
+}
+
+.ase-quote-detail .ase-identity-grid {
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 12px 20px;
+  padding: 0;
+  background: transparent;
+  margin: 0;
+}
+
+.ase-quote-detail dt {
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.ase-quote-detail dd {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 3px 0 0;
+}
+
+.ase-quote-detail dd small {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.ase-quote-detail .ase-advisor-card {
+  padding: 8px 12px;
+  background: #f5f2ff;
+  border: 1px solid #e6e0f2;
+  border-radius: 9px;
+}
+
+.ase-quote-detail .ase-advisor-card dt {
+  color: #6d28d9;
+}
+
+.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-plan-cards {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.ase-quote-detail .ase-plan-summary {
+  padding: 0;
+  gap: 16px;
+  background: transparent;
+}
+
+.ase-quote-detail .ase-plan-summary>div {
+  padding: 16px 18px;
+  border: 1px solid #e6e0f2;
+  border-radius: 12px;
+  box-shadow: 0 2px 3px #20223608;
+  min-width: 0;
+}
+
+.ase-quote-detail .ase-plan-summary>div>small {
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #7c3aed;
+}
+
+.ase-quote-detail .ase-plan-summary strong {
+  font-size: 23px;
+  margin-top: 10px;
+  color: #202236;
+}
+
+.ase-quote-detail .ase-plan-summary p {
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+.ase-quote-detail .ase-plan-summary .ase-captured-contribution strong {
+  font: 700 17px 'Space Grotesk',sans-serif;
+  color: #5516be;
+  display: inline;
+}
+
+.ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-economics--detail {
+  display: grid;
+  grid-template-columns: minmax(0,1.2fr) minmax(0,.85fr);
+  gap: 18px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  align-items: start;
+}
+
+.ase-economics--detail .ase-economic-breakdown {
+  background: #fff;
+  border: 1px solid #e6e0f2;
+  border-radius: 12px;
+  padding: 18px;
+  min-width: 0;
+}
+
+.ase-economics--detail .ase-card-title {
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ase-economics--detail .ase-card-title h3 {
+  text-transform: uppercase;
+  color: #7c3aed;
+  font: 700 12px 'Manrope',sans-serif;
+  letter-spacing: .03em;
+}
+
+.ase-economics--detail .ase-card-title .ase-pill {
+  font-size: 10px;
+}
+
+.ase-economics--detail .ase-economic-breakdown>.ase-muted {
+  display: none;
+}
+
+.ase-economics--detail .ase-money-list {
+  margin: 12px 0 0;
+}
+
+.ase-economics--detail .ase-money-list>div {
+  padding: 9px 0;
+  gap: 10px;
+}
+
+.ase-economics--detail .ase-money-list dt {
+  font-size: 12px;
+  text-transform: none;
+}
+
+.ase-economics--detail .ase-money-list dd {
+  font-size: 13px;
+}
+
+.ase-economics--detail .ase-economic-feature {
+  background: linear-gradient(120deg,#3c0091,#5320b7 70%,#713dd1);
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  min-width: 0;
+}
+
+.ase-economics--detail .ase-total {
+  margin: 0 0 18px;
+  padding: 0;
+  background: transparent;
+  display: block;
+}
+
+.ase-economics--detail .ase-total>div>strong {
+  display: block;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
+.ase-economics--detail .ase-total>strong {
+  display: block;
+  font-size: clamp(24px,2.5vw,36px);
+  margin-top: 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.ase-economics--detail .ase-economic-feature h3 {
+  color: #e9ddff;
+  font: 700 11px 'Manrope',sans-serif;
+  margin: 0 0 10px;
+}
+
+.ase-economics--detail .ase-economic-feature .ase-period-grid {
+  grid-template-columns: repeat(auto-fit,minmax(86px,1fr));
+  gap: 8px;
+}
+
+.ase-economics--detail .ase-economic-feature .ase-period {
+  padding: 8px;
+  background: #ffffff12;
+  border-color: #ffffff30;
+}
+
+.ase-economics--detail .ase-economic-feature .ase-period strong {
+  color: #fff;
+  font-size: 17px;
+  margin: 2px 0;
+}
+
+.ase-economics--detail .ase-economic-feature small,.ase-economics--detail .ase-economic-feature .ase-summary-muted,.ase-economics--detail .ase-economic-feature .ase-muted {
+  color: #e9ddff;
+  font-size: 10px;
+}
+
+.ase-economics--detail .ase-economic-feature .ase-summary-muted {
+  margin: 12px 0 0;
+  line-height: 1.5;
+}
+
+.ase-quote-detail .ase-detail-extra {
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid #e6e0f2;
+  font-size: 12px;
+}
+
+.ase-quote-detail .ase-dialog-body>.ase-detail-extra {
+  margin-top: 8px;
+}
+
+.ase-quote-detail .ase-detail-extra summary {
+  color: #6d28d9;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ase-quote-detail .ase-detail-extra[open] section {
+  padding-top: 12px;
+}
+
+.ase-quote-detail .ase-detail-extra h3 {
+  font-size: 15px;
+}
+
+.ase-economics--detail>.ase-detail-extra {
+  grid-column: 1/-1;
+}
+
+.ase-quote-detail .ase-workspace-actions {
+  flex-shrink: 0;
+  padding: 14px 24px;
+  gap: 10px;
+  background: #faf8ff;
+}
+
+.ase-quote-detail .ase-workspace-actions>div {
+  gap: 8px;
+}
+
+.ase-quote-detail .ase-workspace-actions button,.ase-quote-detail .ase-workspace-actions a {
+  padding: 9px 12px;
+  font-size: 12px;
+}
+
+/*Confirmación Stitch: una sola tarjeta luminosa y sin el encabezado adicional del diálogo genérico.*/
+
+.ase-dialog.ase-ui.ase-quote-confirmation {
+  width: min(720px,calc(100vw - 32px));
+  max-height: 94dvh;
+  background: #fff;
+  border-radius: 18px;
+  border: 0;
+  border-top: 6px solid #a078ff;
+}
+
+.ase-quote-confirmation .ase-dialog-body {
+  padding: 32px 40px;
+}
+
+.ase-quote-confirmation .ase-success h1 {
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+
+.ase-quote-confirmation .ase-success>p {
+  color: #5d607e;
+  font-size: 15px;
+  margin: 0 auto 24px;
+  max-width: 550px;
+}
+
+.ase-quote-confirmation .ase-success-icon {
+  width: 80px;
+  height: 80px;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.ase-quote-confirmation .ase-success-number {
+  padding: 16px;
+  margin: 0 0 24px;
+  border-radius: 12px;
+}
+
+.ase-quote-confirmation .ase-success-number small {
+  color: #5320b7;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ase-quote-confirmation .ase-success-number strong {
+  font-size: 28px;
+  margin-top: 4px;
+}
+
+.ase-quote-confirmation .ase-success-summary {
+  background: #f8f9fc;
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin: 0 0 26px;
+}
+
+.ase-quote-confirmation .ase-success-summary>div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  text-align: left;
+}
+
+.ase-quote-confirmation .ase-success-summary>div+div {
+  border-top: 1px solid #e5e7eb;
+}
+
+.ase-quote-confirmation .ase-success-summary dt {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.ase-quote-confirmation .ase-success-summary dt .ase-symbol {
+  color: #94a3b8;
+  font-size: 18px;
+}
+
+.ase-quote-confirmation .ase-success-summary dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.ase-quote-confirmation .ase-success-summary>div:last-child dd {
+  color: #5320b7;
+  font-size: 17px;
+}
+
+.ase-quote-confirmation .ase-success>a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.ase-quote-confirmation .ase-success-history {
+  color: #5320b7;
+  background: #fff;
+  box-shadow: 0 1px 2px #20223610;
+}
+
+.ase-quote-confirmation .ase-success .ase-text-button {
+  color: #5d607e;
+  font-size: 13px;
+}
+
+@media (max-width:800px) {
+  .ase-quote-detail .ase-plan-summary {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+
+  .ase-quote-detail .ase-plan-summary strong {
+    font-size: 18px;
+  }
+
+  .ase-ui.ase-quote-detail .ase-dialog-body .ase-detail-review>.ase-economics--detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width:600px) {
+  .ase-dialog.ase-quote-detail {
+    width: calc(100vw - 16px);
+  }
+
+  .ase-quote-detail .ase-dialog-header,.ase-quote-detail .ase-dialog-body,.ase-quote-detail .ase-workspace-actions {
+    padding: 14px;
+  }
+
+  .ase-quote-detail .ase-detail-heading h2 {
+    font-size: 20px;
+  }
+
+  .ase-quote-detail .ase-identity-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ase-quote-detail .ase-plan-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ase-quote-detail .ase-workspace-actions>div {
+    width: 100%;
+  }
+
+  .ase-quote-detail .ase-workspace-actions button,.ase-quote-detail .ase-workspace-actions a {
+    flex: 1;
+  }
+
+  .ase-quote-confirmation .ase-dialog-body {
+    padding: 24px 20px;
+  }
+
+  .ase-quote-confirmation .ase-success h1 {
+    font-size: 23px;
+  }
+
+  .ase-quote-confirmation .ase-success-summary {
+    padding: 10px 12px;
+  }
+
+  .ase-quote-confirmation .ase-success-summary>div {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .ase-quote-confirmation .ase-success-summary dd {
+    text-align: left;
+  }
+}
+
+@media (max-width:1100px) {
+  .ase-ui .ase-operation {
+    padding: 24px;
+  }
+
+  .ase-ui .ase-benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ase-ui .ase-filter-bar {
+    flex-wrap: wrap;
+  }
+
+  .ase-ui .ase-filter-bar .ase-search-filter {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width:800px) {
+  .ase-ui .ase-identity-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ase-ui .ase-plan-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .ase-ui .ase-stitch-stepper {
+    gap: 12px;
+  }
+
+  .ase-ui .ase-stitch-stepper li {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .ase-ui .ase-stitch-stepper li::after {
+    display: none;
+  }
+
+  .ase-ui .ase-stitch-stepper strong {
+    white-space: normal;
+    font-size: 12px;
+  }
+}
+
+@media (max-width:600px) {
+  .ase-ui h1 {
+    font-size: 28px;
+  }
+
+  .ase-ui .ase-local-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .ase-ui .ase-client-context {
+    flex-wrap: wrap;
+  }
+
+  .ase-ui .ase-client-context>div:last-child {
+    width: 100%;
+    text-align: left;
+    margin: 0;
+  }
+
+  .ase-ui.ase-client-step,.ase-ui .ase-client-step {
+    padding: 20px;
+  }
+
+  .ase-ui .ase-operation,.ase-ui .ase-review-body,.ase-ui .ase-dialog-body {
+    padding: 16px;
+  }
+
+  .ase-ui .ase-config-card {
+    padding: 16px;
+  }
+
+  .ase-ui .ase-segments>label,.ase-ui .ase-segments>button {
+    padding: 12px 4px;
+    font-size: 10px;
+  }
+
+  .ase-ui .ase-card-title {
+    flex-wrap: wrap;
+  }
+
+  .ase-ui .ase-workspace-actions,.ase-ui .ase-history-footer {
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ase-ui .ase-workspace-actions>div {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .ase-ui .ase-workspace-actions button {
+    flex: 1;
+  }
+
+  .ase-ui .ase-review-header {
+    padding: 24px 20px;
+    flex-direction: column;
+  }
+
+  .ase-ui .ase-identity-grid {
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .ase-ui .ase-total {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ase-ui .ase-total>strong {
+    font-size: 28px;
+  }
+
+  .ase-ui .ase-dialog-header {
+    padding: 20px;
+  }
+
+  .ase-ui .ase-dialog-header h2 {
+    font-size: 22px;
+  }
+}

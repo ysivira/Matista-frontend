@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE INICIO POR MÓDULO
+ * ============================================================
+ *
+ * Archivo: inicioModulo.test.jsx
+ * Módulo: Pruebas de navegación
+ *
+ * Responsabilidad:
+ * Verificar los cinco accesos reales por rol y distinguir enlaces
+ * de puntos descriptivos en la composición compartida.
+ *
+ * ============================================================
+ */
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

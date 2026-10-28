@@ -36,7 +36,7 @@
 
 .auth-title-block {
   display: flex;
-  /* El badge largo puede desbordar junto al título en móviles: se apila sin recortes. */
+  /*El badge largo puede desbordar junto al título en móviles: se apila sin recortes.*/
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
@@ -82,8 +82,8 @@
 .auth-field {
   display: grid;
   gap: 0.4rem;
-  /* Sin alineado inicial al inicio las filas auto absorbían el sobrante cuando la celda
-     vecina es más alta (pista "Opcional" del teléfono), agrandando y bajando el input. */
+  /*Sin alineado inicial al inicio las filas auto absorbían el sobrante cuando la celda
+     vecina es más alta (pista "Opcional" del teléfono), agrandando y bajando el input.*/
   align-content: start;
 }
 
@@ -135,7 +135,7 @@
   top: 50%;
   right: 0.4rem;
   transform: translateY(-50%);
-  /* Zona táctil accesible: 44px aprox. reutilizando la altura del propio control. */
+  /*Zona táctil accesible: 44px aprox. reutilizando la altura del propio control.*/
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0.45rem 0.6rem;
@@ -226,7 +226,7 @@
   color: var(--color-primary-interactive);
   font-weight: 600;
   text-decoration: none;
-  /* Zona táctil interactiva ampliada sin mover la maqueta: el margen negativo cancela el padding inducido. */
+  /*Zona táctil interactiva ampliada sin mover la maqueta: el margen negativo cancela el padding inducido.*/
   padding: 0.35rem 0.25rem;
   margin: -0.35rem -0.25rem;
 }
@@ -267,7 +267,7 @@
   color: var(--color-text);
   font-size: 0.9rem;
   line-height: 1.55;
-  /* Direcciones de correo y códigos largos no deben crear desbordamiento horizontal. */
+  /*Direcciones de correo y códigos largos no deben crear desbordamiento horizontal.*/
   overflow-wrap: anywhere;
 }
 
@@ -309,7 +309,8 @@
   justify-items: center;
 }
 
-/* Panel de identidad de la interfaz temporal: lista de definición simple. */
+/*Panel de identidad de la interfaz temporal: lista de definición simple.*/
+
 .auth-identity {
   width: 100%;
   margin: 0 0 0.25rem;
@@ -339,7 +340,8 @@
   overflow-wrap: anywhere;
 }
 
-/* En móviles angostos la etiqueta fija aprieta demasiado el valor: se apilan. */
+/*En móviles angostos la etiqueta fija aprieta demasiado el valor: se apilan.*/
+
 @media (max-width: 360px) {
   .auth-identity__row {
     grid-template-columns: 1fr;

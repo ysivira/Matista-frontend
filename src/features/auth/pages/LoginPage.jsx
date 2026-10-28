@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: LoginPage.jsx
+ * ============================================================
+ * MATISTA | INICIO DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página LoginPage del módulo Autenticación; compone componentes de la feature para su caso de uso.
+ * Archivo: LoginPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Autenticar por correo y contraseña y resolver el destino según la sesión y el rol.
  *
  * CONTENIDO:
  * - Función LoginPage.
@@ -20,6 +24,8 @@
  * - ../auth.constants.js
  * - ../auth.messages.js
  * - ../auth.validation.js
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';

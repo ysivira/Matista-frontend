@@ -1,13 +1,18 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: cambiosReversibles.js
+ * ============================================================
+ * MATISTA | PRESENTACIÓN DEL DESHACER
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente cambiosReversibles del módulo Administración; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: cambiosReversibles.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Detectar cambios económicos reversibles para habilitar la acción visual.
  *
  * CONTENIDO:
  * - Función hayCambiosReversibles.
+ *
+ * ============================================================
  */
 /**
  * Indica si un borrador registra cambios económicos aún reversibles,

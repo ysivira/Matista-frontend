@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE VERIFICACIÓN INICIAL
+ * ============================================================
+ *
+ * Archivo: verifyEmailPage.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Probar consumo único, reenvío y reintentos del enlace, incluido
+ * StrictMode y descarte de respuestas tras desmontar la pantalla.
+ *
+ * ============================================================
+ */
 import { StrictMode } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

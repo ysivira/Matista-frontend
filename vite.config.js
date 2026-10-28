@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | DESARROLLO Y PRUEBAS DEL FRONTEND
+ * ============================================================
+ *
+ * Archivo: vite.config.js
+ * Módulo: Herramientas del frontend
+ *
+ * Responsabilidad:
+ * Configurar React, puerto y proxy de desarrollo y preparar
+ * Vitest con jsdom y limpieza de mocks entre escenarios.
+ *
+ * ============================================================
+ */
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 

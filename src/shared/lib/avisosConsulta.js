@@ -1,5 +1,16 @@
 /**
- * Avisos de consulta y detección de sesiones vencidas.
+ * ============================================================
+ * MATISTA | AVISOS DE CONSULTA
+ * ============================================================
+ *
+ * Archivo: avisosConsulta.js
+ * Módulo: Utilidades compartidas
+ *
+ * Responsabilidad:
+ * Detectar ausencia contractual de sesión y presentar errores
+ * públicos de consulta o escritura administrativa.
+ *
+ * ============================================================
  */
 import { ApiError } from './httpClient.js';
 import { technicalNoticeFor } from './avisosApi.js';

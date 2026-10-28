@@ -1,8 +1,8 @@
-/* Módulo ADMIN (SPEC-03 SL-1) bajo la identidad Amethyst Prism Enterprise.
+/*Módulo ADMIN (SPEC-03 SL-1) bajo la identidad Amethyst Prism Enterprise.
    Tokens y composición tomados del diseño Stitch aprobado:
    - Shell oscuro #1B1D2B con superficies #10131F/#F5F2FF y acentos #8B5CF6/#5B2CBF.
    - Tipografía: Plus Jakarta Sans (títulos) e Inter (texto y datos mono).
-   - Tarjetas claras con sombras suaves sobre lienzo oscuro ondulado. */
+   - Tarjetas claras con sombras suaves sobre lienzo oscuro ondulado.*/
 
 :root {
   --admin-shell: #171828;
@@ -25,8 +25,7 @@
   grid-template-columns: 232px 1fr;
   min-height: 100vh;
   color: #e9e8f4;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(91, 44, 191, 0.18), transparent 42%),
+  background: radial-gradient(circle at 18% 12%, rgba(91, 44, 191, 0.18), transparent 42%),
     radial-gradient(circle at 85% 78%, rgba(139, 92, 246, 0.1), transparent 46%),
     var(--admin-shell);
   font-family: 'Inter', var(--font-sans, system-ui);
@@ -38,7 +37,8 @@
   letter-spacing: -0.01em;
 }
 
-/* ---------------- Barra lateral ---------------- */
+/*---------------- Barra lateral ----------------*/
+
 .admin-sidebar {
   display: flex;
   flex-direction: column;
@@ -98,9 +98,9 @@
 .admin-nav__link {
   display: flex;
   align-items: center;
-  /* Tipografía y espaciados afinados para que «Gestión de empleados» quepa
+  /*Tipografía y espaciados afinados para que «Gestión de empleados» quepa
      en una sola línea con el ancho habitual de la barra (232 px): no cambia
-     el ancho del sidebar, el icono ni los estados activo/hover. */
+     el ancho del sidebar, el icono ni los estados activo/hover.*/
   gap: 0.4rem;
   padding: 0.55rem 0.55rem;
   border-radius: 0.7rem;
@@ -112,14 +112,34 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.admin-nav__link svg { flex: 0 0 auto; }
-/* Las etiquetas largas ajustan su texto sin desplazar horizontalmente la barra lateral. */
-.admin-nav__label { min-width: 0; white-space: normal; line-height: 1.4; }
+.admin-nav__link svg {
+  flex: 0 0 auto;
+}
 
-/* SPEC-UI-06: solo este enlace comercial; no cambia el ancho ni la navegación del shell. */
-.admin-nav__link[href="/asesor/condiciones"] { gap:0.35rem; padding-inline:0.45rem; font-size:0.79rem; }
-.admin-nav__link[href="/asesor/condiciones"] .admin-nav__label { white-space:nowrap; }
-.admin-nav__link[href="/asesor/condiciones"] svg { width:18px; height:18px; }
+/*Las etiquetas largas ajustan su texto sin desplazar horizontalmente la barra lateral.*/
+
+.admin-nav__label {
+  min-width: 0;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/*SPEC-UI-06: solo este enlace comercial; no cambia el ancho ni la navegación del shell.*/
+
+.admin-nav__link[href="/asesor/condiciones"] {
+  gap: 0.35rem;
+  padding-inline: 0.45rem;
+  font-size: 0.79rem;
+}
+
+.admin-nav__link[href="/asesor/condiciones"] .admin-nav__label {
+  white-space: nowrap;
+}
+
+.admin-nav__link[href="/asesor/condiciones"] svg {
+  width: 18px;
+  height: 18px;
+}
 
 .admin-nav__link:hover {
   background: rgba(139, 92, 246, 0.14);
@@ -132,13 +152,16 @@
   box-shadow: 0 2px 12px rgba(91, 44, 191, 0.45);
 }
 
-.admin-nav__link--active:hover { background: linear-gradient(135deg, #5b2cbf, #7c4ce0); }
+.admin-nav__link--active:hover {
+  background: linear-gradient(135deg, #5b2cbf, #7c4ce0);
+}
 
-/* La tarjeta «Mi perfil» queda anclada al pie de la barra lateral: el flex
+/*La tarjeta «Mi perfil» queda anclada al pie de la barra lateral: el flex
    de la columna la separa de la navegación con un margen automático. Con el
    shell bloqueado al viewport (ver «Zona principal»), la columna lateral
    tiene altura fija en escritorio, de modo que la tarjeta conserva su
-   posición aunque la navegación crezca o el lienzo se desplace internamente. */
+   posición aunque la navegación crezca o el lienzo se desplace internamente.*/
+
 .admin-sidebar__footer {
   margin-top: auto;
 }
@@ -158,9 +181,13 @@
   transition: background 0.15s ease;
 }
 
-.admin-user:hover { background: rgba(46, 48, 68, 0.9); }
+.admin-user:hover {
+  background: rgba(46, 48, 68, 0.9);
+}
 
-.admin-user__text { min-width: 0; }
+.admin-user__text {
+  min-width: 0;
+}
 
 .admin-avatar {
   width: 2rem;
@@ -176,20 +203,26 @@
   background: var(--admin-surface-muted);
 }
 
-.admin-avatar--small { width: 1.85rem; height: 1.85rem; font-size: 0.68rem; }
+.admin-avatar--small {
+  width: 1.85rem;
+  height: 1.85rem;
+  font-size: 0.68rem;
+}
 
-/* En la tabla del directorio el avatar es aún más compacto para mantener
+/*En la tabla del directorio el avatar es aún más compacto para mantener
    la fila baja (27 px); los modales que reutilizan .admin-avatar--small
-   no cambian. */
+   no cambian.*/
+
 .admin-table .admin-avatar--small {
   width: 1.7rem;
   height: 1.7rem;
   font-size: 0.66rem;
 }
 
-/* Etiquetas de rol y estado a 12 px dentro de la tabla, con padding menor
+/*Etiquetas de rol y estado a 12 px dentro de la tabla, con padding menor
    para acompañar la densidad de las filas; las tarjetas móviles conservan
-   su tamaño propio fuera de este alcance. */
+   su tamaño propio fuera de este alcance.*/
+
 .admin-table .admin-chip {
   font-size: 0.75rem;
   padding: 0.18rem 0.6rem;
@@ -209,21 +242,22 @@
   color: var(--admin-soft);
 }
 
-/* ---------------- Zona principal ---------------- */
+/*---------------- Zona principal ----------------*/
 
-/* Justificación del bloqueo al viewport (corrección SL-2E): antes el shell
+/*Justificación del bloqueo al viewport (corrección SL-2E): antes el shell
    crecía con el contenido (min-height en shell y sidebar) y el acordeón de
    planes desplazaba el documento entero (topbar y «Cerrar sesión» fuera de
    vista) y estiraba la columna lateral desplazando la tarjeta «Mi perfil».
    La solución es el patrón estándar de aplicaciones administrativas: un
    único contenedor de desplazamiento vertical (el lienzo central) con la
    barra lateral y la barra superior fijas por composición de la cuadrícula,
-   sin posiciones fijas ni copiar jerarquías nuevas. */
+   sin posiciones fijas ni copiar jerarquías nuevas.*/
+
 @media (min-width: 901px) {
   .admin-shell {
     height: 100vh;
-    /* Navegadores con barras dinámicas (móviles de escritorio táctil) usan 100dvh
-       y dejan 100vh como respaldo: la progresión evita alturas elásticas erróneas. */
+    /*Navegadores con barras dinámicas (móviles de escritorio táctil) usan 100dvh
+       y dejan 100vh como respaldo: la progresión evita alturas elásticas erróneas.*/
     height: 100dvh;
     overflow: hidden;
   }
@@ -234,8 +268,9 @@
     overflow: hidden;
   }
 
-  /* Si la barra no alcanza (ventanas bajas), solo la navegación se desplaza:
-     la marca y la tarjeta «Mi perfil» permanecen en su sitio sin scrolls extra. */
+  /*Si la barra no alcanza (ventanas bajas), solo la navegación se desplaza:
+     la marca y la tarjeta «Mi perfil» permanecen en su sitio sin scrolls extra.*/
+
   .admin-nav {
     min-height: 0;
     overflow-y: auto;
@@ -246,9 +281,10 @@
     height: 100%;
   }
 
-  /* Único desplazamiento vertical del escritorio: el contenido crece aquí y
+  /*Único desplazamiento vertical del escritorio: el contenido crece aquí y
      el documento nunca se mueve; las pantallas existentes no cambian su
-     composición interna (el directorio sigue con su panel de altura fija). */
+     composición interna (el directorio sigue con su panel de altura fija).*/
+
   .admin-content {
     min-height: 0;
     overflow-y: auto;
@@ -257,28 +293,30 @@
 
 .admin-canvas {
   display: grid;
-  /* Columna del lienzo con minmax(0, 1fr): en una pista implícita solo con
+  /*Columna del lienzo con minmax(0, 1fr): en una pista implícita solo con
      anchor autos, el contenido irrestricto (tabla sin max-width) redefine el
      max-content y desborda el lienzo en pantallas anchas; el minmax(0, 1fr)
-     fija la columna al ancho disponible y deja el ajuste interno al contenido. */
+     fija la columna al ancho disponible y deja el ajuste interno al contenido.*/
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr;
   min-width: 0;
 }
 
-/* El lienzo central fluye con el ancho disponible de la cuadrícula (sin tope
+/*El lienzo central fluye con el ancho disponible de la cuadrícula (sin tope
    arbitrario): antes, un max-width fijo dejaba una franja estrecha de
    contenido con vacío excesivo a la derecha en pantallas anchas. Sin
    `width: 100%`: el estiramiento del ítem ya llena la pista y, con el
    box-sizing por defecto, el porcentaje se suma al padding y desborda el
    lienzo (51,2 px verificados en navegador). La pista `minmax(0, 1fr)` del
-   `.admin-canvas` mantiene la columna en el ancho disponible. */
+   `.admin-canvas` mantiene la columna en el ancho disponible.*/
+
 .admin-content {
   min-width: 0;
   padding: 1.35rem 1.6rem 2rem;
 }
 
-/* ---------------- Botones ---------------- */
+/*---------------- Botones ----------------*/
+
 .admin-button {
   display: inline-flex;
   align-items: center;
@@ -295,7 +333,9 @@
   transition: filter 0.15s ease;
 }
 
-.admin-button:hover { filter: brightness(1.08); }
+.admin-button:hover {
+  filter: brightness(1.08);
+}
 
 .admin-button:disabled {
   opacity: 0.6;
@@ -309,14 +349,20 @@
   box-shadow: none;
 }
 
-.admin-button--ghost:hover { border-color: var(--admin-primary); filter: none; }
+.admin-button--ghost:hover {
+  border-color: var(--admin-primary);
+  filter: none;
+}
 
 .admin-button--danger {
   background: #dc2626;
   box-shadow: none;
 }
 
-.admin-button--danger:hover { filter: none; background: #b91c1c; }
+.admin-button--danger:hover {
+  filter: none;
+  background: #b91c1c;
+}
 
 .admin-button--subtle {
   background: rgba(139, 92, 246, 0.12);
@@ -324,12 +370,18 @@
   box-shadow: none;
 }
 
-.admin-button--wide { width: 100%; }
+.admin-button--wide {
+  width: 100%;
+}
 
-/* Variante compacta para formularios dentro de tarjetas y modal de cuenta */
-.admin-button--compact { min-width: 12rem; }
+/*Variante compacta para formularios dentro de tarjetas y modal de cuenta*/
 
-/* Botones de icono dentro de la tabla */
+.admin-button--compact {
+  min-width: 12rem;
+}
+
+/*Botones de icono dentro de la tabla*/
+
 .admin-icon-button {
   display: inline-grid;
   place-items: center;
@@ -343,9 +395,13 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.admin-icon-button:hover { background: var(--admin-surface-muted); color: var(--admin-primary-deep); }
+.admin-icon-button:hover {
+  background: var(--admin-surface-muted);
+  color: var(--admin-primary-deep);
+}
 
-/* Buscador del directorio */
+/*Buscador del directorio*/
+
 .admin-search {
   display: flex;
   align-items: center;
@@ -375,7 +431,9 @@
   min-width: 0;
 }
 
-.admin-search input::placeholder { color: var(--admin-soft); }
+.admin-search input::placeholder {
+  color: var(--admin-soft);
+}
 
 .admin-filters {
   display: flex;
@@ -402,7 +460,8 @@
   font: 500 0.82rem 'Inter', sans-serif;
 }
 
-/* ---------------- Tarjeta directorio ---------------- */
+/*---------------- Tarjeta directorio ----------------*/
+
 .admin-title {
   margin: 0 0 0.3rem;
   font-size: 1.55rem;
@@ -410,9 +469,10 @@
   color: #f8f7fd;
 }
 
-/* Descripción breve y discreta del directorio: el título vive solo en el
+/*Descripción breve y discreta del directorio: el título vive solo en el
    encabezado superior del shell («Gestión de empleados»), así que aquí no
-   hay segundo h1; solo una línea de apoyo con espacio vertical reducido. */
+   hay segundo h1; solo una línea de apoyo con espacio vertical reducido.*/
+
 .admin-directory__descripcion {
   margin: 0 0 0.9rem;
   font-size: 0.82rem;
@@ -437,7 +497,10 @@
   white-space: nowrap;
 }
 
-.admin-employee-card--center { justify-content: center; width: 100%; }
+.admin-employee-card--center {
+  justify-content: center;
+  width: 100%;
+}
 
 .admin-directory__toolbar {
   display: flex;
@@ -456,12 +519,11 @@
   box-shadow: var(--admin-shadow);
 }
 
-
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  /* Distribución fija: la proporción del colgroup gobierna las columnas y el
-     contenido no las ensancha, evitando saltos horizontales entre consultas. */
+  /*Distribución fija: la proporción del colgroup gobierna las columnas y el
+     contenido no las ensancha, evitando saltos horizontales entre consultas.*/
   table-layout: fixed;
 }
 
@@ -477,9 +539,10 @@
   color: #4b5060;
 }
 
-/* Filas compactas y uniformes del directorio: tipografía de 13–14 px con
+/*Filas compactas y uniformes del directorio: tipografía de 13–14 px con
    padding vertical de ~6 px, de modo que cada fila mide 38–42 px y una
-   página de diez registros es cómoda y separada sin estilizar datos. */
+   página de diez registros es cómoda y separada sin estilizar datos.*/
+
 .admin-table td {
   padding: 0.375rem 0.9rem;
   border-bottom: 1px solid #f0eef7;
@@ -487,7 +550,9 @@
   font-size: 0.8125rem;
 }
 
-.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
 
 .admin-table__employee {
   display: flex;
@@ -519,8 +584,9 @@
   color: #6b7280;
 }
 
-/* Con el layout fijo el texto no puede ensanchar su columna: se envuelve
-   dentro de la celda para preservar la anchura acordada del colgroup. */
+/*Con el layout fijo el texto no puede ensanchar su columna: se envuelve
+   dentro de la celda para preservar la anchura acordada del colgroup.*/
+
 .admin-table__email,
 .admin-table__name {
   overflow-wrap: anywhere;
@@ -537,8 +603,9 @@
   gap: 0.35rem;
 }
 
-/* Tarjetas del directorio: sustituyen a la tabla en tablet y móvil cuando
-   las columnas y acciones no caben sin scroll horizontal (< 1024 px). */
+/*Tarjetas del directorio: sustituyen a la tabla en tablet y móvil cuando
+   las columnas y acciones no caben sin scroll horizontal (< 1024 px).*/
+
 .admin-directory-cards {
   padding: 1rem;
 }
@@ -585,7 +652,9 @@
   cursor: pointer;
 }
 
-.admin-directory-card__nombre:hover { color: var(--admin-primary-deep); }
+.admin-directory-card__nombre:hover {
+  color: var(--admin-primary-deep);
+}
 
 .admin-directory-card__legajo {
   font-family: 'Inter', monospace;
@@ -593,8 +662,9 @@
   color: var(--admin-muted);
 }
 
-/* En pantallas reducidas el correo único puede superar el ancho de la
-   tarjeta; se parte línea con el ajuste pedido en la SPEC. */
+/*En pantallas reducidas el correo único puede superar el ancho de la
+   tarjeta; se parte línea con el ajuste pedido en la SPEC.*/
+
 .admin-directory-card__datos {
   display: grid;
   gap: 0.45rem;
@@ -609,7 +679,11 @@
   gap: 0.9rem;
 }
 
-.admin-directory-card__datos dt { color: var(--admin-muted); font-weight: 600; }
+.admin-directory-card__datos dt {
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
 .admin-directory-card__datos dd {
   margin: 0;
   font-weight: 600;
@@ -643,9 +717,12 @@
   cursor: pointer;
 }
 
-.admin-link:hover { color: var(--admin-primary-deep); }
+.admin-link:hover {
+  color: var(--admin-primary-deep);
+}
 
-/* Chips de rol y estado según Stitch */
+/*Chips de rol y estado según Stitch*/
+
 .admin-chip {
   display: inline-flex;
   align-items: center;
@@ -666,7 +743,11 @@
   color: #4b5060;
 }
 
-.admin-chip--estado-activo { background: #def7ec; color: #03543f; }
+.admin-chip--estado-activo {
+  background: #def7ec;
+  color: #03543f;
+}
+
 .admin-chip--estado-activo::before {
   content: '';
   width: 0.4rem;
@@ -675,7 +756,11 @@
   background: #31c48d;
 }
 
-.admin-chip--estado-pendiente { background: var(--admin-surface-muted); color: #6d28d9; }
+.admin-chip--estado-pendiente {
+  background: var(--admin-surface-muted);
+  color: #6d28d9;
+}
+
 .admin-chip--estado-pendiente::before {
   content: '';
   width: 0.4rem;
@@ -684,7 +769,11 @@
   background: #8b5cf6;
 }
 
-.admin-chip--estado-inactivo { background: #fde8e8; color: #b91c1c; }
+.admin-chip--estado-inactivo {
+  background: #fde8e8;
+  color: #b91c1c;
+}
+
 .admin-chip--estado-inactivo::before {
   content: '';
   width: 0.4rem;
@@ -693,11 +782,19 @@
   background: #f98080;
 }
 
-.admin-chip--estado-baja { background: #e5e7eb; color: #4b5563; }
+.admin-chip--estado-baja {
+  background: #e5e7eb;
+  color: #4b5563;
+}
 
-/* Chips de estados del ciclo de vida de versiones del tarifario (SL-4/SL-5).
-   Nombres deliberadamente distintos de los del directorio de empleados. */
-.admin-chip--estado-preparacion { background: var(--admin-surface-muted); color: #6d28d9; }
+/*Chips de estados del ciclo de vida de versiones del tarifario (SL-4/SL-5).
+   Nombres deliberadamente distintos de los del directorio de empleados.*/
+
+.admin-chip--estado-preparacion {
+  background: var(--admin-surface-muted);
+  color: #6d28d9;
+}
+
 .admin-chip--estado-preparacion::before {
   content: '';
   width: 0.4rem;
@@ -706,7 +803,11 @@
   background: #8b5cf6;
 }
 
-.admin-chip--estado-lista_para_activar { background: #fef3c7; color: #92400e; }
+.admin-chip--estado-lista_para_activar {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 .admin-chip--estado-lista_para_activar::before {
   content: '';
   width: 0.4rem;
@@ -715,7 +816,11 @@
   background: #fbbf24;
 }
 
-.admin-chip--estado-activa { background: #def7ec; color: #03543f; }
+.admin-chip--estado-activa {
+  background: #def7ec;
+  color: #03543f;
+}
+
 .admin-chip--estado-activa::before {
   content: '';
   width: 0.4rem;
@@ -724,14 +829,22 @@
   background: #31c48d;
 }
 
-.admin-chip--estado-historica { background: #e5e7eb; color: #4b5563; }
+.admin-chip--estado-historica {
+  background: #e5e7eb;
+  color: #4b5563;
+}
 
-/* El estado interno CANCELADA (descarte de versiones no activadas) se
-   presenta como 'Descartada' con el tono de advertencia suave. */
-.admin-chip--estado-cancelada { background: rgba(179, 50, 60, 0.1); color: #b3323c; }
+/*El estado interno CANCELADA (descarte de versiones no activadas) se
+   presenta como 'Descartada' con el tono de advertencia suave.*/
 
-/* Boton destructivo secundario del descarte: hereda la geometria de los
-   botones del modulo pero lleva el rojo de alerta, sin relleno fuerte. */
+.admin-chip--estado-cancelada {
+  background: rgba(179, 50, 60, 0.1);
+  color: #b3323c;
+}
+
+/*Boton destructivo secundario del descarte: hereda la geometria de los
+   botones del modulo pero lleva el rojo de alerta, sin relleno fuerte.*/
+
 .admin-button--peligro {
   background: transparent;
   color: #b3323c;
@@ -749,21 +862,24 @@
   box-shadow: none;
 }
 
-/* El campo del motivo vive dentro del bloque de confirmacion sin
-   estirarse mas alla del ancho necesario. */
+/*El campo del motivo vive dentro del bloque de confirmacion sin
+   estirarse mas alla del ancho necesario.*/
+
 .admin-vers__campo-descarte {
   min-width: 20rem;
   max-width: 22rem;
 }
 
-/* Filtro de descartadas: píldora tenue que resalta solo cuando esta
-   activa, para no confundirse con las acciones del ciclo. */
+/*Filtro de descartadas: píldora tenue que resalta solo cuando esta
+   activa, para no confundirse con las acciones del ciclo.*/
+
 .admin-vers__filtro-activo {
   border: 1px solid #7c4ce0;
   color: #5b2cbf;
 }
 
-/* Cabecera del panel de versiones: título con acciones del ciclo a la derecha. */
+/*Cabecera del panel de versiones: título con acciones del ciclo a la derecha.*/
+
 .admin-vers__cabecera {
   display: flex;
   justify-content: space-between;
@@ -784,8 +900,9 @@
   flex-wrap: wrap;
 }
 
-/* Alturas, bordes y radios unificados para toda accion del ciclo de
-   versiones; el texto de cada boton no se parte en varias lineas. */
+/*Alturas, bordes y radios unificados para toda accion del ciclo de
+   versiones; el texto de cada boton no se parte en varias lineas.*/
+
 .admin-vers__acciones .admin-button,
 .admin-vers__formu .admin-button,
 .admin-vers__confirmar .admin-button,
@@ -796,8 +913,9 @@
   border-radius: 0.6rem;
 }
 
-/* Tabla de filas del detalle: celdas compactas con el encabezado
-   adherido (regla global de sticky thead) para listas largas. */
+/*Tabla de filas del detalle: celdas compactas con el encabezado
+   adherido (regla global de sticky thead) para listas largas.*/
+
 .admin-vers-card--detalle .admin-table thead th {
   padding: 0.45rem 0.9rem 0.4rem;
 }
@@ -806,12 +924,18 @@
   padding: 0.3rem 0.9rem;
 }
 
-/* Fila del historial elegida como panel abierto. */
-.admin-vers__fila-elegida { background: rgba(139, 92, 246, 0.06); }
+/*Fila del historial elegida como panel abierto.*/
 
-/* La version ACTIVA se reconoce de un vistazo aunque no sea la mas
-   reciente: tinte verde suave junto a la marca Vigente de su celda. */
-.admin-vers__fila-activa { background: rgba(49, 196, 141, 0.07); }
+.admin-vers__fila-elegida {
+  background: rgba(139, 92, 246, 0.06);
+}
+
+/*La version ACTIVA se reconoce de un vistazo aunque no sea la mas
+   reciente: tinte verde suave junto a la marca Vigente de su celda.*/
+
+.admin-vers__fila-activa {
+  background: rgba(49, 196, 141, 0.07);
+}
 
 .admin-vers__vigente {
   display: inline-block;
@@ -826,7 +950,8 @@
   background: rgba(49, 196, 141, 0.14);
 }
 
-/* Formulario incrustado del aumento masivo sobre el panel del borrador. */
+/*Formulario incrustado del aumento masivo sobre el panel del borrador.*/
+
 .admin-vers__formu {
   display: flex;
   align-items: flex-end;
@@ -839,23 +964,26 @@
   min-width: 11rem;
 }
 
-/* Los paneles de versiones cancelan la altura fija de 10 filas que usan los
+/*Los paneles de versiones cancelan la altura fija de 10 filas que usan los
    directorios paginados: historial y detalle se dimensionan por contenido con
-   topes propios y quedan como tarjetas visualmente independientes. */
+   topes propios y quedan como tarjetas visualmente independientes.*/
+
 .admin-card.admin-table-wrap.admin-vers-card {
   height: auto;
 }
 
-/* El detalle se separa del historial que lo precede sin cambiar el flujo de
-   las tarjetas cuando ninguna versión está seleccionada. */
+/*El detalle se separa del historial que lo precede sin cambiar el flujo de
+   las tarjetas cuando ninguna versión está seleccionada.*/
+
 .admin-vers-card--detalle {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-/* Historial compacto: cinco versiones visibles con filas mas bajas; el
+/*Historial compacto: cinco versiones visibles con filas mas bajas; el
    resto se resuelve con el scroll vertical interno del propio bloque de
-   filas (la altura de fila coincide con el calc de abajo). */
+   filas (la altura de fila coincide con el calc de abajo).*/
+
 .admin-vers-card--historial .admin-table thead th {
   padding: 0.45rem 0.9rem 0.4rem;
 }
@@ -868,8 +996,9 @@
   max-height: calc(5 * 1.9rem + 0.9rem);
 }
 
-/* Boton de fila del historial: unico, compacto, alineado a la derecha y
-   sin quiebre de texto dentro del boton. */
+/*Boton de fila del historial: unico, compacto, alineado a la derecha y
+   sin quiebre de texto dentro del boton.*/
+
 .admin-vers__ver-fila {
   white-space: nowrap;
   padding: 0.28rem 0.72rem;
@@ -878,15 +1007,17 @@
   font-size: 0.78rem;
 }
 
-/* Tabla de tarifas del detalle: scroll interno moderado con encabezado
+/*Tabla de tarifas del detalle: scroll interno moderado con encabezado
    adherido (regla global de sticky thead) para listas largas de rangos;
-   la altura de fila compacta responde al calc de abajo. */
+   la altura de fila compacta responde al calc de abajo.*/
+
 .admin-vers-card--detalle .admin-table__scroll {
   max-height: calc(6 * 1.9rem + 0.9rem);
 }
 
-/* Confirmación de dos clics del deshacer y del aumento masivo: mensaje
-   plano con las acciones alineadas bajo la cabecera del panel. */
+/*Confirmación de dos clics del deshacer y del aumento masivo: mensaje
+   plano con las acciones alineadas bajo la cabecera del panel.*/
+
 .admin-vers__confirmar,
 .admin-vers__confirmacion-aumento {
   margin: 0 1.1rem 0.9rem;
@@ -908,16 +1039,18 @@
   font-size: 0.88rem;
 }
 
-/* Vista previa del aumento: la tabla de antes->nuevo no puede desplazar
+/*Vista previa del aumento: la tabla de antes->nuevo no puede desplazar
    al borrador completo; se resuelve con el mismo archivo de filas de 6
-   que la tabla del detalle. */
+   que la tabla del detalle.*/
+
 .admin-vers__confirmacion-aumento .admin-vers__previa-scroll {
   flex: 1 1 100%;
   max-height: calc(6 * 1.9rem + 0.9rem);
 }
 
-/* Resumen de cambios: auditoría real del backend listada de la más
-   reciente a la más antigua, con scroll interno para eventos largos. */
+/*Resumen de cambios: auditoría real del backend listada de la más
+   reciente a la más antigua, con scroll interno para eventos largos.*/
+
 .admin-resumen {
   border-top: 1px solid var(--admin-border);
   margin-top: 0.75rem;
@@ -929,8 +1062,8 @@
   font-size: 0.95rem;
 }
 
-/* La descripcion redundante fue retirada de la pantalla: el titulo y el
-   contenido del listado son la informacion de auditoria. */
+/*La descripcion redundante fue retirada de la pantalla: el titulo y el
+   contenido del listado son la informacion de auditoria.*/
 
 .admin-resumen__vacio {
   margin: 0;
@@ -1003,7 +1136,8 @@
   color: #a5a2ba;
 }
 
-/* ---------------- Modales ---------------- */
+/*---------------- Modales ----------------*/
+
 .admin-modal__backdrop {
   position: fixed;
   inset: 0;
@@ -1027,7 +1161,9 @@
   box-shadow: 0 30px 70px -30px rgba(5, 4, 18, 0.75);
 }
 
-.admin-modal--center { text-align: center; }
+.admin-modal--center {
+  text-align: center;
+}
 
 .admin-modal__header {
   display: flex;
@@ -1046,9 +1182,23 @@
   border-radius: 999px;
 }
 
-.admin-modal__icon--danger { background: #fde8e8; color: #b91c1c; }
-.admin-modal__icon--primary { background: var(--admin-surface-muted); color: #6d28d9; }
-.admin-modal__icon--success { background: #def7ec; color: #03543f; width: 3.4rem; height: 3.4rem; margin: 0 auto; }
+.admin-modal__icon--danger {
+  background: #fde8e8;
+  color: #b91c1c;
+}
+
+.admin-modal__icon--primary {
+  background: var(--admin-surface-muted);
+  color: #6d28d9;
+}
+
+.admin-modal__icon--success {
+  background: #def7ec;
+  color: #03543f;
+  width: 3.4rem;
+  height: 3.4rem;
+  margin: 0 auto;
+}
 
 .admin-modal__title {
   margin: 0;
@@ -1087,7 +1237,8 @@
   text-align: center;
 }
 
-/* El aviso de éxito centra su icono y su título como en Stitch */
+/*El aviso de éxito centra su icono y su título como en Stitch*/
+
 .admin-modal--center .admin-modal__header {
   display: grid;
   grid-auto-flow: row;
@@ -1097,11 +1248,16 @@
   padding: 1.4rem 1.25rem 0.9rem;
 }
 
-.admin-modal--center .admin-modal__header > div { display: contents; }
+.admin-modal--center .admin-modal__header > div {
+  display: contents;
+}
 
-.admin-modal--center .admin-modal__title { font-size: 1.25rem; }
+.admin-modal--center .admin-modal__title {
+  font-size: 1.25rem;
+}
 
-/* Mini tarjeta de empleado dentro de modales */
+/*Mini tarjeta de empleado dentro de modales*/
+
 .admin-employee-card {
   display: flex;
   align-items: center;
@@ -1126,7 +1282,9 @@
   color: var(--admin-muted);
 }
 
-.admin-employee-card__state { margin-left: auto; }
+.admin-employee-card__state {
+  margin-left: auto;
+}
 
 .admin-transition {
   padding: 0.7rem 0.9rem;
@@ -1151,7 +1309,9 @@
   margin-top: 0.45rem;
 }
 
-.admin-transition__arrow { color: var(--admin-muted); }
+.admin-transition__arrow {
+  color: var(--admin-muted);
+}
 
 .admin-modal__lead {
   margin: 0;
@@ -1159,8 +1319,9 @@
   color: var(--admin-text);
 }
 
-/* Aviso de bloqueo por verificacion de correo pendiente (SPEC-25): se
-   muestra con la tonalidad de error del modal en lugar del texto neutro. */
+/*Aviso de bloqueo por verificacion de correo pendiente (SPEC-25): se
+   muestra con la tonalidad de error del modal en lugar del texto neutro.*/
+
 .admin-modal__lead--error {
   color: var(--admin-danger, #b42318);
   font-weight: 600;
@@ -1174,7 +1335,8 @@
   background: var(--admin-surface);
 }
 
-/* Encabezado de cada formulario independiente dentro del modal de cuenta */
+/*Encabezado de cada formulario independiente dentro del modal de cuenta*/
+
 .admin-modal__section-title {
   margin: 0;
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -1190,13 +1352,16 @@
   font-family: 'Inter', monospace;
 }
 
-/* Menú contextual compacto de acciones por empleado */
+/*Menú contextual compacto de acciones por empleado*/
+
 .admin-menu__wrap {
   position: relative;
   display: inline-flex;
 }
 
-.admin-modal__actions--center { justify-content: stretch; }
+.admin-modal__actions--center {
+  justify-content: stretch;
+}
 
 .admin-facts {
   display: grid;
@@ -1211,11 +1376,23 @@
   gap: 1rem;
 }
 
-.admin-facts dt { color: var(--admin-muted); font-weight: 600; }
-.admin-facts dd { margin: 0; color: var(--admin-text); font-weight: 700; text-align: right; }
+.admin-facts dt {
+  color: var(--admin-muted);
+  font-weight: 600;
+}
 
-/* ---------------- Perfil ---------------- */
-.admin-profile { max-width: 760px; }
+.admin-facts dd {
+  margin: 0;
+  color: var(--admin-text);
+  font-weight: 700;
+  text-align: right;
+}
+
+/*---------------- Perfil ----------------*/
+
+.admin-profile {
+  max-width: 760px;
+}
 
 .admin-profile__section {
   margin-top: 1.4rem;
@@ -1226,7 +1403,8 @@
   box-shadow: var(--admin-shadow);
 }
 
-/* La identidad se lee como una tarjeta clara del diseño Stitch */
+/*La identidad se lee como una tarjeta clara del diseño Stitch*/
+
 .admin-profile__identity {
   padding: 1.15rem 1.4rem;
   border-radius: var(--admin-radius);
@@ -1240,16 +1418,21 @@
   font-size: 1.05rem;
 }
 
-/* Ajustes puntuales de los formularios AUTH reutilizados sobre tarjetas claras */
-.admin-card .auth-form { text-align: left; }
+/*Ajustes puntuales de los formularios AUTH reutilizados sobre tarjetas claras*/
 
-/* Los controles AUTH se leen sobre la tarjeta clara con el tinte del diseño */
+.admin-card .auth-form {
+  text-align: left;
+}
+
+/*Los controles AUTH se leen sobre la tarjeta clara con el tinte del diseño*/
+
 .admin-profile__section .auth-input {
   background: var(--admin-surface-tint);
   border-color: var(--admin-border);
 }
 
-/* Sobre el cuerpo pale del modal, blanco con borde y altura compacta */
+/*Sobre el cuerpo pale del modal, blanco con borde y altura compacta*/
+
 .admin-modal .auth-input {
   background: #ffffff;
   border-color: var(--admin-border);
@@ -1258,13 +1441,20 @@
   font-size: 0.88rem;
 }
 
-.admin-modal .auth-label { font-size: 0.68rem; }
+.admin-modal .auth-label {
+  font-size: 0.68rem;
+}
 
-.admin-modal .auth-form { gap: 0.55rem; }
+.admin-modal .auth-form {
+  gap: 0.55rem;
+}
 
-.admin-modal .auth-hint { font-size: 0.74rem; }
+.admin-modal .auth-hint {
+  font-size: 0.74rem;
+}
 
-/* Fila de acciones de cada formulario (Volver + envío) */
+/*Fila de acciones de cada formulario (Volver + envío)*/
+
 .admin-form-row {
   display: flex;
   justify-content: flex-end;
@@ -1273,8 +1463,12 @@
   margin-top: 0.3rem;
 }
 
-/* Vista inicial del modal de cuenta: datos + opciones en lista */
-.admin-facts--compact { gap: 0.35rem; font-size: 0.84rem; }
+/*Vista inicial del modal de cuenta: datos + opciones en lista*/
+
+.admin-facts--compact {
+  gap: 0.35rem;
+  font-size: 0.84rem;
+}
 
 .admin-options {
   display: grid;
@@ -1309,16 +1503,21 @@
   font-size: 1rem;
 }
 
-/* Responsive */
-/* SPEC-27 — Navegación responsive compartida (ADMIN y ASESOR). Por debajo de
+/*Responsive*/
+
+/*SPEC-27 — Navegación responsive compartida (ADMIN y ASESOR). Por debajo de
    900 px el sidebar deja de apilarse sobre el lienzo (causa del header
    desplazado a 768 px): pasa a drawer fijo fuera de pantalla, con botón
    hamburguesa en la topbar, velo oscuro semitransparente y cierre por
    botón, Escape, selección de opción o toque fuera del drawer. En
    escritorio (>900 px) ninguna de estas reglas aplica: el shell de dos
-   columnas queda intacto y el botón hamburguesa se oculta. */
-/* El botón de cierre del drawer solo existe en pantallas angostas. */
-.admin-sidebar__cerrar { display: none; }
+   columnas queda intacto y el botón hamburguesa se oculta.*/
+
+/*El botón de cierre del drawer solo existe en pantallas angostas.*/
+
+.admin-sidebar__cerrar {
+  display: none;
+}
 
 @media (max-width: 900px) {
   .admin-sidebar {
@@ -1361,11 +1560,15 @@
     transition: background 0.15s ease, color 0.15s ease;
   }
 
-  .admin-sidebar__cerrar:hover { background: rgba(46, 48, 68, 0.9); color: #fff; }
+  .admin-sidebar__cerrar:hover {
+    background: rgba(46, 48, 68, 0.9);
+    color: #fff;
+  }
 }
 
-/* Botón hamburguesa de la topbar: solo visible en pantallas angostas; el
-   header vuelve a ser la primera franja de la pantalla en móvil. */
+/*Botón hamburguesa de la topbar: solo visible en pantallas angostas; el
+   header vuelve a ser la primera franja de la pantalla en móvil.*/
+
 .ui-cabecera__menu {
   display: none;
   flex: 0 0 auto;
@@ -1381,17 +1584,28 @@
   transition: background 0.15s ease;
 }
 
-.ui-cabecera__menu:hover { background: rgba(46, 48, 68, 0.95); }
-
-.ui-cabecera__menu svg { width: 1.3rem; height: 1.3rem; }
-
-@media (max-width: 900px) {
-  .ui-cabecera { padding-inline: 1rem; }
-  .ui-cabecera__menu { display: grid; }
+.ui-cabecera__menu:hover {
+  background: rgba(46, 48, 68, 0.95);
 }
 
-/* Velo oscuro semitransparente sobre el contenido mientras el drawer está
-   abierto; su clic cierra el menú. */
+.ui-cabecera__menu svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+@media (max-width: 900px) {
+  .ui-cabecera {
+    padding-inline: 1rem;
+  }
+
+  .ui-cabecera__menu {
+    display: grid;
+  }
+}
+
+/*Velo oscuro semitransparente sobre el contenido mientras el drawer está
+   abierto; su clic cierra el menú.*/
+
 .admin-velo {
   position: fixed;
   inset: 0;
@@ -1400,25 +1614,36 @@
 }
 
 @media (max-width: 900px) {
-  .admin-shell { grid-template-columns: 1fr; }
-  .admin-search { min-width: 0; }
-  .admin-content { padding: 1.2rem; }
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-search {
+    min-width: 0;
+  }
+
+  .admin-content {
+    padding: 1.2rem;
+  }
 }
 
-/* Al volver a la columna en móvil el buscador y los filtros se apilan para
-   no obligar a desplazamientos ni encabezados repetidos. */
+/*Al volver a la columna en móvil el buscador y los filtros se apilan para
+   no obligar a desplazamientos ni encabezados repetidos.*/
+
 @media (max-width: 767px) {
   .admin-directory__toolbar {
     flex-direction: column;
     align-items: stretch;
   }
+
   .admin-filters {
     justify-content: flex-start;
   }
 }
 
-/* De 1024 a 1279 px la tabla todavía cabe completa; se afina el espaciado
-   lateral de celdas para mantener todas las columnas fijas sin corte. */
+/*De 1024 a 1279 px la tabla todavía cabe completa; se afina el espaciado
+   lateral de celdas para mantener todas las columnas fijas sin corte.*/
+
 @media (min-width: 1024px) and (max-width: 1279px) {
   .admin-table th,
   .admin-table td {
@@ -1426,14 +1651,16 @@
   }
 }
 
-/* Tablet: dos columnas de tarjetas aprovechan el ancho disponible */
+/*Tablet: dos columnas de tarjetas aprovechan el ancho disponible*/
+
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .admin-directory-cards__grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-/* El menú de acciones se ancla al botón de su fila */
+/*El menú de acciones se ancla al botón de su fila*/
+
 .admin-menu__wrap .admin-menu {
   position: absolute;
   top: calc(100% + 0.3rem);
@@ -1463,18 +1690,25 @@
   cursor: pointer;
 }
 
-.admin-menu__item:hover { background: var(--admin-surface-muted); color: var(--admin-primary-deep); }
+.admin-menu__item:hover {
+  background: var(--admin-surface-muted);
+  color: var(--admin-primary-deep);
+}
 
-/* La tarjeta de usuario es un botón interactivo del foot de la barra lateral */
-.admin-profile__section h2 { font-size: 0.95rem; }
+/*La tarjeta de usuario es un botón interactivo del foot de la barra lateral*/
 
-/* Pie de paginación anclado al borde inferior interno del panel blanco de
+.admin-profile__section h2 {
+  font-size: 0.95rem;
+}
+
+/*Pie de paginación anclado al borde inferior interno del panel blanco de
    escritorio: el contenedor reparte su altura en columna y el pie queda
    pegado al fondo, de modo que el espacio libre entre la última fila y el
    pie conserve la posición del pie con 10, 3, 1 o 0 resultados. El hueco
    libre queda entre la última fila y el pie, nunca debajo. Durante las
    recargas el flex sigue activo: la clase de actualización no altera aquí
-   la distribución interna. */
+   la distribución interna.*/
+
 .admin-card.admin-table-wrap {
   display: flex;
   flex-direction: column;
@@ -1484,22 +1718,24 @@
   margin-top: auto;
 }
 
-/* Altura exterior constante en escritorio independientemente del selector
+/*Altura exterior constante en escritorio independientemente del selector
    de filas por página: el panel reserva siempre el espacio de una página
    completa de 10 filas compactas (2.45rem por fila + encabezados + pie).
    Nunca crece con 25 o 50 registros, por lo que la barra lateral y su
    tarjeta «Mi perfil» mantienen su ubicación; la variación de contenido se
-   resuelve con el scroll interno del área desplazable, no del documento. */
+   resuelve con el scroll interno del área desplazable, no del documento.*/
+
 @media (min-width: 1024px) {
   .admin-card.admin-table-wrap {
     height: calc(10 * 2.45rem + 5.3rem);
   }
 }
 
-/* Área desplazable de registros: el scroll vertical pertenece únicamente a
+/*Área desplazable de registros: el scroll vertical pertenece únicamente a
    las filas dentro de su propio contenedor (limitado por el flex del panel);
    los encabezados y el pie permanecen fijos y nunca aparecen scrolls
-   horizontales porque el colgroup fijo ya condiciona todas las columnas. */
+   horizontales porque el colgroup fijo ya condiciona todas las columnas.*/
+
 .admin-table__scroll {
   flex: 1 1 auto;
   min-height: 0;
@@ -1507,24 +1743,26 @@
   overflow-x: hidden;
 }
 
-/* Encabezados visibles durante el desplazamiento interno de filas: sticky
+/*Encabezados visibles durante el desplazamiento interno de filas: sticky
    sobre la misma tabla para preservar la alineación exacta entre los th y
-   las celdas con el colgroup fijo; sin tablas de encabezado separadas. */
+   las celdas con el colgroup fijo; sin tablas de encabezado separadas.*/
+
 .admin-table thead th {
   position: sticky;
   top: 0;
   z-index: 1;
-  /* Con border-collapse el borde inferior puede pintarlo la tabla y no
+  /*Con border-collapse el borde inferior puede pintarlo la tabla y no
      acompañar al encabezado pegado: la sombra interior lo mantiene visible
-     durante el desplazamiento sin duplicar ningún borde. */
+     durante el desplazamiento sin duplicar ningún borde.*/
   box-shadow: inset 0 -1px 0 var(--admin-border);
 }
 
-/* Recarga en vivo del directorio: mientras llega el listado del nuevo filtro,
+/*Recarga en vivo del directorio: mientras llega el listado del nuevo filtro,
    la tabla o las tarjetas permanecen montadas al 100 % de opacidad. La única
    señal de actualización es un marcador fino sobre el borde superior del
    bloque, absolutamente posicionado para no desplazar ni causar saltos;
-   la interacción queda bloqueada durante la consulta. */
+   la interacción queda bloqueada durante la consulta.*/
+
 .admin-card.admin-directory--actualizando {
   position: relative;
   pointer-events: none;
@@ -1539,14 +1777,20 @@
   animation: admin-actualizando 1s ease-in-out infinite;
 }
 
-/* Pulso del marcador de recarga: solo varía la opacidad de la barra; ningún
-   movimiento horizontal ni vertical que altere la composición del directorio. */
+/*Pulso del marcador de recarga: solo varía la opacidad de la barra; ningún
+   movimiento horizontal ni vertical que altere la composición del directorio.*/
+
 @keyframes admin-actualizando {
-  from { opacity: 0.25; }
-  to { opacity: 0.9; }
+  from {
+    opacity: 0.25;
+  }
+
+  to {
+    opacity: 0.9;
+  }
 }
 
-/* El bloque de resultados reserva altura constante según las filas por
+/*El bloque de resultados reserva altura constante según las filas por
    página vigentes (--filas-pagina la inyecta la página en .admin-table-wrap):
    el pie de paginación queda a la misma posición vertical al alternar entre
    filtros como ACTIVO, BAJA o todos, aunque la consulta devuelva menos filas
@@ -1554,16 +1798,18 @@
    al borde inferior del viewport; con 25 o 50 el documento permite el scroll
    natural si el área reservada supera la pantalla. Nunca hay scroll interno:
    la tabla fluye completa. En móvil las tarjetas siguen siendo adaptables,
-   sin reservar el espacio de diez tarjetas. */
-/* Pie de paginación anclado al borde inferior interno del panel blanco de
+   sin reservar el espacio de diez tarjetas.*/
+
+/*Pie de paginación anclado al borde inferior interno del panel blanco de
    escritorio: el contenedor reparte su altura en columna y el pie queda
    pegado al fondo, de modo que el espacio libre entre la última fila y el
    pie conserve la posición del pie con 10, 3, 1 o 0 resultados. El hueco
-   libre queda entre la última fila y el pie, nunca debajo. */
+   libre queda entre la última fila y el pie, nunca debajo.*/
 
-/* Pie de paginación compartido (diseño Stitch): selector discreto de filas
+/*Pie de paginación compartido (diseño Stitch): selector discreto de filas
    por página y navegación anterior/siguiente compacta y deshabilitada en
-   los extremos. */
+   los extremos.*/
+
 .admin-footer-filas {
   display: inline-flex;
   align-items: center;
@@ -1594,21 +1840,43 @@
   background: none;
 }
 
-/* En pantallas angostas los modales compartidos ajustan su espaciado: los
+/*En pantallas angostas los modales compartidos ajustan su espaciado: los
    botones se apilan en vertical y el correo dentro de la tarjeta de empleado
-   puede pasar a su propia línea para no recortar chips, botones ni la X. */
+   puede pasar a su propia línea para no recortar chips, botones ni la X.*/
+
 @media (max-width: 374.98px) {
-  .admin-modal__header { padding: 1rem 1rem 0.9rem; }
-  .admin-modal__body { padding: 0.8rem 0.9rem; }
+  .admin-modal__header {
+    padding: 1rem 1rem 0.9rem;
+  }
+
+  .admin-modal__body {
+    padding: 0.8rem 0.9rem;
+  }
+
   .admin-modal__actions {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
   }
-  .admin-modal__actions .admin-button { width: 100%; }
-  .admin-employee-card { flex-wrap: wrap; row-gap: 0.55rem; }
-  .admin-employee-card__meta { overflow-wrap: anywhere; }
-  .admin-employee-card > div { flex: 1 1 0; min-width: 0; }
+
+  .admin-modal__actions .admin-button {
+    width: 100%;
+  }
+
+  .admin-employee-card {
+    flex-wrap: wrap;
+    row-gap: 0.55rem;
+  }
+
+  .admin-employee-card__meta {
+    overflow-wrap: anywhere;
+  }
+
+  .admin-employee-card > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   .admin-employee-card--center .admin-employee-card__state {
     margin-left: 0;
     width: 100%;
@@ -1617,14 +1885,15 @@
   }
 }
 
-/* Gestión de Precios con la estructura aprobada en Stitch «Asesor —
+/*Gestión de Precios con la estructura aprobada en Stitch «Asesor —
    Consultar Listas de Precios»: panel de filtros sobre superficie clara,
    tarjeta de resultados con plan, modalidad y cantidad de segmentos, tabla
-   de precios vigentes y pie informativo con los datos de la versión. */
+   de precios vigentes y pie informativo con los datos de la versión.*/
 
-/* Panel de filtros del diseño aprobado: una única fila horizontal en
+/*Panel de filtros del diseño aprobado: una única fila horizontal en
    escritorio con plan, modalidad, búsqueda y la acción de limpieza compacta
-   a la derecha; en pantallas pequeñas las columnas se reorganizan. */
+   a la derecha; en pantallas pequeñas las columnas se reorganizan.*/
+
 .admin-tarifario-filtros {
   display: flex;
   flex-wrap: wrap;
@@ -1646,7 +1915,8 @@
   flex: 1 1 12rem;
 }
 
-/* Acción de limpieza: ancho del contenido y extremo derecho de la fila. */
+/*Acción de limpieza: ancho del contenido y extremo derecho de la fila.*/
+
 .admin-tarifario-filtros__limpiar {
   flex: 0 0 auto;
   margin-left: auto;
@@ -1672,7 +1942,9 @@
   font: 500 0.9rem 'Inter', sans-serif;
 }
 
-.admin-campo input::placeholder { color: var(--admin-soft); }
+.admin-campo input::placeholder {
+  color: var(--admin-soft);
+}
 
 .admin-campo select:focus-visible,
 .admin-campo input:focus-visible {
@@ -1680,7 +1952,8 @@
   outline-offset: 2px;
 }
 
-/* Indicador de tarifas vigentes: emblema verde del diseño aprobado. */
+/*Indicador de tarifas vigentes: emblema verde del diseño aprobado.*/
+
 .admin-vigencia {
   display: inline-flex;
   align-items: center;
@@ -1694,9 +1967,14 @@
   box-shadow: 0 1px 3px rgba(6, 95, 70, 0.18);
 }
 
-.admin-vigencia svg { width: 1.05rem; height: 1.05rem; }
+.admin-vigencia svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
 
-.admin-tarifario { overflow: hidden; }
+.admin-tarifario {
+  overflow: hidden;
+}
 
 .admin-tarifario__cabecera {
   display: flex;
@@ -1763,20 +2041,30 @@
   overflow-y: auto;
 }
 
-/* SPEC-27 — indicación discreta de desplazamiento horizontal: cuando el
+/*SPEC-27 — indicación discreta de desplazamiento horizontal: cuando el
    contenido excede el ancho del contenedor, una franja sombreada en el
    borde derecho (fondo del contenedor, que no se desplaza con el scroll)
-   advierte que hay más datos hacia la derecha. */
+   advierte que hay más datos hacia la derecha.*/
+
 .admin-tarifario__scroll--desplazable {
   background: linear-gradient(to left, rgba(16, 18, 34, 0.10), transparent 20px) right / 20px 100% no-repeat;
 }
 
-/* A 320 px el costo del padding ocupaba las columnas: se reducen paddings
+/*A 320 px el costo del padding ocupaba las columnas: se reducen paddings
    y tipografía de encabezado para conservar rango etario y precio legibles
-   sin cortes, manteniendo el desplazamiento interno de la tabla. */
+   sin cortes, manteniendo el desplazamiento interno de la tabla.*/
+
 @media (max-width: 479.98px) {
-  .admin-tarifario__tabla thead th { padding: 0.6rem 0.8rem; font-size: 0.66rem; letter-spacing: 0.04em; }
-  .admin-tarifario__tabla tbody td { padding: 0.6rem 0.8rem; font-size: 0.84rem; }
+  .admin-tarifario__tabla thead th {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+  }
+
+  .admin-tarifario__tabla tbody td {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.84rem;
+  }
 }
 
 .admin-tarifario__tabla {
@@ -1807,8 +2095,13 @@
   vertical-align: top;
 }
 
-.admin-tarifario__tabla tbody tr:nth-child(even) td { background: #f9f7ff; }
-.admin-tarifario__tabla tbody tr:last-child td { border-bottom: none; }
+.admin-tarifario__tabla tbody tr:nth-child(even) td {
+  background: #f9f7ff;
+}
+
+.admin-tarifario__tabla tbody tr:last-child td {
+  border-bottom: none;
+}
 
 .admin-tarifario__segmento {
   display: flex;
@@ -1817,7 +2110,8 @@
   font-weight: 600;
 }
 
-/* Punto violeta de marca de segmento, como en el diseño aprobado. */
+/*Punto violeta de marca de segmento, como en el diseño aprobado.*/
+
 .admin-tarifario__punto {
   width: 0.45rem;
   height: 0.45rem;
@@ -1855,47 +2149,74 @@
   color: var(--admin-muted);
 }
 
-.admin-table__texto { color: var(--admin-muted); font-size: 0.9rem; }
-
-.admin-table__precio { text-align: right; font-variant-numeric: tabular-nums; }
-
-@media (max-width: 900px) {
-  /* Pantallas estrechas: los filtros se apilan y la acción baja al final.
-     SPEC-27: en dirección columna el flex-basis de 12rem de .admin-campo
-     se interpreta como ALTURA (causa de los grandes huecos verticales a
-     320/768 px); los campos pasan a altura natural. */
-  .admin-tarifario-filtros { flex-direction: column; align-items: stretch; gap: 0.8rem; padding: 1rem; }
-  .admin-tarifario-filtros .admin-campo { flex: 0 0 auto; }
-  .admin-tarifario-filtros__limpiar { margin-left: 0; align-self: flex-start; }
+.admin-table__texto {
+  color: var(--admin-muted);
+  font-size: 0.9rem;
 }
 
-/* SM-2E/COMPARTIDOS: catálogo de planes bajo la presentación aprobada del
+.admin-table__precio {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  /*Pantallas estrechas: los filtros se apilan y la acción baja al final.
+     SPEC-27: en dirección columna el flex-basis de 12rem de .admin-campo
+     se interpreta como ALTURA (causa de los grandes huecos verticales a
+     320/768 px); los campos pasan a altura natural.*/
+
+  .admin-tarifario-filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+
+  .admin-tarifario-filtros .admin-campo {
+    flex: 0 0 auto;
+  }
+
+  .admin-tarifario-filtros__limpiar {
+    margin-left: 0;
+    align-self: flex-start;
+  }
+}
+
+/*SM-2E/COMPARTIDOS: catálogo de planes bajo la presentación aprobada del
    catálogo ASESOR: rejilla de tarjetas compactas con gema y selección de
    anillo violeta, y ficha técnica en panel ancho debajo de la rejilla. Los
    textos de cobertura se leen en la ficha, no dentro de la tarjeta, por lo
-   que la rejilla puede crecer a dos y cuatro columnas sin scroll. */
+   que la rejilla puede crecer a dos y cuatro columnas sin scroll.*/
+
 .admin-plan-lista {
   display: grid;
   gap: 1rem;
 }
 
 @media (min-width: 640px) {
-  .admin-plan-lista { grid-template-columns: repeat(2, 1fr); }
+  .admin-plan-lista {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (min-width: 1024px) {
-  .admin-plan-lista { grid-template-columns: repeat(4, 1fr); }
+  .admin-plan-lista {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-/* Tarjeta compacta del catálogo: gema sobre el nombre y acciones apiladas al
-   pie, tasa hover de elevación leve y anillo violeta en la tarjeta abierta. */
+/*Tarjeta compacta del catálogo: gema sobre el nombre y acciones apiladas al
+   pie, tasa hover de elevación leve y anillo violeta en la tarjeta abierta.*/
+
 .admin-plan-card {
   padding: 0;
   overflow-wrap: anywhere;
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.admin-plan-card:hover { transform: translateY(-2px); }
+.admin-plan-card:hover {
+  transform: translateY(-2px);
+}
 
 .admin-plan-card--abierto {
   box-shadow: 0 0 0 2px var(--admin-primary), var(--admin-shadow);
@@ -1909,7 +2230,9 @@
   padding: 1rem 1.1rem 1.15rem;
 }
 
-.admin-plan-card__gema { display: inline-flex; }
+.admin-plan-card__gema {
+  display: inline-flex;
+}
 
 .admin-plan-card__nombre {
   margin: 0;
@@ -1919,7 +2242,8 @@
   color: var(--admin-text);
 }
 
-/* Acciones del plan apiladas de ancho completo, como el botón único aprobado. */
+/*Acciones del plan apiladas de ancho completo, como el botón único aprobado.*/
+
 .admin-plan-card__acciones {
   display: flex;
   flex-direction: column;
@@ -1929,9 +2253,10 @@
   width: 100%;
 }
 
-/* Separación vertical entre la rejilla de tarjetas y el bloque de fichas
+/*Separación vertical entre la rejilla de tarjetas y el bloque de fichas
    técnicas: la ficha se lee como bloque propio, no como extensión de la
-   tarjeta seleccionada. */
+   tarjeta seleccionada.*/
+
 .admin-plan-fichas {
   display: grid;
   gap: 1.25rem;
@@ -1942,18 +2267,25 @@
   padding: 1.25rem 1.4rem 1.4rem;
 }
 
-/* Espaciado interno sin display propio en el panel: si el componente declara
+/*Espaciado interno sin display propio en el panel: si el componente declara
    display, esa regla de autor anula la del agente de usuario y el atributo
-   [hidden] deja de ocultar (causa del defecto SL-2E confirmado en navegador). */
-.admin-plan-card__body > * + * { margin-top: 0.75rem; }
+   [hidden] deja de ocultar (causa del defecto SL-2E confirmado en navegador).*/
 
-/* Guardia explícita: el panel contraído queda oculto incluso si una regla
-   agregada después volviera a declarar display para el panel. */
-.admin-plan-card__body[hidden] { display: none; }
+.admin-plan-card__body > * + * {
+  margin-top: 0.75rem;
+}
 
-/* SPEC-27 — acordeón contextual en pantallas angostas: la ficha vive dentro
+/*Guardia explícita: el panel contraído queda oculto incluso si una regla
+   agregada después volviera a declarar display para el panel.*/
+
+.admin-plan-card__body[hidden] {
+  display: none;
+}
+
+/*SPEC-27 — acordeón contextual en pantallas angostas: la ficha vive dentro
    de la tarjeta seleccionada; se separa del header con un margen que respeta
-   el padding de la tarjeta y radios suaves para leerse como bloque interno. */
+   el padding de la tarjeta y radios suaves para leerse como bloque interno.*/
+
 @media (max-width: 767px) {
   .admin-plan-card .admin-plan-card__body {
     margin: 0 0.9rem 0.9rem;
@@ -1961,7 +2293,8 @@
   }
 }
 
-/* Titular de la ficha técnica aprobada: gema de tamaño mayor y epígrafe. */
+/*Titular de la ficha técnica aprobada: gema de tamaño mayor y epígrafe.*/
+
 .admin-plan-card__titular {
   display: flex;
   align-items: center;
@@ -1986,8 +2319,9 @@
   color: var(--admin-muted);
 }
 
-/* El texto se renderiza fiel: los saltos de linea del origen conservan la
-   estructura de coberturas y no se interpreta el separador `|` inconsistente. */
+/*El texto se renderiza fiel: los saltos de linea del origen conservan la
+   estructura de coberturas y no se interpreta el separador `|` inconsistente.*/
+
 .admin-plan-card__texto {
   margin: 0;
   white-space: pre-line;
@@ -1996,10 +2330,11 @@
   color: var(--admin-text);
 }
 
-/* Tabla semántica de coberturas: encabezados jerarquizados, separación
+/*Tabla semántica de coberturas: encabezados jerarquizados, separación
    sutil por fila y columnas alineadas. El contenido proviene de la fuente
    sin reinterpretaciones: `NO` y abreviaturas se conservan literales y los
-   registros ambiguos se muestran completos en una fila extendida. */
+   registros ambiguos se muestran completos en una fila extendida.*/
+
 .admin-plan-tabla {
   width: 100%;
   border-collapse: collapse;
@@ -2007,15 +2342,25 @@
   font-size: 0.88rem;
 }
 
-/* Proporciones estables de columna con layout fijo: la prestación gana el
+/*Proporciones estables de columna con layout fijo: la prestación gana el
    mayor ancho y las prestaciones extensas ocupan varias líneas sin
    deformar la tabla; a su vez los anchos en porcentaje acompañan el zoom
-   del navegador sin cortes ni anchos fijos de píxeles. */
-.admin-plan-tabla col:nth-child(1) { width: 46%; }
-.admin-plan-tabla col:nth-child(2) { width: 27%; }
-.admin-plan-tabla col:nth-child(3) { width: 27%; }
+   del navegador sin cortes ni anchos fijos de píxeles.*/
 
-/* Rótulo solo accesible: la tabla ya tiene encabezados visibles. */
+.admin-plan-tabla col:nth-child(1) {
+  width: 46%;
+}
+
+.admin-plan-tabla col:nth-child(2) {
+  width: 27%;
+}
+
+.admin-plan-tabla col:nth-child(3) {
+  width: 27%;
+}
+
+/*Rótulo solo accesible: la tabla ya tiene encabezados visibles.*/
+
 .admin-plan-tabla__captura {
   position: absolute;
   width: 1px;
@@ -2048,8 +2393,9 @@
   border-bottom: 1px solid var(--admin-border);
 }
 
-/* Punto de color del plan junto a la prestación: marca segmental aprobada
-   en el catálogo de ASESOR; el color lo aporta colorDePlan(). */
+/*Punto de color del plan junto a la prestación: marca segmental aprobada
+   en el catálogo de ASESOR; el color lo aporta colorDePlan().*/
+
 .admin-plan-tabla__bullet {
   display: inline-block;
   width: 0.4rem;
@@ -2059,8 +2405,9 @@
   vertical-align: 0.2em;
 }
 
-/* Píldora con fondo violeta tenue para el valor de cobertura, igual que el
-   chip de la columna Cobertura aprobado en el catálogo de ASESOR. */
+/*Píldora con fondo violeta tenue para el valor de cobertura, igual que el
+   chip de la columna Cobertura aprobado en el catálogo de ASESOR.*/
+
 .admin-plan-tabla__cobertura {
   display: inline-block;
   padding: 0.06rem 0.5rem;
@@ -2071,11 +2418,16 @@
   font-weight: 600;
 }
 
-.admin-plan-tabla tbody tr:last-child td { border-bottom: none; }
+.admin-plan-tabla tbody tr:last-child td {
+  border-bottom: none;
+}
 
-/* Fila extendida del registro ambiguo: el texto íntegro ocupa las tres
-   columnas y la etiqueta discreta lo distingue sin alterarlo. */
-.admin-plan-tabla__fila-completa td { background: var(--admin-surface-tint); }
+/*Fila extendida del registro ambiguo: el texto íntegro ocupa las tres
+   columnas y la etiqueta discreta lo distingue sin alterarlo.*/
+
+.admin-plan-tabla__fila-completa td {
+  background: var(--admin-surface-tint);
+}
 
 .admin-plan-tabla__etiqueta {
   display: inline-block;
@@ -2092,27 +2444,43 @@
   vertical-align: middle;
 }
 
-/* El glosario de referencias se separa visualmente del cuerpo de
+/*El glosario de referencias se separa visualmente del cuerpo de
    condiciones: es una porción estructural fiable (prefijo `Referencias:`
-   verificado en los cuatro planes), no una interpretación de contenido. */
+   verificado en los cuatro planes), no una interpretación de contenido.*/
+
 .admin-plan-card__glosario {
   border-left: 3px solid var(--admin-primary);
   padding: 0.1rem 0 0.1rem 0.8rem;
 }
 
-.admin-plan-card__texto--glosario { font-size: 0.82rem; color: var(--admin-soft); }
+.admin-plan-card__texto--glosario {
+  font-size: 0.82rem;
+  color: var(--admin-soft);
+}
 
-.admin-plan-card__empty { margin: 0; padding: 1.1rem; color: var(--admin-muted); }
+.admin-plan-card__empty {
+  margin: 0;
+  padding: 1.1rem;
+  color: var(--admin-muted);
+}
 
 @media (max-width: 900px) {
-  .admin-plan-card__header { padding: 0.85rem 0.9rem; }
-  .admin-plan-card__body { padding: 0.85rem 0.9rem 1.1rem; }
+  .admin-plan-card__header {
+    padding: 0.85rem 0.9rem;
+  }
 
-  /* SPEC-29: cada prestación usa el ancho completo. La etiqueta fija de
+  .admin-plan-card__body {
+    padding: 0.85rem 0.9rem 1.1rem;
+  }
+
+  /*SPEC-29: cada prestación usa el ancho completo. La etiqueta fija de
      7.5rem dejaba una columna mínima para los valores del acordeón móvil.
      Nombre arriba, Cobertura y Observaciones debajo, sin columnas internas;
-     también cubre las fichas estrechas del catálogo en tablet. */
-  .admin-plan-tabla thead { display: none; }
+     también cubre las fichas estrechas del catálogo en tablet.*/
+
+  .admin-plan-tabla thead {
+    display: none;
+  }
 
   .admin-plan-tabla,
   .admin-plan-tabla tbody,
@@ -2148,15 +2516,24 @@
     color: var(--admin-muted);
   }
 
-  .admin-plan-tabla tbody td[data-label="Prestación"] { font-weight:600; }
-  .admin-plan-tabla tbody td[data-label="Prestación"]::before { content:none; }
+  .admin-plan-tabla tbody td[data-label="Prestación"] {
+    font-weight: 600;
+  }
 
-  /* La fila extendida del «Detalle original» no repite etiquetas de campo:
-     conserva su propia indicación y el texto completo debajo. */
-  .admin-plan-tabla tr.admin-plan-tabla__fila-completa td::before { content: none; }
+  .admin-plan-tabla tbody td[data-label="Prestación"]::before {
+    content: none;
+  }
+
+  /*La fila extendida del «Detalle original» no repite etiquetas de campo:
+     conserva su propia indicación y el texto completo debajo.*/
+
+  .admin-plan-tabla tr.admin-plan-tabla__fila-completa td::before {
+    content: none;
+  }
 }
 
-/* Configuración Comercial (SPEC-03) */
+/*Configuración Comercial (SPEC-03)*/
+
 .admin-config-comercial {
   display: grid;
   gap: 1.5rem;
@@ -2212,8 +2589,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.25rem;
-  /* Cada celda arranca arriba: la ayuda de «Primer tramo 50% máx.» no
-     desplaza visualmente el input vecino (p. ej. «Descuento TDC»). */
+  /*Cada celda arranca arriba: la ayuda de «Primer tramo 50% máx.» no
+     desplaza visualmente el input vecino (p. ej. «Descuento TDC»).*/
   align-items: start;
 }
 
@@ -2288,9 +2665,12 @@
   margin: 0.2rem 0 0;
 }
 
-/* El formulario conserva su separación previa; el margen de lectura vive
-   exclusivamente en .admin-config__grupos para no mezclar ambos modos. */
-.admin-config__form { margin-bottom: 24px; }
+/*El formulario conserva su separación previa; el margen de lectura vive
+   exclusivamente en .admin-config__grupos para no mezclar ambos modos.*/
+
+.admin-config__form {
+  margin-bottom: 24px;
+}
 
 .admin-config__descuentos-editor {
   display: grid;
@@ -2307,7 +2687,9 @@
   max-width: 22rem;
 }
 
-.admin-config__agregar-descuento .admin-config__campo { flex: 1; }
+.admin-config__agregar-descuento .admin-config__campo {
+  flex: 1;
+}
 
 .admin-config__boton-mas {
   min-width: 2.5rem;
@@ -2384,7 +2766,10 @@
   cursor: pointer;
 }
 
-.admin-config__version span { font-size: 0.72rem; color: var(--admin-muted); }
+.admin-config__version span {
+  font-size: 0.72rem;
+  color: var(--admin-muted);
+}
 
 .admin-config__version--activa {
   border-color: var(--admin-primary);
@@ -2405,7 +2790,8 @@
   gap: 0.75rem;
 }
 
-/* Selector de activación inmediata o programada dentro del formulario. */
+/*Selector de activación inmediata o programada dentro del formulario.*/
+
 .admin-config__activacion {
   display: flex;
   flex-wrap: wrap;
@@ -2417,8 +2803,14 @@
   border-radius: 0.6rem;
   background: var(--admin-surface-tint);
 }
-.admin-config__activacion legend { padding-right: 0.5rem; }
-.admin-config__activacion .admin-config__input { max-width: 15rem; }
+
+.admin-config__activacion legend {
+  padding-right: 0.5rem;
+}
+
+.admin-config__activacion .admin-config__input {
+  max-width: 15rem;
+}
 
 .admin-config__radio-wrap {
   display: inline-flex;
@@ -2429,7 +2821,8 @@
   color: var(--admin-text);
 }
 
-/* Destino de la edición dentro del formulario (versión nueva o programada). */
+/*Destino de la edición dentro del formulario (versión nueva o programada).*/
+
 .admin-config__edicion-destino {
   margin: 0;
   font-size: 0.8rem;
@@ -2437,7 +2830,8 @@
   color: var(--admin-muted);
 }
 
-/* Bloque de la programación pendiente expuesto junto a la vigente. */
+/*Bloque de la programación pendiente expuesto junto a la vigente.*/
+
 .admin-config__pendiente {
   margin-top: 1.5rem;
   padding: 1rem;
@@ -2445,9 +2839,14 @@
   border-radius: 0.6rem;
   background: var(--admin-surface-tint);
 }
-.admin-config__pendiente p { margin: 0 0 0.75rem; font-size: 0.85rem; }
 
-/* Auditoría de ciclo de vida dentro del detalle histórico. */
+.admin-config__pendiente p {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+}
+
+/*Auditoría de ciclo de vida dentro del detalle histórico.*/
+
 .admin-config__eventos {
   margin: 1rem 0;
   padding: 0;
@@ -2457,11 +2856,27 @@
   font-size: 0.8rem;
   color: var(--admin-text);
 }
-.admin-config__eventos strong { font-weight: 700; }
+
+.admin-config__eventos strong {
+  font-weight: 700;
+}
 
 @media (max-width: 700px) {
-  .admin-config__header { align-items: flex-start; flex-direction: column; }
-  .admin-config__acciones { width: 100%; flex-wrap: wrap; }
-  .admin-config__grid { grid-template-columns: minmax(0, 1fr); }
-  .admin-config__historial-body { grid-template-columns: 1fr; }
+  .admin-config__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-config__acciones {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .admin-config__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-config__historial-body {
+    grid-template-columns: 1fr;
+  }
 }

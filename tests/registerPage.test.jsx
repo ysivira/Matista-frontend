@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE REGISTRO PÚBLICO
+ * ============================================================
+ *
+ * Archivo: registerPage.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Verificar validaciones, DTO, confirmación y modal de espera,
+ * preservando el bloqueo de envíos duplicados con API simulada.
+ *
+ * ============================================================
+ */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'

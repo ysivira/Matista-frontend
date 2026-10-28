@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: ClientesPage.jsx
+ * ============================================================
+ * MATISTA | GESTIÓN DE CLIENTES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página ClientesPage del módulo Asesor comercial; compone componentes de la feature para su caso
- * de uso.
+ * Archivo: ClientesPage.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Componer búsqueda y edición de clientes con el listado propio filtrado por DNI.
  *
  * CONTENIDO:
  * - Función ClientesPage.
@@ -15,6 +18,8 @@
  * - ../components/ClientSearch.jsx
  * - ../hooks/useAsesorConsulta.js
  * - ../../../shared/ui/EncabezadoContextual.jsx
+ *
+ * ============================================================
  */
 import { Link } from 'react-router-dom';
 import { useState } from 'react';

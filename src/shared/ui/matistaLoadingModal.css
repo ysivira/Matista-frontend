@@ -1,36 +1,219 @@
-/* Modal institucional de procesamiento (SPEC-26). Superposición
+/*Modal institucional de procesamiento (SPEC-26). Superposición
    semitransparente sobre la pantalla activa, tarjeta oscura con borde violeta,
    logo oficial MATISTA con latido suave, anillo orbital luminoso, tres puntos
-   de carga y aviso inferior. Respeta prefers-reduced-motion. */
-.matista-loading { position:fixed; inset:0; z-index:60; display:grid; place-items:center; padding:20px; background:rgba(13,14,26,.72); backdrop-filter:blur(3px); }
-.matista-loading__caja { width:min(420px,100%); display:flex; flex-direction:column; align-items:center; text-align:center; padding:34px 30px 26px; color:#fff; background:linear-gradient(165deg,#202134,#171828 60%); border:1px solid rgba(167,139,250,.5); border-radius:22px; box-shadow:0 24px 60px rgba(5,6,14,.55), 0 0 30px rgba(124,58,237,.14); outline:none; }
-.matista-loading__orbita { position:relative; display:grid; place-items:center; width:170px; height:170px; margin-bottom:22px; }
-.matista-loading__anillo { position:absolute; inset:0; border:1px solid rgba(167,139,250,.38); border-radius:50%; }
-.matista-loading__logo { display:grid; place-items:center; width:104px; animation:matista-latido 1.7s ease-in-out infinite; }
-.matista-loading__logo img { width:100%; height:auto; filter:drop-shadow(0 0 14px rgba(139,92,246,.35)); }
-@keyframes matista-latido { 0%,100% { transform:scale(1); filter:brightness(1); } 50% { transform:scale(1.06); filter:brightness(1.18); } }
-.matista-loading__satelite { position:absolute; top:50%; left:50%; width:11px; height:11px; border-radius:50%; background:#c9b4fd; box-shadow:0 0 12px 3px rgba(167,139,250,.65); animation:matista-orbita 1.7s linear infinite; }
-.matista-loading__satelite--a { --matista-inicio:0deg; }
-.matista-loading__satelite--b { --matista-inicio:140deg; width:7px; height:7px; background:#a78bfa; }
-@keyframes matista-orbita { from { transform:rotate(var(--matista-inicio)) translateX(85px) rotate(calc(-1 * var(--matista-inicio))); } to { transform:rotate(calc(var(--matista-inicio) + 360deg)) translateX(85px) rotate(calc(-1 * (var(--matista-inicio) + 360deg))); } }
-.matista-loading__titulo { font-family:'Plus Jakarta Sans',sans-serif; font-size:1.3rem; font-weight:700; letter-spacing:-.015em; margin:0 0 8px; }
-.matista-loading__descripcion { max-width:30rem; font-size:.92rem; color:#aab0c9; margin:0 0 18px; line-height:1.55; }
-.matista-loading__puntos { display:flex; gap:9px; margin-bottom:20px; }
-.matista-loading__puntos span { width:9px; height:9px; border-radius:50%; background:#8b5cf6; animation:matista-punto 1.4s ease-in-out infinite; }
-.matista-loading__puntos span:nth-child(2) { animation-delay:.18s; background:#a78bfa; }
-.matista-loading__puntos span:nth-child(3) { animation-delay:.36s; }
-@keyframes matista-punto { 0%,100% { opacity:.35; transform:scale(.85); } 50% { opacity:1; transform:scale(1.12); } }
-.matista-loading__aviso { display:flex; gap:12px; align-items:center; width:100%; text-align:left; font-size:.85rem; color:#c3c8dd; background:rgba(139,92,246,.08); border:1px solid rgba(139,92,246,.2); border-left:3px solid #8b5cf6; border-radius:12px; padding:12px 14px; margin:0; }
-.matista-loading__aviso-icono { flex-shrink:0; color:#a78bfa; }
-@media (max-width:480px) {
-  .matista-loading__caja { padding:26px 20px 20px; }
-  .matista-loading__orbita { width:140px; height:140px; }
-  .matista-loading__logo { width:84px; }
-  @keyframes matista-orbita { from { transform:rotate(var(--matista-inicio)) translateX(70px) rotate(calc(-1 * var(--matista-inicio))); } to { transform:rotate(calc(var(--matista-inicio) + 360deg)) translateX(70px) rotate(calc(-1 * (var(--matista-inicio) + 360deg))); } }
+   de carga y aviso inferior. Respeta prefers-reduced-motion.*/
+
+.matista-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(13,14,26,.72);
+  backdrop-filter: blur(3px);
 }
+
+.matista-loading__caja {
+  width: min(420px,100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 34px 30px 26px;
+  color: #fff;
+  background: linear-gradient(165deg,#202134,#171828 60%);
+  border: 1px solid rgba(167,139,250,.5);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(5,6,14,.55), 0 0 30px rgba(124,58,237,.14);
+  outline: none;
+}
+
+.matista-loading__orbita {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 170px;
+  height: 170px;
+  margin-bottom: 22px;
+}
+
+.matista-loading__anillo {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(167,139,250,.38);
+  border-radius: 50%;
+}
+
+.matista-loading__logo {
+  display: grid;
+  place-items: center;
+  width: 104px;
+  animation: matista-latido 1.7s ease-in-out infinite;
+}
+
+.matista-loading__logo img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 14px rgba(139,92,246,.35));
+}
+
+@keyframes matista-latido {
+  0%,100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+    filter: brightness(1.18);
+  }
+}
+
+.matista-loading__satelite {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #c9b4fd;
+  box-shadow: 0 0 12px 3px rgba(167,139,250,.65);
+  animation: matista-orbita 1.7s linear infinite;
+}
+
+.matista-loading__satelite--a {
+  --matista-inicio: 0deg;
+}
+
+.matista-loading__satelite--b {
+  --matista-inicio: 140deg;
+  width: 7px;
+  height: 7px;
+  background: #a78bfa;
+}
+
+@keyframes matista-orbita {
+  from {
+    transform: rotate(var(--matista-inicio)) translateX(85px) rotate(calc(-1 * var(--matista-inicio)));
+  }
+
+  to {
+    transform: rotate(calc(var(--matista-inicio) + 360deg)) translateX(85px) rotate(calc(-1 * (var(--matista-inicio) + 360deg)));
+  }
+}
+
+.matista-loading__titulo {
+  font-family: 'Plus Jakarta Sans',sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -.015em;
+  margin: 0 0 8px;
+}
+
+.matista-loading__descripcion {
+  max-width: 30rem;
+  font-size: .92rem;
+  color: #aab0c9;
+  margin: 0 0 18px;
+  line-height: 1.55;
+}
+
+.matista-loading__puntos {
+  display: flex;
+  gap: 9px;
+  margin-bottom: 20px;
+}
+
+.matista-loading__puntos span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #8b5cf6;
+  animation: matista-punto 1.4s ease-in-out infinite;
+}
+
+.matista-loading__puntos span:nth-child(2) {
+  animation-delay: .18s;
+  background: #a78bfa;
+}
+
+.matista-loading__puntos span:nth-child(3) {
+  animation-delay: .36s;
+}
+
+@keyframes matista-punto {
+  0%,100% {
+    opacity: .35;
+    transform: scale(.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+.matista-loading__aviso {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  font-size: .85rem;
+  color: #c3c8dd;
+  background: rgba(139,92,246,.08);
+  border: 1px solid rgba(139,92,246,.2);
+  border-left: 3px solid #8b5cf6;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 0;
+}
+
+.matista-loading__aviso-icono {
+  flex-shrink: 0;
+  color: #a78bfa;
+}
+
+@media (max-width:480px) {
+  .matista-loading__caja {
+    padding: 26px 20px 20px;
+  }
+
+  .matista-loading__orbita {
+    width: 140px;
+    height: 140px;
+  }
+
+  .matista-loading__logo {
+    width: 84px;
+  }
+
+  @keyframes matista-orbita {
+    from {
+      transform: rotate(var(--matista-inicio)) translateX(70px) rotate(calc(-1 * var(--matista-inicio)));
+    }
+
+    to {
+      transform: rotate(calc(var(--matista-inicio) + 360deg)) translateX(70px) rotate(calc(-1 * (var(--matista-inicio) + 360deg)));
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .matista-loading__logo,.matista-loading__satelite,.matista-loading__puntos span { animation:none; }
-  .matista-loading__satelite { opacity:.7; }
-  .matista-loading__satelite--b { display:none; }
-  .matista-loading__puntos span { opacity:.7; }
+  .matista-loading__logo,.matista-loading__satelite,.matista-loading__puntos span {
+    animation: none;
+  }
+
+  .matista-loading__satelite {
+    opacity: .7;
+  }
+
+  .matista-loading__satelite--b {
+    display: none;
+  }
+
+  .matista-loading__puntos span {
+    opacity: .7;
+  }
 }

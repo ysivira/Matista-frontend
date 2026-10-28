@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: useCommercialValidation.js
+ * ============================================================
+ * MATISTA | VALIDACIÓN REMOTA DE CAMPAÑAS
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Hook reutilizable de la interfaz.
+ * Archivo: useCommercialValidation.js
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Consultar errores comerciales y controlar su visibilidad y vigencia por petición.
  *
  * CONTENIDO:
  * - Función useCommercialValidation.
@@ -11,6 +15,8 @@
  * DEPENDENCIAS:
  * - react
  * - ../api/asesorApi.js
+ *
+ * ============================================================
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { guardarAsesor } from '../api/asesorApi.js';

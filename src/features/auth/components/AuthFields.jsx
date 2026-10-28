@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: AuthFields.jsx
+ * ============================================================
+ * MATISTA | CAMPOS DE FORMULARIOS AUTH
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AuthFields del módulo Autenticación; unidad de interfaz reutilizable de la feature.
+ * Archivo: AuthFields.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Presentar campos controlados con etiquetas, errores y visibilidad de contraseña.
  *
  * CONTENIDO:
  * - Función TextField.
@@ -11,6 +15,8 @@
  *
  * DEPENDENCIAS:
  * - react
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 

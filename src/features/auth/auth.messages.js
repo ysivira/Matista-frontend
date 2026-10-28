@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: auth.messages.js
+ * ============================================================
+ * MATISTA | AVISOS DE CUENTA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Recurso de interfaz del módulo Autenticación.
+ * Archivo: auth.messages.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Traducir errores públicos AUTH a avisos de login y mensajes por campo.
  *
  * CONTENIDO:
  * - Exporta rateLimitNoticeFor.
@@ -14,6 +18,8 @@
  * DEPENDENCIAS:
  * - ../../shared/lib/httpClient.js
  * - ../../shared/lib/avisosApi.js
+ *
+ * ============================================================
  */
 import { ApiError, NetworkError } from '../../shared/lib/httpClient.js';
 import { rateLimitNoticeFor } from '../../shared/lib/avisosApi.js';

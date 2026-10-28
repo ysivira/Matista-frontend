@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL FLUJO COMERCIAL
+ * ============================================================
+ *
+ * Archivo: asesor.test.jsx
+ * Módulo: Pruebas del asesor
+ *
+ * Responsabilidad:
+ * Probar clientes, familia, validación remota, previsualización
+ * y emisión con API simulada, sin calcular economía en React.
+ *
+ * ============================================================
+ */
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createMemoryRouter, MemoryRouter, RouterProvider } from 'react-router-dom'

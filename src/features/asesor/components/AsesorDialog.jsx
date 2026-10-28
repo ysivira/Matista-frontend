@@ -1,16 +1,21 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: AsesorDialog.jsx
+ * ============================================================
+ * MATISTA | DIÁLOGO COMERCIAL
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AsesorDialog del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: AsesorDialog.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Presentar un diálogo nativo con cabecera opcional y cierre contextual.
  *
  * CONTENIDO:
  * - Función AsesorDialog.
  *
  * DEPENDENCIAS:
  * - react
+ *
+ * ============================================================
  */
 import { useEffect, useRef } from 'react';
 

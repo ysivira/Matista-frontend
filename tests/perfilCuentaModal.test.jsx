@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DEL MODAL DE CUENTA
+ * ============================================================
+ *
+ * Archivo: perfilCuentaModal.test.jsx
+ * Módulo: Pruebas de perfil
+ *
+ * Responsabilidad:
+ * Probar apertura, formularios y errores sensibles, verificando
+ * además el alcance CSS móvil sin modificar el modal genérico.
+ *
+ * ============================================================
+ */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

@@ -1,5 +1,16 @@
 /**
- * Secciones de acceso a las funciones de cada módulo sobre el lienzo oscuro.
+ * ============================================================
+ * MATISTA | INICIO DE MÓDULO
+ * ============================================================
+ *
+ * Archivo: InicioModulo.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar accesos de navegación y puntos descriptivos de
+ * cada módulo sobre el lienzo institucional compartido.
+ *
+ * ============================================================
  */
 import { Link } from 'react-router-dom';
 import { EncabezadoContextual } from './EncabezadoContextual.jsx';
@@ -8,7 +19,7 @@ import './inicioModulo.css';
 
 /**
  * Reutiliza las secciones MATISTA para navegar a las funciones autorizadas de
- * cada módulo, con el rediseño oscuro de SPEC-26: secciones integradas al
+ * cada módulo, con el rediseño oscuro institucional: secciones integradas al
  * fondo institucional (sin tarjetas blancas), ícono violeta, título blanco,
  * descripción clara, línea divisoria fina y puntos descriptivos del área.
  * Los `puntos` son solo descriptivos: no crean rutas ni accesos nuevos; los

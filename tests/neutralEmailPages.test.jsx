@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE RESPUESTAS NEUTRAS
+ * ============================================================
+ *
+ * Archivo: neutralEmailPages.test.jsx
+ * Módulo: Pruebas de autenticación
+ *
+ * Responsabilidad:
+ * Probar reenvío y recuperación sin enumerar cuentas, incluidos
+ * errores de campo, fallos técnicos y límites de solicitudes.
+ *
+ * ============================================================
+ */
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it, vi } from 'vitest'

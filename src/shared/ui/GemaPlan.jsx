@@ -1,5 +1,16 @@
 /**
- * Gema decorativa del plan con la paleta y los trazos existentes.
+ * ============================================================
+ * MATISTA | GEMA DEL PLAN
+ * ============================================================
+ *
+ * Archivo: GemaPlan.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar la gema SVG decorativa del plan con su clave de
+ * paleta y la variante de tamaño recibida.
+ *
+ * ============================================================
  */
 import './uiCompartidos.css';
 import { claveDePlan } from './gemasPlan.js';

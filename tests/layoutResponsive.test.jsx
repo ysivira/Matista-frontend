@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE NAVEGACIÓN RESPONSIVE
+ * ============================================================
+ *
+ * Archivo: layoutResponsive.test.jsx
+ * Módulo: Pruebas de navegación
+ *
+ * Responsabilidad:
+ * Simular tamaños de pantalla y probar drawer, cierres y posición
+ * de la ficha de plan sin depender de un navegador real.
+ *
+ * ============================================================
+ */
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'

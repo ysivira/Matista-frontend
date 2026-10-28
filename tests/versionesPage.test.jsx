@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE VERSIONES TARIFARIAS
+ * ============================================================
+ *
+ * Archivo: versionesPage.test.jsx
+ * Módulo: Pruebas administrativas
+ *
+ * Responsabilidad:
+ * Probar historial y ciclo de versiones con API controlada,
+ * incluida previsualización, revisiones, auditoría y deshacer.
+ *
+ * ============================================================
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom'

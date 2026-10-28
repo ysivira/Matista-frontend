@@ -1,15 +1,20 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: AccionesDocumento.jsx
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DE ACCIONES DOCUMENTALES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AccionesDocumento del módulo Administración; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: AccionesDocumento.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar los enlaces documentales de la interfaz compartida.
  *
  * CONTENIDO:
  * - Exporta AccionesDocumento.
  *
  * DEPENDENCIAS:
  * - ../../../shared/ui/AccionesDocumento.jsx
+ *
+ * ============================================================
  */
 export { AccionesDocumento } from '../../../shared/ui/AccionesDocumento.jsx';

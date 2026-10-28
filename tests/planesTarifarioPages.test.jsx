@@ -1,3 +1,17 @@
+/**
+ * ============================================================
+ * MATISTA | PRUEBAS DE PLANES Y TARIFAS
+ * ============================================================
+ *
+ * Archivo: planesTarifarioPages.test.jsx
+ * Módulo: Pruebas de catálogo
+ *
+ * Responsabilidad:
+ * Verificar consultas, acordeones, coberturas y contratos CSS
+ * con fixtures de planes y respuestas de API controladas.
+ *
+ * ============================================================
+ */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'

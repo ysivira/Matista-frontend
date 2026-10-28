@@ -1,10 +1,14 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: QuoteDetail.jsx
+ * ============================================================
+ * MATISTA | DETALLE DE COTIZACIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página QuoteDetail del módulo Asesor comercial; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: QuoteDetail.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Releer el snapshot propio y conducir contacto, anulación y recotización
+ * sin recalcular historia ni repetir emisiones al recargar la ruta.
  *
  * CONTENIDO:
  * - Función QuoteDetail.
@@ -18,6 +22,8 @@
  * - ../components/AsesorDialog.jsx
  * - ../components/QuoteConfirmation.jsx
  * - ../stitch.css
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -92,8 +98,8 @@ function QuoteDetailContent({
     <p>Se actualizan el correo electrónico y el teléfono de esta cotización. Sus importes y número oficial se conservan.</p>
     <form id="ase-editar-contacto" onBlurCapture={e => revisarCampo(e.target)} onSubmit={e => {
       e.preventDefault();
-      // SPEC-28: misma regla telefónica que el alta; el valor histórico se
-      // presenta tal cual y el backend aplica la validación equivalente.
+      // Misma regla telefónica que el alta: el valor histórico se presenta
+      // tal cual y el backend aplica la validación equivalente.
       if (!revisarFormulario(e.currentTarget)) return;
       void operar('contacto', {
         revision: q.revision,

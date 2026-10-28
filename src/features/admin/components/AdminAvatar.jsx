@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: AdminAvatar.jsx
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DEL AVATAR ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente AdminAvatar del módulo Administración; unidad de interfaz reutilizable de la feature.
+ * Archivo: AdminAvatar.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Exponer Avatar compartido bajo el nombre público AdminAvatar.
  *
  * CONTENIDO:
  * - Exporta AdminAvatar.
@@ -13,5 +17,7 @@
  *
  * OBSERVACIONES:
  * Compatibilidad con consumidores ADMIN: una única implementación compartida.
+ *
+ * ============================================================
  */
 export { Avatar as AdminAvatar } from '../../../shared/ui/Avatar.jsx';

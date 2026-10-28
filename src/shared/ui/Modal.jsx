@@ -1,5 +1,16 @@
 /**
- * Contenedor modal compartido con cabecera, contenido y acciones.
+ * ============================================================
+ * MATISTA | MODAL COMPARTIDO
+ * ============================================================
+ *
+ * Archivo: Modal.jsx
+ * Módulo: Interfaz compartida
+ *
+ * Responsabilidad:
+ * Presentar un diálogo con cabecera, contenido y acciones,
+ * junto a iconos reutilizables de advertencia, éxito y búsqueda.
+ *
+ * ============================================================
  */
 /**
  * Modal de la identidad Stitch: backdrop oscuro, tarjeta clara redondeada y

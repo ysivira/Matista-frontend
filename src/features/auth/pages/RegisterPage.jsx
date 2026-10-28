@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: RegisterPage.jsx
+ * ============================================================
+ * MATISTA | REGISTRO PÚBLICO DE ASESOR
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página RegisterPage del módulo Autenticación; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: RegisterPage.jsx
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Validar el formulario y solicitar el alta pública de una cuenta ASESOR pendiente.
  *
  * CONTENIDO:
  * - Función RegisterPage.
@@ -19,6 +22,8 @@
  * - ../auth.messages.js
  * - ../auth.validation.js
  * - ../../../shared/ui/MatistaLoadingModal.jsx
+ *
+ * ============================================================
  */
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

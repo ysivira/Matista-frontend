@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: PlanesPage.jsx
+ * ============================================================
+ * MATISTA | CONSULTA ADMIN DE PLANES
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página PlanesPage del módulo Administración; compone componentes de la feature para su caso de
- * uso.
+ * Archivo: PlanesPage.jsx
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Componer la consulta compartida de planes con API y destino ADMIN.
  *
  * CONTENIDO:
  * - Función PlanesPage.
@@ -12,6 +15,8 @@
  * DEPENDENCIAS:
  * - ../api/adminApi.js
  * - ../../../shared/catalogo/ConsultaPlanes.jsx
+ *
+ * ============================================================
  */
 import { adminApi } from '../api/adminApi.js';
 import { ConsultaPlanes } from '../../../shared/catalogo/ConsultaPlanes.jsx';

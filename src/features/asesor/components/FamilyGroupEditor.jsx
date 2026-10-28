@@ -1,13 +1,18 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: FamilyGroupEditor.jsx
+ * ============================================================
+ * MATISTA | EDICIÓN DEL GRUPO FAMILIAR
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente FamilyGroupEditor del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: FamilyGroupEditor.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Editar edades y vínculos y sincronizar cónyuge y estado civil declarado.
  *
  * CONTENIDO:
  * - Función FamilyGroupEditor.
+ *
+ * ============================================================
  */
 /** Editor de edades/vínculos: sincroniza cónyuge con CASADO sin inferir soltería al quitarlo ni alterar fechas históricas. */
 export function FamilyGroupEditor({

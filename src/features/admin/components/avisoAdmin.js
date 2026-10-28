@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Administración
- * Archivo: avisoAdmin.js
+ * ============================================================
+ * MATISTA | COMPATIBILIDAD DE AVISOS ADMIN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente avisoAdmin del módulo Administración; unidad de interfaz reutilizable de la feature.
+ * Archivo: avisoAdmin.js
+ * Módulo: Administración
+ *
+ * Responsabilidad:
+ * Reexportar avisos de consulta y detección de sesión vencida.
  *
  * CONTENIDO:
  * - Exporta avisoAdminPara.
@@ -14,5 +18,7 @@
  *
  * OBSERVACIONES:
  * Compatibilidad de códigos públicos: la presentación de avisos de consulta es compartida.
+ *
+ * ============================================================
  */
 export { avisoAdminPara, sesionCayoPara } from '../../../shared/lib/avisosConsulta.js';

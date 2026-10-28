@@ -1,10 +1,13 @@
 /**
- * MATISTA - Frontend · Asesor comercial
- * Archivo: EconomicPreview.jsx
+ * ============================================================
+ * MATISTA | VISTA PREVIA ECONÓMICA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Componente EconomicPreview del módulo Asesor comercial; unidad de interfaz reutilizable de la
- * feature.
+ * Archivo: EconomicPreview.jsx
+ * Módulo: Asesor
+ *
+ * Responsabilidad:
+ * Consultar el cálculo efímero de entradas completas y descartar respuestas obsoletas.
  *
  * CONTENIDO:
  * - Función EconomicPreview.
@@ -13,6 +16,8 @@
  * - react
  * - ../api/asesorApi.js
  * - ./QuoteSummary.jsx
+ *
+ * ============================================================
  */
 import { useEffect, useState } from 'react';
 import { guardarAsesor } from '../api/asesorApi.js';

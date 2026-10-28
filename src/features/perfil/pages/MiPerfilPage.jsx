@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Perfil de usuario
- * Archivo: MiPerfilPage.jsx
+ * ============================================================
+ * MATISTA | PERFIL DE LA CUENTA
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Página MiPerfilPage del módulo Perfil; compone componentes de la feature para su caso de uso.
+ * Archivo: MiPerfilPage.jsx
+ * Módulo: Perfil
+ *
+ * Responsabilidad:
+ * Mostrar datos de sesión y formularios personales compartidos por ADMIN y ASESOR.
  *
  * CONTENIDO:
  * - Función MiPerfilPage.
@@ -13,6 +17,8 @@
  * - ../../auth/components/AuthFields.jsx
  * - ../../auth/hooks/useSession.js
  * - ../hooks/usePerfilAcciones.js
+ *
+ * ============================================================
  */
 import { AuthAlert } from '../../auth/components/AuthAlert.jsx';
 import { PasswordField, TextField } from '../../auth/components/AuthFields.jsx';

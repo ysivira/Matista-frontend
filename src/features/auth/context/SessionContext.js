@@ -1,9 +1,13 @@
 /**
- * MATISTA - Frontend · Autenticación
- * Archivo: SessionContext.js
+ * ============================================================
+ * MATISTA | CONTEXTO DE SESIÓN
+ * ============================================================
  *
- * RESPONSABILIDAD:
- * Contexto SessionContext del módulo Autenticación; comparte estado de sesión entre componentes.
+ * Archivo: SessionContext.js
+ * Módulo: Autenticación
+ *
+ * Responsabilidad:
+ * Declarar el contexto React y los estados públicos de la sesión en memoria.
  *
  * CONTENIDO:
  * - Constante SESSION_STATUS.
@@ -11,6 +15,8 @@
  *
  * DEPENDENCIAS:
  * - react
+ *
+ * ============================================================
  */
 import { createContext } from 'react';
 export const SESSION_STATUS = Object.freeze({
