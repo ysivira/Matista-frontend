@@ -1,127 +1,194 @@
-# MATISTA Frontend
+# MATISTA · Frontend
 
-Aplicación web de MATISTA construida con React, Vite y JavaScript ES Modules.
+Aplicación web de MATISTA, proyecto académico de **Taller de Desarrollo de Aplicaciones Informáticas**, surgido de la refactorización y evolución de SIGEC. Este repositorio contiene la interfaz React; la API Node/Express se mantiene en un repositorio independiente.
 
-## Estado actual
+La interfaz implementa los recorridos de AUTH, ADMIN y ASESOR. Consume los cálculos y datos autorizados del backend; no reemplaza sus reglas comerciales ni controles de acceso.
 
-SPEC-02, etapa D.2 implementada:
+## Contenido
 
-- Router modular con rutas públicas y guards por sesión, estado y rol.
-- Cliente HTTP basado en `fetch` y configurado con `credentials: 'include'`.
-- Capa API para los doce endpoints del contrato AUTH vigente.
-- Sesión centralizada en memoria y restaurada mediante `GET /api/auth/me`.
-- Tokens globales de Amethyst Prism y recursos oficiales locales.
-- Placeholders mínimos para validar rutas sin anticipar pantallas funcionales.
-- Pruebas aisladas con Vitest, React Testing Library y jsdom.
+- [Funcionalidades](#funcionalidades)
+- [Tecnologías y requisitos](#tecnologías-y-requisitos)
+- [Arquitectura](#arquitectura)
+- [Instalación y configuración](#instalación-y-configuración)
+- [Ejecución, build y pruebas](#ejecución-build-y-pruebas)
+- [Integración con el backend](#integración-con-el-backend)
+- [Seguridad y límites](#seguridad-y-límites)
 
-No se implementaron todavía los formularios ni las pantallas finales de login,
-registro, verificación o recuperación. Tampoco existen interfaces funcionales de
-ADMIN o ASESOR.
+## Funcionalidades
 
-## Requisitos
+### AUTH y perfil
 
-- Node.js 24 o una versión compatible posterior.
-- npm y las dependencias declaradas en `package.json`.
+- Formularios de registro, login, confirmación/reenvío de correo, recuperación y restablecimiento de contraseña.
+- Cambio y confirmación de correo, edición de perfil y cambio de contraseña.
+- Restauración de sesión, cierre de sesión y navegación por rol, con estados de carga, error técnico y reintento.
 
-## Comandos
+El registro no da acceso inmediato: la cuenta queda pendiente; confirmar correo y obtener aprobación ADMIN son pasos distintos.
 
-Instalar exactamente las dependencias del lockfile:
+### ADMIN
+
+- Inicio del módulo y directorio de empleados con detalle, acciones de estado y rol y bloqueo de activación si el correo actual no está verificado.
+- Consulta de planes y tarifario.
+- Gestión de versiones de precios: borradores, edición, vista previa de aumentos, aplicación, finalización, reanudación, activación manual y acciones históricas según estado.
+- Configuración comercial con política vigente, historial y programación/cancelación de pendientes.
+- Acciones compartidas de consulta, impresión y descarga de documentos.
+
+Los planes proceden de un catálogo inicializado en backend. **No se implementa un CRUD general de planes** ni una administración de listas ajena al ciclo de versiones tarifarias.
+
+### ASESOR
+
+- Inicio comercial, consulta de planes/listas/condiciones y búsqueda, alta o edición de cliente dentro del recorrido de cotización.
+- Cotización **Obligatorio, Voluntario y Monotributo**, grupo familiar, modalidad de aportes y selección de descuentos/beneficios.
+- Vista previa económica del backend, revisión de datos y confirmación de emisión.
+- Historial y detalle propios; continuación de borrador, edición de contacto, recotización vinculada, anulación y PDF de una emisión autorizada.
+
+**Flujo principal:** seleccionar o registrar cliente → completar familia/plan/modalidad/condiciones → consultar vista previa → guardar preparación → solicitar cálculo → confirmar emisión con revisión y huella → consultar detalle y descargar PDF.
+
+El importe definitivo y sus topes proceden del servidor. Las acciones disponibles dependen del estado de la cotización y de la autorización vigente. No se sustituye una emisión histórica al recotizarla.
+
+**No existe un módulo Supervisor funcional.** Algunas pantallas auxiliares de cuenta/ruta no encontrada son informativas; no representan módulos de negocio adicionales.
+
+## Tecnologías y requisitos
+
+JavaScript/JSX y CSS propios con ES Modules. Las versiones exactas siguientes provienen de `package-lock.json`; `package.json` contiene los rangos admitidos.
+
+| Tecnología | Versión bloqueada | Uso |
+|---|---|---|
+| React / React DOM | 19.3.1 / 19.3.1 | Componentes y renderizado |
+| React Router DOM | 7.18.4 | Rutas públicas/protegidas y router de pruebas |
+| Vite / plugin React | 8.3.4 / 6.1.2 | Desarrollo y compilación |
+| Vitest | 5.0.5 | Ejecución de pruebas |
+| React Testing Library | 16.3.3 | Pruebas de componentes |
+| jsdom | 30.1.3 | Entorno DOM simulado |
+| ESLint | 10.12.0 | Análisis estático |
+
+Se utilizan hooks y Context de React para estado/sesión; formularios con componentes y validaciones propias; `fetch` nativo para HTTP. No se atribuyen Redux, Axios ni bibliotecas de formularios que no están en las dependencias.
+
+El proyecto no declara `engines.node` propio. Para toda la cadena bloqueada, se recomienda **Node.js 24.x desde 24.15.0**: jsdom exige `^22.22.2 || ^24.15.0 || >=26.0.0`, y Vite, Vitest y ESLint también tienen restricciones. No asumir que cualquier Node 20 o cualquier Node 24 inicial ejecutará todas las herramientas. No se fija una versión concreta de npm.
+
+## Arquitectura
+
+```text
+index.html                     # entrada HTML
+src/
+├── main.jsx                   # montaje React, StrictMode y proveedores
+├── App.jsx                    # router de aplicación
+├── app/                       # router, proveedores y SessionLayout
+├── features/
+│   ├── auth/                  # páginas, API, validación y contexto de sesión
+│   ├── admin/                 # páginas, API, hooks y componentes ADMIN
+│   ├── asesor/                # formulario, historial, detalle y catálogo de consulta
+│   └── perfil/                # perfil y acciones de cuenta compartidas
+├── shared/
+│   ├── lib/                   # cliente HTTP, errores y utilidades de presentación
+│   ├── api/                   # cliente del catálogo compartido
+│   ├── catalogo/              # consultas reutilizadas por ambos roles
+│   ├── layouts/               # composición de interfaz
+│   └── ui/                    # modales, carga, navegación, marca y documentos
+└── assets/                    # recursos locales
+public/                        # favicons e iconografía
+tests/                         # Vitest + Testing Library
+```
+
+- `AppProviders` incorpora `SessionProvider`. La sesión pública se mantiene en memoria y se restaura mediante `GET /api/auth/me`.
+- `ProtectedRoute` limita navegación por sesión/rol. El backend sigue autorizando cada solicitud.
+- Las capas `api` por funcionalidad usan el cliente compartido; el catálogo neutral evita acoplar ASESOR a pantallas de administración.
+- `httpClient.js` configura `credentials: 'include'`, JSON y señales de cancelación; distingue `ApiError` de `NetworkError`.
+- Los formularios gestionan validación, errores de campo y envíos con hooks; `MatistaLoadingModal`, alertas y componentes compartidos representan carga y fallos.
+- Los estilos son CSS locales y los recursos de marca se sirven desde el repositorio.
+
+### Rutas visibles principales
+
+| Área | Rutas reales |
+|---|---|
+| Públicas | `/login`, `/register`, `/confirm-email`, `/confirm-email-change`, `/resend-verification`, `/forgot-password`, `/reset-password` |
+| ADMIN | `/admin`, `/admin/empleados`, `/admin/planes`, `/admin/tarifario`, `/admin/versiones`, `/admin/configuracion` |
+| ASESOR | `/asesor`, `/asesor/planes`, `/asesor/precios`, `/asesor/condiciones`, `/asesor/nueva`, `/asesor/cotizaciones` |
+| Cotización | `/asesor/cotizaciones/:id`, `/:id/preparacion` y `/:id/recotizar` bajo `/asesor/cotizaciones` |
+| Compartida | `/perfil` para ADMIN y ASESOR |
+
+La raíz redirige a `/login`. No se documenta `/asesor/clientes` como página montada: la existencia de un archivo de componente no significa que tenga una ruta pública en el router actual.
+
+## Instalación y configuración
+
+Los comandos se documentan para una ejecución posterior; no se ejecutaron durante SPEC-10.
+
+Dentro de este repositorio:
 
 ```bash
 npm ci
 ```
 
-Iniciar el servidor de desarrollo:
+Instala las versiones resueltas por `package-lock.json`. Preparar la API, MySQL y SMTP siguiendo el README del backend; el frontend no crea bases, catálogos ni administradores.
 
-```bash
-npm run dev
+### URL de la API
+
+La única variable de aplicación observada es `VITE_API_BASE_URL`. Es **pública**: Vite incorpora su valor al código del navegador. No debe contener claves, contraseñas, tokens ni credenciales de URL.
+
+El cliente agrega rutas que ya comienzan por `/api`. La base es sólo el origen o cadena vacía, **sin añadir `/api` otra vez**; normaliza barras finales.
+
+**Desarrollo por el proxy de Vite, recomendado para mismo origen:** definir localmente
+
+```dotenv
+VITE_API_BASE_URL=
 ```
 
-Ejecutar verificaciones:
+También se usa mismo origen si la variable no está definida en ninguna fuente del entorno. `vite.config.js` reenvía `/api` a `http://127.0.0.1:3000`, sin cambiar el Origin. El puerto de desarrollo es **5173**, con `strictPort`: no pasa silenciosamente a 5174.
 
-```bash
-npm run lint
-npm run test
-npm run build
-```
+**Conexión directa local:** [`.env.example`](.env.example) contiene esta alternativa:
 
-Ejecutar las pruebas en modo observación:
-
-```bash
-npm run test:watch
-```
-
-## Variables de entorno
-
-Copiar la configuración pública documentada en `.env.example` al entorno local
-correspondiente. Vite incorpora las variables `VITE_*` al navegador, por lo que
-nunca deben contener contraseñas, tokens ni secretos.
-
-```text
+```dotenv
 VITE_API_BASE_URL=http://localhost:3000
 ```
 
-Si `VITE_API_BASE_URL` no está definida, el cliente utiliza el mismo origen del
-frontend. La URL no debe terminar en `/`; el cliente también normaliza esa barra
-si estuviera presente.
+En ese caso el navegador contacta directamente con ese origen y debe coincidir con la política CORS/cookies del backend. No mezclar `localhost` y `127.0.0.1` sin revisar el comportamiento de cookie y mismo sitio.
 
-## Arquitectura D.2
+Crear una copia local de la plantilla sólo si no existe `.env`; **no sobrescribir configuraciones existentes**. Para usar el proxy, cambiar el valor local de ejemplo a vacío. Revisar además variables del proceso y otros archivos Vite, ya que pueden definir la URL aunque no haya `.env`.
 
-```text
-src/
-|-- app/
-|   |-- AppProviders.jsx
-|   |-- PlaceholderPages.jsx
-|   `-- router.jsx
-|-- assets/brand/
-|   |-- logo.png
-|   `-- logo1.png
-|-- features/auth/
-|   |-- api/authApi.js
-|   |-- components/ProtectedRoute.jsx
-|   |-- context/
-|   |   |-- SessionContext.js
-|   |   `-- SessionProvider.jsx
-|   |-- hooks/useSession.js
-|   `-- auth.constants.js
-|-- shared/
-|   |-- lib/httpClient.js
-|   `-- ui/
-|       |-- BrandLogo.jsx
-|       `-- LoadingState.jsx
-|-- App.css
-|-- App.jsx
-|-- index.css
-`-- main.jsx
-tests/
-|-- authApi.test.js
-|-- httpClient.test.js
-|-- router.test.jsx
-|-- session.test.jsx
-`-- setup.js
-```
+Las variables Vite se resuelven al iniciar desarrollo o compilar. Un build distribuido no lee después el `.env` privado del servidor backend. No se necesitan ni se admiten secretos MySQL/SMTP/JWT en este repositorio.
 
-## Seguridad de sesión
+## Ejecución, build y pruebas
 
-- El navegador administra la cookie HttpOnly `matista_session`.
-- El frontend no intenta leer la cookie.
-- No se almacena ninguna credencial o token en `localStorage` o `sessionStorage`.
-- No existe refresh token ni renovación automática.
-- Los guards mejoran la navegación, pero el backend conserva la autorización
-  efectiva en cada solicitud protegida.
-- Una cuenta pendiente no se representa como sesión autenticada.
+Todos los comandos siguientes existen en `package.json`:
 
-## Identidad visual
+| Comando | Efecto |
+|---|---|
+| `npm run dev` | Inicia Vite de desarrollo en 5173 |
+| `npm run build` | Genera la compilación en `dist/` |
+| `npm run preview` | Sirve localmente una compilación existente con Vite preview |
+| `npm run lint` | Ejecuta ESLint; el script no incluye `--fix` |
+| `npm test` | Ejecuta `vitest run` |
+| `npm run test:watch` | Inicia Vitest en observación |
 
-Los tokens globales siguen Amethyst Prism y utilizan `#1B1D2B` como fondo común.
-`logo.png` se reserva para fondos oscuros y `logo1.png` para fondos claros. Los
-archivos se mantienen sin alterar y no dependen de URLs externas.
+Las pruebas usan jsdom, `tests/setup.js`, mocks y Testing Library. Cubren sesión, router, AUTH/perfil, directorio, consultas y versiones, políticas, asesor y UI compartida/responsive. Hay un router de memoria con el mismo árbol de rutas para probar navegación.
 
-La tipografía definitiva sigue pendiente para una etapa visual posterior. D.2
-utiliza una pila local del sistema para evitar dependencias CDN.
+No son una validación E2E de MySQL, SMTP, Chrome o cookies en un despliegue real. **No se ejecutaron pruebas, lint ni build durante SPEC-10**; no se presentan resultados históricos como nuevos.
 
-## Integración pendiente
+`dist/` es un artefacto ignorado, no la fuente de verdad. Vite preview no es un despliegue permanente y puede usar un origen distinto de 5173; revisar `FRONTEND_ORIGIN` antes de probar autenticación desde él.
 
-Las pruebas actuales utilizan dobles y no acreditan integración real con el
-backend, MySQL, SMTP, CORS de despliegue ni cookies bajo HTTPS. Esas verificaciones
-corresponden al bloque de validación autorizado posteriormente.
+## Integración con el backend
+
+Orden general de puesta en marcha en un entorno autorizado:
+
+1. Preparar esquema, catálogos, cuenta administradora y configuración privada del backend.
+2. Revisar su destino MySQL antes de arrancar: **el servidor puede activar políticas pendientes y escribir en base al iniciarse**.
+3. Iniciar la API y verificar su endpoint HTTP `/api/health`; ese endpoint no certifica SMTP/base/PDF.
+4. Alinear `FRONTEND_ORIGIN` con el origen exacto de la interfaz y elegir URL directa o proxy.
+5. Iniciar la interfaz, autenticar una cuenta elegible y comprobar el recorrido del rol correspondiente.
+
+Los enlaces de correo apuntan al origen configurado en backend y entregan el token temporal mediante fragmento URL. Las rutas de confirmación consumen ese token con la API; no son rutas GET del backend.
+
+Para una publicación web futura, decidir dónde se sirven la SPA y `/api`, configurar HTTPS, proxy/ruteo y fallback de rutas de React. El build estático no incluye por sí mismo el proxy del servidor Vite. SameSite=Strict puede impedir cookies en topologías de sitios distintos; no basta con cambiar una URL o habilitar CORS indiscriminado.
+
+El usuario informó funcionamiento local y mediante túnel de VS Code desde `main`; esta revisión documental no lo volvió a probar. **El túnel no constituye un despliegue permanente de producción** y no se publican sus URLs temporales. Con acceso remoto, `localhost` en una URL de API se refiere al equipo del visitante, no al equipo que aloja MATISTA.
+
+## Seguridad y límites
+
+- La cookie `matista_session` es HttpOnly y la administra el navegador; el frontend no la lee ni conserva JWT/credenciales en `localStorage` o `sessionStorage`.
+- La sesión pública reside en memoria; no hay refresh token ni renovación automática. Los guards no son una frontera de seguridad del servidor.
+- Los tokens de enlaces son temporales y se manejan para la confirmación/restablecimiento; no compartir URLs de cuenta ni capturarlas en documentación pública.
+- Toda variable `VITE_*` y todo archivo de `public/` puede ser visible para el visitante. Nunca almacenar allí secretos.
+- No publicar `.env`, backups, datos personales, PDFs de clientes, capturas de cuentas o artefactos con configuración privada.
+- `.gitignore` excluye entornos, dependencias, compilación, cobertura y varios archivos locales; no sanea commits antiguos ni impide un añadido forzado.
+- Los datos económicos, la propiedad de clientes/cotizaciones y la autorización real se resuelven en la API. Validar un formulario en React no garantiza que una solicitud sea autorizada.
+
+Antes de hacer público el repositorio, revisar el historial, identidad de commits, procedencia de fixtures y permisos sobre textos y marca. La descripción de controles no garantiza seguridad absoluta ni equivale a una auditoría de vulnerabilidades de dependencias o de producción.
