@@ -33,6 +33,24 @@ function jsonResponse(body, status = 200) {
 }
 
 describe('httpClient', () => {
+  it.each([
+    ['/api/auth/me', 'GET'],
+    ['/api/auth/login', 'POST'],
+    ['/api/admin/empleados', 'GET'],
+    ['/api/asesor/cotizaciones', 'POST'],
+    ['/api/catalogo/planes', 'GET'],
+  ])('usa la ruta relativa %s con cookies y método %s cuando la base está vacía', async (path, method) => {
+    const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ code: 'OK' }))
+    const client = createHttpClient({ baseUrl: '', fetchImpl: fetchMock })
+
+    await client.request(path, { method })
+
+    expect(fetchMock).toHaveBeenCalledExactlyOnceWith(
+      path,
+      expect.objectContaining({ method, credentials: 'include' }),
+    )
+  })
+
   it('incluye credenciales y serializa cuerpos JSON', async () => {
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse({ code: 'OK' }))
     const client = createHttpClient({

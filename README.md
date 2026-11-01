@@ -12,6 +12,7 @@ La interfaz implementa los recorridos de AUTH, ADMIN y ASESOR. Consume los cálc
 - [Instalación y configuración](#instalación-y-configuración)
 - [Ejecución, build y pruebas](#ejecución-build-y-pruebas)
 - [Integración con el backend](#integración-con-el-backend)
+- [Despliegue en Vercel](#despliegue-en-vercel)
 - [Seguridad y límites](#seguridad-y-límites)
 
 ## Funcionalidades
@@ -63,7 +64,7 @@ JavaScript/JSX y CSS propios con ES Modules. Las versiones exactas siguientes pr
 
 Se utilizan hooks y Context de React para estado/sesión; formularios con componentes y validaciones propias; `fetch` nativo para HTTP. No se atribuyen Redux, Axios ni bibliotecas de formularios que no están en las dependencias.
 
-El proyecto no declara `engines.node` propio. Para toda la cadena bloqueada, se recomienda **Node.js 24.x desde 24.15.0**: jsdom exige `^22.22.2 || ^24.15.0 || >=26.0.0`, y Vite, Vitest y ESLint también tienen restricciones. No asumir que cualquier Node 20 o cualquier Node 24 inicial ejecutará todas las herramientas. No se fija una versión concreta de npm.
+El proyecto declara `engines.node: "24.x"`. Usar **Node.js 24.x desde 24.15.0** para toda la cadena bloqueada: jsdom exige `^22.22.2 || ^24.15.0 || >=26.0.0`, y Vite, Vitest y ESLint también tienen restricciones. No asumir que cualquier Node 20 o cualquier Node 24 inicial ejecutará todas las herramientas. No se fija una versión concreta de npm.
 
 ## Arquitectura
 
@@ -110,8 +111,6 @@ La raíz redirige a `/login`. No se documenta `/asesor/clientes` como página mo
 
 ## Instalación y configuración
 
-Los comandos se documentan para una ejecución posterior; no se ejecutaron durante SPEC-10.
-
 Dentro de este repositorio:
 
 ```bash
@@ -126,7 +125,7 @@ La única variable de aplicación observada es `VITE_API_BASE_URL`. Es **públic
 
 El cliente agrega rutas que ya comienzan por `/api`. La base es sólo el origen o cadena vacía, **sin añadir `/api` otra vez**; normaliza barras finales.
 
-**Desarrollo por el proxy de Vite, recomendado para mismo origen:** definir localmente
+**Mismo origen, recomendado y definido en [`.env.example`](.env.example):**
 
 ```dotenv
 VITE_API_BASE_URL=
@@ -134,7 +133,7 @@ VITE_API_BASE_URL=
 
 También se usa mismo origen si la variable no está definida en ninguna fuente del entorno. `vite.config.js` reenvía `/api` a `http://127.0.0.1:3000`, sin cambiar el Origin. El puerto de desarrollo es **5173**, con `strictPort`: no pasa silenciosamente a 5174.
 
-**Conexión directa local:** [`.env.example`](.env.example) contiene esta alternativa:
+**Conexión directa local, alternativa opcional y no válida para publicar:**
 
 ```dotenv
 VITE_API_BASE_URL=http://localhost:3000
@@ -142,7 +141,7 @@ VITE_API_BASE_URL=http://localhost:3000
 
 En ese caso el navegador contacta directamente con ese origen y debe coincidir con la política CORS/cookies del backend. No mezclar `localhost` y `127.0.0.1` sin revisar el comportamiento de cookie y mismo sitio.
 
-Crear una copia local de la plantilla sólo si no existe `.env`; **no sobrescribir configuraciones existentes**. Para usar el proxy, cambiar el valor local de ejemplo a vacío. Revisar además variables del proceso y otros archivos Vite, ya que pueden definir la URL aunque no haya `.env`.
+Crear una copia local de la plantilla sólo si no existe `.env`; **no sobrescribir configuraciones existentes**. Si el `.env` existente usa una API local, se puede seleccionar el proxy sin editarlo mediante `VITE_API_BASE_URL= npm run dev` (shell POSIX). Revisar además variables del proceso y otros archivos Vite, ya que pueden definir la URL aunque no haya `.env`.
 
 Las variables Vite se resuelven al iniciar desarrollo o compilar. Un build distribuido no lee después el `.env` privado del servidor backend. No se necesitan ni se admiten secretos MySQL/SMTP/JWT en este repositorio.
 
@@ -161,7 +160,15 @@ Todos los comandos siguientes existen en `package.json`:
 
 Las pruebas usan jsdom, `tests/setup.js`, mocks y Testing Library. Cubren sesión, router, AUTH/perfil, directorio, consultas y versiones, políticas, asesor y UI compartida/responsive. Hay un router de memoria con el mismo árbol de rutas para probar navegación.
 
-No son una validación E2E de MySQL, SMTP, Chrome o cookies en un despliegue real. **No se ejecutaron pruebas, lint ni build durante SPEC-10**; no se presentan resultados históricos como nuevos.
+No son una validación E2E de MySQL, SMTP, Chrome o cookies en un despliegue real. Las pruebas de transporte comprueban rutas relativas y envío de credenciales; las de despliegue verifican el orden del proxy y el fallback de `vercel.json`, no la ejecución del proxy en Vercel.
+
+Para compilar en modo producción con API relativa, sin heredar un `localhost` del `.env` existente ni modificar ese archivo (shell POSIX):
+
+```bash
+VITE_API_BASE_URL= npm run build
+```
+
+El valor del proceso tiene prioridad sobre los archivos `.env`. El build local sin esa asignación puede seguir incorporando la API local configurada; no publicar ese artefacto.
 
 `dist/` es un artefacto ignorado, no la fuente de verdad. Vite preview no es un despliegue permanente y puede usar un origen distinto de 5173; revisar `FRONTEND_ORIGIN` antes de probar autenticación desde él.
 
@@ -177,9 +184,53 @@ Orden general de puesta en marcha en un entorno autorizado:
 
 Los enlaces de correo apuntan al origen configurado en backend y entregan el token temporal mediante fragmento URL. Las rutas de confirmación consumen ese token con la API; no son rutas GET del backend.
 
-Para una publicación web futura, decidir dónde se sirven la SPA y `/api`, configurar HTTPS, proxy/ruteo y fallback de rutas de React. El build estático no incluye por sí mismo el proxy del servidor Vite. SameSite=Strict puede impedir cookies en topologías de sitios distintos; no basta con cambiar una URL o habilitar CORS indiscriminado.
+Para publicar en Vercel se utiliza la topología de mismo origen descrita a continuación. El build estático no incluye por sí mismo el proxy del servidor Vite. SameSite=Strict puede impedir cookies en topologías de sitios distintos; no basta con cambiar una URL o habilitar CORS indiscriminado.
 
 El usuario informó funcionamiento local y mediante túnel de VS Code desde `main`; esta revisión documental no lo volvió a probar. **El túnel no constituye un despliegue permanente de producción** y no se publican sus URLs temporales. Con acceso remoto, `localhost` en una URL de API se refiere al equipo del visitante, no al equipo que aloja MATISTA.
+
+## Despliegue en Vercel
+
+**Dominio público deseado: `https://matista.vercel.app`. Su disponibilidad y asignación al proyecto todavía deben confirmarse en Vercel; esta configuración no reserva el dominio ni constituye un despliegue.** Backend existente: `https://matista-backend.vercel.app`.
+
+### Arquitectura
+
+```text
+Navegador → https://matista.vercel.app (dominio deseado)
+             ├─ recursos estáticos → dist/
+             ├─ /api/* → https://matista-backend.vercel.app/api/*
+             └─ rutas React → /index.html
+```
+
+[`vercel.json`](vercel.json) declara primero el rewrite externo de `/api/:path*`, conservando el prefijo `/api`, y después el fallback SPA. El proxy es interno: no redirige al navegador al dominio del backend. Permite abrir y recargar rutas como `/admin/empleados`, `/asesor/cotizaciones/123`, `/confirm-email` y `/reset-password`.
+
+Con `VITE_API_BASE_URL` vacía o ausente, las llamadas HTTP y los enlaces de PDF/impresión usan `/api/...` bajo el origen público del frontend. El navegador administra la cookie HttpOnly y el cliente conserva `credentials: 'include'`. La cookie del backend sin `Domain` explícito y con `Path=/api` es compatible con esta topología; validar en el despliegue real que se conserva `Set-Cookie` y que la sesión se restaura. No relajar `SameSite=Strict` ni mover tokens al almacenamiento del navegador.
+
+No se requiere ejecutar Vite, mantener una computadora encendida ni usar túneles. MySQL, SMTP y la generación de PDF siguen siendo responsabilidades del backend.
+
+### Configuración del proyecto frontend
+
+| Opción de Vercel | Valor |
+|---|---|
+| Framework Preset | Vite |
+| Root Directory | Raíz de este repositorio |
+| Install Command | `npm ci` |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+| Node.js | 24.x; verificar que el build use al menos 24.15.0 |
+| `VITE_API_BASE_URL` | Ausente o vacía; nunca `localhost`, `/api` ni la URL directa del backend para esta topología |
+| Acceso de producción | Público, sin protección de despliegue que bloquee visitantes |
+
+Vercel debe construir desde los fuentes versionados, no desde un `dist/` local potencialmente compilado con otra API. `.env`, `node_modules/` y `dist/` permanecen ignorados; no subirlos ni introducir secretos en variables `VITE_*`. Un cambio de entorno requiere recompilar.
+
+### Dominio, backend y validaciones pendientes
+
+1. Confirmar en Vercel si `matista.vercel.app` está disponible y puede asignarse al proyecto. Si no, acordar otro dominio antes de cambiar el backend.
+2. **Sólo después de confirmar el dominio definitivo y con autorización**, alinear `FRONTEND_ORIGIN` del backend con ese origen HTTPS exacto, sin barra final. Si se confirma el deseado, será `https://matista.vercel.app`. No se modifica el backend durante esta preparación.
+3. El proxy no evita el control de `Origin`: el backend lo valida en operaciones mutables, además de aplicar CORS. El mismo origen configurado determina los enlaces de correo. La auditoría previa observó que el backend público aceptaba `https://matista-frontend.vercel.app`; revisar esa configuración remota al confirmar el nuevo dominio, sin asumir que cambió.
+4. Las URLs variables de Preview no están automáticamente autorizadas por el backend, que admite un único origen exacto. Coordinar un entorno de prueba separado o un origen estable autorizado; no habilitar comodines ni desactivar la protección de origen.
+5. Tras autorizar la publicación, comprobar `/api/health`, login, cookie segura, `/api/auth/me`, recarga de sesión, logout, roles, PDF/impresión y enlaces de correo desde el dominio definitivo. Verificar que no haya solicitudes a `localhost` y que las respuestas autenticadas mantengan `Cache-Control: no-store`, sin caché compartida.
+
+Referencias: [Vite en Vercel](https://vercel.com/docs/frameworks/frontend/vite) y [rewrites](https://vercel.com/docs/rewrites).
 
 ## Seguridad y límites
 
